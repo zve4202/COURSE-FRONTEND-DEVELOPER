@@ -1,33 +1,44 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
-import Quality from "./quality";
-import Bookmark from "./bookmark";
-
-const User = ({ user, ...rest }) => {
-  const getQualities = (qualities) => {
-    return qualities.map((quality) => (
-      <Quality key={quality._id} {...quality} />
-    ));
-  };
-
-  return (
-    <tr>
-      <td>{user.name}</td>
-      <td>{getQualities(user.qualities)}</td>
-      <td>{user.profession.name}</td>
-      <td>{user.completedMeetings}</td>
-      <td>{user.rate}/5</td>
-      <td>{<Bookmark {...user} {...rest} />}</td>
-      <td>
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => rest.onDelete(user._id)}
-        >
-          delete
-        </button>
-      </td>
-    </tr>
-  );
+import Qualitie from "./qualitie";
+import BookMark from "./bookmark";
+const User = ({
+    _id,
+    name,
+    qualities,
+    profession,
+    completedMeetings,
+    rate,
+    onDelete,
+    bookmark,
+    onToggleBookMark,
+}) => {
+    return (
+        <tr>
+            <td>{name}</td>
+            <td>
+                {qualities.map((qual) => (
+                    <Qualitie key={qual._id} {...qual} />
+                ))}
+            </td>
+            <td>{profession.name}</td>
+            <td>{completedMeetings}</td>
+            <td>{rate} /5</td>
+            <td>
+                <BookMark
+                    status={bookmark}
+                    onClick={() => onToggleBookMark(_id)}
+                />
+            </td>
+            <td>
+                <button
+                    onClick={() => onDelete(_id)}
+                    className="btn btn-danger"
+                >
+                    delete
+                </button>
+            </td>
+        </tr>
+    );
 };
 
 export default User;

@@ -1,31 +1,26 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
 
-const SearchStatus = ({ number }) => {
-  const spanClass = () => {
-    const bg_name = number === 0 ? "danger" : "primary";
-    return `badge bg-${bg_name} fs-5`;
-  };
-  const sklon = (number, txt) => {
-    const cases = [2, 0, 1, 1, 1, 2];
-    return txt[
-      number % 100 > 4 && number % 100 < 20
-        ? 2
-        : cases[number % 10 < 5 ? number % 10 : 5]
-    ];
-  };
-
-  return (
-    <span className={spanClass()}>
-      {number === 0
-        ? "Никто с тобой не тусанёт"
-        : `${number} челове${sklon(number, [
-            "к",
-            "ка",
-            "к",
-          ])} тусуется с тобой сегодня`}
-    </span>
-  );
+const SearchStatus = ({ length }) => {
+    const renderPhrase = (number) => {
+        const lastOne = Number(number.toString().slice(-1));
+        if (number > 4 && number < 15) {
+            return "человек тусанет";
+        }
+        if (lastOne === 1) return "человек тусанет";
+        if ([2, 3, 4].indexOf(lastOne) >= 0) return "человека тусанут";
+        return "человек тусанет";
+    };
+    return (
+        <h2>
+            <span
+                className={"badge " + (length > 0 ? "bg-primary" : "bg-danger")}
+            >
+                {length > 0
+                    ? `${length + " " + renderPhrase(length)}   с тобой сегодня`
+                    : "Никто с тобой не тусанет"}
+            </span>
+        </h2>
+    );
 };
 
 export default SearchStatus;

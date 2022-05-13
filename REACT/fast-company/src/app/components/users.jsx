@@ -7,6 +7,7 @@ import GroupList from "./gropList";
 import api from "../api";
 
 const Users = ({ users: allUsers, ...rest }) => {
+  const count = allUsers.length;
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
@@ -29,16 +30,23 @@ const Users = ({ users: allUsers, ...rest }) => {
     ? allUsers.filter((user) => user.profession === selectedProf)
     : allUsers;
   const userCrop = paginate(filtredUsers, currentPage, pageSize);
-  const count = allUsers.length;
 
+  const clearFiltr = () => {
+    setSelectedProf();
+  };
   return (
     <>
       {professions && (
-        <GroupList
-          selectedItem={selectedProf}
-          items={professions}
-          onItemSelect={handleItemSelect}
-        />
+        <>
+          <GroupList
+            selectedItem={selectedProf}
+            items={professions}
+            onItemSelect={handleItemSelect}
+          />
+          <button className="btn btn-secondary mt-2" onClick={clearFiltr}>
+            Сбросить
+          </button>
+        </>
       )}
       {count > 0 && (
         <table className="table">

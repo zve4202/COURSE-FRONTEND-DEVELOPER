@@ -11,6 +11,7 @@ const Users = ({ users, ...rest }) => {
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
+  const [selectedProf, setSelectedProf] = useState();
 
   useEffect(() => {
     console.log("send request");
@@ -25,8 +26,8 @@ const Users = ({ users, ...rest }) => {
     setCurrentPage(pageIndex);
   };
 
-  const handleItemSelected = (psrams) => {
-    console.log(psrams);
+  const handleItemSelect = (item) => {
+    setSelectedProf(item);
   };
 
   const userCrop = paginate(users, currentPage, pageSize);
@@ -34,7 +35,11 @@ const Users = ({ users, ...rest }) => {
   return (
     <>
       {professions && (
-        <GroupList items={professions} onItemSelected={handleItemSelected} />
+        <GroupList
+          selectedItem={selectedProf}
+          items={professions}
+          onItemSelect={handleItemSelect}
+        />
       )}
       {count > 0 && (
         <table className="table">

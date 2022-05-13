@@ -1,50 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 import User from "./user";
+import TableHeader from "./tableHeader";
 
-const UserTable = ({ users, onSort, currentSort, ...rest }) => {
-  const handleSort = (item) => {
-    if (currentSort.iter === item) {
-      onSort({
-        ...currentSort,
-        order: currentSort.order === "asc" ? "desc" : "asc"
-      });
-    } else {
-      onSort({ iter: item, order: "asc" });
-    }
+const UserTable = ({ users, onSort, selectedSort, ...rest }) => {
+  const columns = {
+    name: { iter: "name", name: "Имя" },
+    qualities: { name: "Качества" },
+    profession: { iter: "profession.name", name: "Провфессия" },
+    completedMeetings: { iter: "completedMeetings", name: "Встретился, раз" },
+    rate: { iter: "rate", name: "Оценка" },
+    bookmark: { iter: "bookmark", name: "Избранное" },
+    delete: {}
   };
-
   return (
     <table className="table">
-      <thead>
-        <tr>
-          <th role="button" onClick={() => handleSort("name")} scope="col">
-            Имя
-          </th>
-          <th scope="col">Качества</th>
-          <th
-            role="button"
-            onClick={() => handleSort("profession.name")}
-            scope="col"
-          >
-            Провфессия
-          </th>
-          <th
-            role="button"
-            onClick={() => handleSort("completedMeetings")}
-            scope="col"
-          >
-            Встретился, раз
-          </th>
-          <th role="button" onClick={() => handleSort("rate")} scope="col">
-            Оценка
-          </th>
-          <th role="button" onClick={() => handleSort("bookmark")} scope="col">
-            Избранное
-          </th>
-          <th role="button" />
-        </tr>
-      </thead>
+      <TableHeader {...{ onSort, selectedSort, columns }} />
       <tbody>
         {users.map((user) => (
           <User key={user._id} {...rest} {...user} />
@@ -56,7 +27,7 @@ const UserTable = ({ users, onSort, currentSort, ...rest }) => {
 UserTable.propTypes = {
   users: PropTypes.array.isRequired,
   onSort: PropTypes.func.isRequired,
-  currentSort: PropTypes.object.isRequired
+  selectedSort: PropTypes.object.isRequired
 };
 
 export default UserTable;

@@ -13,7 +13,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
     }
   };
 
-  const drawIcon = (item) => {
+  const heaserIcon = (item) => {
     if (selectedSort.path === item) {
       return (
         <i
@@ -43,7 +43,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             scope="col"
           >
             {columns[column].name}
-            {drawIcon(columns[column].path)}
+            {heaserIcon(columns[column].path)}
           </th>
         ))}
 

@@ -13,6 +13,21 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
     }
   };
 
+  const drawIcon = (item) => {
+    if (selectedSort.path === item) {
+      return (
+        <i
+          className={
+            "bi " +
+            (selectedSort.order === "asc"
+              ? "bi-caret-up-fill"
+              : "bi-caret-down-fill")
+          }
+        ></i>
+      );
+    }
+  };
+
   return (
     <thead>
       <tr>
@@ -28,6 +43,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             scope="col"
           >
             {columns[column].name}
+            {drawIcon(columns[column].path)}
           </th>
         ))}
 

@@ -16,7 +16,12 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/posts" component={Posts} />
         <Route path="/dashboard/stats" component={Stats} />
-        <Route path="/dashboard" component={Dashboard} />
+        <Route
+          path="/dashboard"
+          render={(props) => {
+            return false && <Dashboard isAdmin={false} {...props} />;
+          }}
+        />
       </Switch>
     </div>
   );

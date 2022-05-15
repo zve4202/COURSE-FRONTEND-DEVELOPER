@@ -1,5 +1,28 @@
-const Posts = () => {
-  return <h1>Posts</h1>;
+import React from "react";
+import PostsList from "./postsList";
+import Post from "./post";
+
+const Posts = ({ match }) => {
+  const posts = [
+    { id: 1, label: "Post 1" },
+    { id: 2, label: "Post 2" },
+    { id: 3, label: "Post 3" },
+    { id: 4, label: "Post 4" },
+  ];
+  const postId = match.params.postId;
+  const display = match.params.display;
+  return (
+    <>
+      {postId ? (
+        <>
+          {display && <h3>{display}</h3>}
+          <Post id={postId} posts={posts} />
+        </>
+      ) : (
+        <PostsList posts={posts} />
+      )}
+    </>
+  );
 };
 
 export default Posts;

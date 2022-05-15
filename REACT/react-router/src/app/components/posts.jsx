@@ -10,14 +10,10 @@ const Posts = ({ match }) => {
     { id: 4, label: "Post 4" },
   ];
   const postId = match.params.postId;
-  const display = match.params.display;
   return (
     <>
       {postId ? (
-        <>
-          {display && <h3>{display}</h3>}
-          <Post id={postId} posts={posts} />
-        </>
+        <Post id={postId} posts={posts} />
       ) : (
         <PostsList posts={posts} />
       )}

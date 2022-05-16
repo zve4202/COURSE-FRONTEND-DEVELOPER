@@ -1,16 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import UserPage from "../components/userPage";
-import Users from "../components/users";
-
-const User = () => {
+import UsersList from "../components/usersList";
+const Users = () => {
     const params = useParams();
     const { userId } = params;
-    if (userId) {
-        return <UserPage userId={userId} />;
-    }
-
-    return <Users />;
+    return <>{userId ? <UserPage userId={userId} /> : <UsersList />}</>;
 };
 
-export default User;
+export default Users;

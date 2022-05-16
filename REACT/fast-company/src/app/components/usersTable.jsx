@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import BookMark from "./bookmark";
 import QualitiesList from "./qualitiesList";
 import Table from "./table";
-import UserLink from "./userLink";
+import { Link } from "react-router-dom";
 
 const UserTable = ({
     users,
@@ -18,7 +18,9 @@ const UserTable = ({
         name: {
             path: "name",
             name: "Имя",
-            component: (user) => <UserLink name={user.name} id={user._id} />
+            component: (user) => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
         },
         qualities: {
             name: "Качества",

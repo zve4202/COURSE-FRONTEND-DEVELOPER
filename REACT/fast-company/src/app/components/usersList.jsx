@@ -13,7 +13,10 @@ const UsersList = () => {
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
-
+    const [searchValue, setSearchValue] = useState("");
+    const handleSeharch = ({ target }) => {
+        setSearchValue(target.value);
+    };
     const [users, setUsers] = useState();
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
@@ -37,7 +40,13 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
+        if (selectedProf && searchValue) setSearchValue("");
     }, [selectedProf]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+        if (selectedProf && searchValue) setSelectedProf();
+    }, [searchValue]);
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
@@ -56,6 +65,10 @@ const UsersList = () => {
                   (user) =>
                       JSON.stringify(user.profession) ===
                       JSON.stringify(selectedProf)
+              )
+            : searchValue
+            ? users.filter((user) =>
+                  user.name.toLowerCase().includes(searchValue.toLowerCase())
               )
             : users;
 
@@ -89,7 +102,12 @@ const UsersList = () => {
                     </div>
                 )}
                 <div className="d-flex flex-column">
-                    <SearchStatus length={count} />
+                    <SearchStatus
+                        value={searchValue}
+                        length={count}
+                        Search
+                        onHandleSeharch={handleSeharch}
+                    />
                     {count > 0 && (
                         <UserTable
                             users={usersCrop}
@@ -102,6 +120,7 @@ const UsersList = () => {
                     <div className="d-flex justify-content-center">
                         <Pagination
                             itemsCount={count}
+                            Search
                             pageSize={pageSize}
                             currentPage={currentPage}
                             onPageChange={handlePageChange}

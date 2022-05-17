@@ -60,6 +60,7 @@ const Login = () => {
                             value={data.email}
                             onChange={handleChange}
                             error={errors.email}
+                            placeHolder="Электронная почта"
                         />
                         <TextField
                             label="Пароль"

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-const SearchStatus = ({ length }) => {
+import SearchForm from "./searchForm";
+const SearchStatus = ({ value, length, onHandleSeharch }) => {
     const renderPhrase = (number) => {
         const lastOne = Number(number.toString().slice(-1));
         if (number > 4 && number < 15) {
@@ -10,20 +11,36 @@ const SearchStatus = ({ length }) => {
         if ([2, 3, 4].indexOf(lastOne) >= 0) return "человека тусанут";
         return "человек тусанет";
     };
+
     return (
-        <h2>
-            <span
-                className={"badge " + (length > 0 ? "bg-primary" : "bg-danger")}
-            >
-                {length > 0
-                    ? `${length + " " + renderPhrase(length)}   с тобой сегодня`
-                    : "Никто с тобой не тусанет"}
-            </span>
-        </h2>
+        <div>
+            <div className="d-flex flex-row">
+                <h2>
+                    <span
+                        className={
+                            "badge " + (length > 0 ? "bg-primary" : "bg-danger")
+                        }
+                    >
+                        {length > 0
+                            ? `${
+                                  length + " " + renderPhrase(length)
+                              }   с тобой сегодня`
+                            : "Никто с тобой не тусанет"}
+                    </span>
+                </h2>
+            </div>
+            <SearchForm
+                value={value}
+                onChange={onHandleSeharch}
+                placeHolder="Search..."
+            />
+        </div>
     );
 };
 SearchStatus.propTypes = {
-    length: PropTypes.number
+    length: PropTypes.number,
+    value: PropTypes.string,
+    onHandleSeharch: PropTypes.func
 };
 
 export default SearchStatus;

@@ -20,10 +20,23 @@ const Login = () => {
         email: {
             isRequered: {
                 massage: "Электронная почта обязательна для заполнения"
+            },
+            isEmail: {
+                massage: "Email введен не корректно"
             }
         },
         password: {
-            isRequered: { massage: "Пароль обязателен для заполнения" }
+            isRequered: { massage: "Пароль обязателен для заполнения" },
+            isCapitalSymbol: {
+                massage: "Пароль должен содержать хотя бы одну заглавную букву"
+            },
+            isContainDigit: {
+                massage: "Пароль должен содержать хотя бы одну цифру"
+            },
+            min: {
+                massage: "Пароль должен состоять минимум из 8-им символов",
+                value: 8
+            }
         }
     };
 
@@ -33,25 +46,40 @@ const Login = () => {
         return Object.keys(errors).length === 0;
     };
 
+    const isValid = Object.keys(errors).length === 0;
+
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                label="Электронная почта"
-                name="email"
-                value={data.email}
-                onChange={handleChange}
-                error={errors.email}
-            />
-            <TextField
-                label="Пароль"
-                type="password"
-                name="password"
-                value={data.password}
-                onChange={handleChange}
-                error={errors.password}
-            />
-            <button type="submit">Submit</button>
-        </form>
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-md-6 offset-md-3 shadow p-4">
+                    <form onSubmit={handleSubmit}>
+                        <h3 className="mb-4">Login</h3>
+                        <TextField
+                            label="Электронная почта"
+                            name="email"
+                            value={data.email}
+                            onChange={handleChange}
+                            error={errors.email}
+                        />
+                        <TextField
+                            label="Пароль"
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            onChange={handleChange}
+                            error={errors.password}
+                        />
+                        <button
+                            type="submit"
+                            disabled={!isValid}
+                            className="btn btn-primary w-100 mx-auto"
+                        >
+                            Войти
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 

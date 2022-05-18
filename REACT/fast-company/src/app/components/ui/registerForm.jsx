@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
+import API from "../../api";
+import SelectField from "../common/form/selectField";
+import RadioField from "../common/form/radioField";
 
 const RegisterForm = () => {
-    const [data, setData] = useState({ email: "", password: "" });
+    const [professions, setProfession] = useState();
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+        profession: "",
+        sex: "male"
+    });
+    useEffect(() => {
+        API.professions.fetchAll().then((data) => setProfession(data));
+    }, []);
+
     const [errors, setErrors] = useState({});
     const handleChange = ({ target }) => {
         setData((prevState) => ({
@@ -33,6 +46,11 @@ const RegisterForm = () => {
             min: {
                 message: "Пароль должен состоять минимум из 8 символов",
                 value: 8
+            }
+        },
+        profession: {
+            isRequired: {
+                message: "Проффессия обязательна для заполнения"
             }
         }
     };
@@ -68,6 +86,25 @@ const RegisterForm = () => {
                 value={data.password}
                 onChange={handleChange}
                 error={errors.password}
+            />
+            <SelectField
+                label="Профессия"
+                defaltOption="Choose..."
+                options={professions}
+                onChange={handleChange}
+                value={data.profession}
+                error={errors.profession}
+            />
+            <RadioField
+                options={[
+                    { name: "Male", value: "male" },
+                    { name: "Female", value: "female" },
+                    { name: "Othe", value: "othe" }
+                ]}
+                value={data.sex}
+                name="sex"
+                label="Пол"
+                onChange={handleChange}
             />
             <button
                 className="btn btn-primary w-100 mx-auto"

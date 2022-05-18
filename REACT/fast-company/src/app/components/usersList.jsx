@@ -10,13 +10,11 @@ import _ from "lodash";
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
-    const [searchValue, setSearchValue] = useState("");
-    const handleSeharch = ({ target }) => {
-        setSearchValue(target.value);
-    };
+
     const [users, setUsers] = useState();
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
@@ -40,16 +38,15 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-        if (selectedProf && searchValue) setSearchValue("");
-    }, [selectedProf]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-        if (selectedProf && searchValue) setSelectedProf();
-    }, [searchValue]);
+    }, [selectedProf, searchQuery]);
 
     const handleProfessionSelect = (item) => {
+        if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
+    };
+    const handleSearchQuery = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearchQuery(target.value);
     };
 
     const handlePageChange = (pageIndex) => {
@@ -60,15 +57,18 @@ const UsersList = () => {
     };
 
     if (users) {
-        const filteredUsers = selectedProf
+        const filteredUsers = searchQuery
+            ? users.filter(
+                  (user) =>
+                      user.name
+                          .toLowerCase()
+                          .indexOf(searchQuery.toLowerCase()) !== -1
+              )
+            : selectedProf
             ? users.filter(
                   (user) =>
                       JSON.stringify(user.profession) ===
                       JSON.stringify(selectedProf)
-              )
-            : searchValue
-            ? users.filter((user) =>
-                  user.name.toLowerCase().includes(searchValue.toLowerCase())
               )
             : users;
 
@@ -97,16 +97,18 @@ const UsersList = () => {
                             onClick={clearFilter}
                         >
                             {" "}
-                            Очиститть
+                            Очистить
                         </button>
                     </div>
                 )}
                 <div className="d-flex flex-column">
-                    <SearchStatus
-                        value={searchValue}
-                        length={count}
-                        Search
-                        onHandleSeharch={handleSeharch}
+                    <SearchStatus length={count} />
+                    <input
+                        type="text"
+                        name="searchQuery"
+                        placeholder="Search..."
+                        onChange={handleSearchQuery}
+                        value={searchQuery}
                     />
                     {count > 0 && (
                         <UserTable
@@ -120,7 +122,6 @@ const UsersList = () => {
                     <div className="d-flex justify-content-center">
                         <Pagination
                             itemsCount={count}
-                            Search
                             pageSize={pageSize}
                             currentPage={currentPage}
                             onPageChange={handlePageChange}

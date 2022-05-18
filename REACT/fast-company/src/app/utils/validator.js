@@ -1,9 +1,9 @@
 export function validator(data, config) {
     const errors = {};
-    const validate = (validateMthod, data, config) => {
-        let statusValidate = true;
-        switch (validateMthod) {
-            case "isRequered":
+    function validate(validateMethod, data, config) {
+        let statusValidate;
+        switch (validateMethod) {
+            case "isRequired":
                 statusValidate = data.trim() === "";
                 break;
             case "isEmail": {
@@ -12,7 +12,7 @@ export function validator(data, config) {
                 break;
             }
             case "isCapitalSymbol": {
-                const capitalRegExp = /[A-Z]/g;
+                const capitalRegExp = /[A-Z]+/g;
                 statusValidate = !capitalRegExp.test(data);
                 break;
             }
@@ -28,15 +28,14 @@ export function validator(data, config) {
             default:
                 break;
         }
-        if (statusValidate) return config.massage;
-    };
-
+        if (statusValidate) return config.message;
+    }
     for (const fieldName in data) {
-        for (const validateMthod in config[fieldName]) {
+        for (const validateMethod in config[fieldName]) {
             const error = validate(
-                validateMthod,
+                validateMethod,
                 data[fieldName],
-                config[fieldName][validateMthod]
+                config[fieldName][validateMethod]
             );
             if (error && !errors[fieldName]) {
                 errors[fieldName] = error;

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
-import CheckBoxField from "../common/form/checkBoxField";
 import TextField from "../common/form/textField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -16,7 +16,6 @@ const LoginForm = () => {
             [target.name]: target.value
         }));
     };
-
     const validatorConfig = {
         email: {
             isRequired: {
@@ -92,7 +91,5 @@ const LoginForm = () => {
         </form>
     );
 };
-
-LoginForm.propTypes = {};
 
 export default LoginForm;

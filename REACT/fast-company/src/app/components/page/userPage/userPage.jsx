@@ -10,8 +10,17 @@ const UserPage = ({ userId }) => {
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
     }, []);
-    const handleClick = () => {
-        history.push("/users");
+    const handleClick = (acton) => {
+        switch (acton) {
+            case "all":
+                history.push("/users/");
+                break;
+            case "edit":
+                history.push(`/users/${userId}/edit`);
+                break;
+            default:
+                break;
+        }
     };
     if (user) {
         return (
@@ -21,7 +30,20 @@ const UserPage = ({ userId }) => {
                 <Qualities qualities={user.qualities} />
                 <p>completedMeetings: {user.completedMeetings}</p>
                 <h2>Rate: {user.rate}</h2>
-                <button onClick={handleClick}> Все Пользователи</button>
+                <div>
+                    <button
+                        className="btn btn-secondary mx-2"
+                        onClick={() => handleClick("all")}
+                    >
+                        Все пользователи
+                    </button>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => handleClick("edit")}
+                    >
+                        Изменить
+                    </button>
+                </div>
             </div>
         );
     } else {

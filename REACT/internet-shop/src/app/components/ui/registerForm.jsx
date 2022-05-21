@@ -96,7 +96,7 @@ const RegisterForm = () => {
                 type="submit"
                 disabled={!isValid}
             >
-                Submit
+                Зарегнстрировать
             </button>
         </form>
     );

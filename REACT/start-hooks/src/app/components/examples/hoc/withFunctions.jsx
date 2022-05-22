@@ -18,7 +18,7 @@ const withFunctions = (Component) => (props) => {
     const onLogOut = () => {
         setIsAuth(false);
     };
-    console.log(isAuth);
+
     return (
         <CardWrapper>
             <Component

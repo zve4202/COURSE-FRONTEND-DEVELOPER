@@ -6,7 +6,7 @@ const NumWrapper = ({ children }) => {
     return React.Children.map(children, (child) => {
         num++;
         const newChild = (
-            <div className="row">
+            <div className="row gx-2">
                 <div className="col-auto">{num}</div>
                 <div className="col">{child}</div>
             </div>

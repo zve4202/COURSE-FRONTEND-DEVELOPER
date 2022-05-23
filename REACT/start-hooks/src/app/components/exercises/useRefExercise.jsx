@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
 import CollapseWrapper from "../common/collapse";
-
 const UseRefExercise = () => {
     const blockRef = useRef();
+
     const handleClick = () => {
-        blockRef.current.style.width = "80px";
-        blockRef.current.style.height = "150px";
+        blockRef.current.children[0].innerText = "text";
+        blockRef.current.style.width = "150px";
+        blockRef.current.style.height = "80px";
     };
     return (
         <CollapseWrapper title="Упражнение">
@@ -28,8 +29,8 @@ const UseRefExercise = () => {
             >
                 <small>Блок</small>
             </div>
-            <button className="btn btn-secondary" onClick={handleClick}>
-                Изменить ширину блока
+            <button className="btn btn-secondary my-4" onClick={handleClick}>
+                Trigger action
             </button>
         </CollapseWrapper>
     );

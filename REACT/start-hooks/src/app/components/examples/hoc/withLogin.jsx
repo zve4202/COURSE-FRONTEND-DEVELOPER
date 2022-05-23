@@ -1,11 +1,13 @@
 import React from "react";
-import Subtitle from "../../common/typografy/subtitle";
+import SmallTitle from "../../common/typografy/smallTitle";
 
 const withLogin = (Component) => (props) => {
-    const isLogin = localStorage.getItem("auth");
-    return (
-        <>{isLogin ? <Component {...props} /> : <Subtitle>Auth</Subtitle>}</>
-    );
+  const isLogin = localStorage.getItem("auth");
+  return (
+    <>
+      {isLogin ? <Component {...props} /> : <SmallTitle>Auth</SmallTitle>}
+    </>
+  );
 };
 
 export default withLogin;

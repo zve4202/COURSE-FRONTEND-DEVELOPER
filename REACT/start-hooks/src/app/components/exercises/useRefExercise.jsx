@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import CollapseWrapper from "../common/collapse";
+
 const UseRefExercise = () => {
     const blockRef = useRef();
     const handleClick = () => {

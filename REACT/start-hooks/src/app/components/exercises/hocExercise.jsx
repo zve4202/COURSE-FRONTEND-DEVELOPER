@@ -1,7 +1,7 @@
 import React from "react";
 import CollapseWrapper from "../common/collapse";
-import SimpleComponent from "../examples/hoc/simpleComponent";
-import withFunctions from "../examples/hoc/withFunctions";
+import SimpleComponent from "./simpleComponent";
+import withFunctions from "./withFunctions";
 
 const HocExercise = () => {
     const ComponentWithHoc = withFunctions(SimpleComponent);

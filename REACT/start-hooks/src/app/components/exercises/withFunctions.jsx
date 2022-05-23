@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CardWrapper from "../../common/Card";
+import CardWrapper from "../common/Card";
 
 const withFunctions = (Component) => (props) => {
     const auth = localStorage.getItem("auth");

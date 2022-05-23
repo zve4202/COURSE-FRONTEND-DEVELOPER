@@ -2,16 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const NumWrapper = ({ children }) => {
-    let num = 0;
+    let npp = 0;
     return React.Children.map(children, (child) => {
-        num++;
-        const newChild = (
-            <div className="row gx-2">
-                <div className="col-auto">{num}</div>
-                <div className="col">{child}</div>
-            </div>
-        );
-        return newChild;
+        npp++;
+        const config = {
+            ...child.props,
+            num: npp
+        };
+        return React.cloneElement(child, config);
     });
 };
 

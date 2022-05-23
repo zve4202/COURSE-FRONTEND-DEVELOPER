@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import CollapseWrapper from "../common/collapse";
 import NumWrapper from "./numWrapper";
 const ChildrenExercise = () => {
@@ -20,8 +22,10 @@ const ChildrenExercise = () => {
     );
 };
 
-const Component = () => {
-    return <div>Компонент списка</div>;
+const Component = ({ num }) => {
+    const text = (num || "") + " Компонент списка";
+    return <div>{text}</div>;
 };
+Component.propTypes = { num: PropTypes.number };
 
 export default ChildrenExercise;

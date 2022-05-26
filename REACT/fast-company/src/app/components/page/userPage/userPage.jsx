@@ -1,53 +1,46 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import api from "../../../api";
-import Qualities from "../../ui/qualities";
-import { useHistory } from "react-router-dom";
+import UserCard from "../../ui/userCard";
+import QualitiesCard from "../../ui/qualitiesCard";
+import MeetingsCard from "../../ui/meetingsCard";
+import Comments from "../../ui/comments";
+import { UserLayout } from "../../common/wrappers";
 
 const UserPage = ({ userId }) => {
-    const history = useHistory();
     const [user, setUser] = useState();
     useEffect(() => {
-        api.users.getById(userId).then((data) => setUser(data));
+        api.users.getById(userId).then((data) => {
+            setUser(data);
+        });
     }, []);
-    const handleClick = (acton) => {
-        switch (acton) {
-            case "all":
-                history.push("/users/");
-                break;
-            case "edit":
-                history.push(`/users/${userId}/edit`);
-                break;
-            default:
-                break;
-        }
-    };
+
+    console.log(user);
+
     if (user) {
         return (
-            <div>
-                <h1> {user.name}</h1>
-                <h2>Профессия: {user.profession.name}</h2>
-                <Qualities qualities={user.qualities} />
-                <p>completedMeetings: {user.completedMeetings}</p>
-                <h2>Rate: {user.rate}</h2>
-                <div>
-                    <button
-                        className="btn btn-secondary mx-2"
-                        onClick={() => handleClick("all")}
-                    >
-                        Все пользователи
-                    </button>
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => handleClick("edit")}
-                    >
-                        Изменить
-                    </button>
+            <UserLayout>
+                <div className="col-md-4 mb-3">
+                    <UserCard user={user} />
+                    <QualitiesCard data={user.qualities} />
+                    <MeetingsCard value={user.completedMeetings} />
                 </div>
-            </div>
+                <div className="col-md-8">
+                    <Comments />
+                </div>
+            </UserLayout>
         );
     } else {
-        return <h1>Loading</h1>;
+        return (
+            <UserLayout>
+                <div className="card">
+                    <div className="card-body">
+                        {/* <div className="card-body align-items-center text-center"> */}
+                        <h5>Loading...</h5>
+                    </div>
+                </div>
+            </UserLayout>
+        );
     }
 };
 

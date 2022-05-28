@@ -3,6 +3,20 @@ import { useParams } from "react-router-dom";
 import EditForm from "../components/ui/editForm";
 import axios from "axios";
 
+axios.interceptors.response.use(
+  (res) => res,
+  function (error) {
+    const expectedErrors =
+      error.response &&
+      error.response.status >= 400 &&
+      error.response.status < 500;
+    if (!expectedErrors) {
+      console.log("Unexpected error");
+    }
+    return Promise.reject(error);
+  }
+);
+
 const EditQualityPage = () => {
   const id = useParams().id;
   const qualityEnPoint = `http://localhost:4000/api/v1/quality/${id}`;
@@ -18,19 +32,10 @@ const EditQualityPage = () => {
   const handleSubmit = async (data) => {
     try {
       await axios
-        .put(qualityEnPoint, data)
+        .put(qualityEnPoint + "ajaj", data)
         .then((res) => console.log(res.data.content));
     } catch (error) {
-      // ожидаемая ошибка
-      const expectedErrors =
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status < 500;
-      if (!expectedErrors) {
-        console.log("unexpected error");
-      } else {
-        console.log("Expected error");
-      }
+      console.log("Expected error");
     }
   };
 

@@ -1,28 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import professionService from "../services/profession.service";
+import qualityService from "../services/quality.service";
 
-const ProfessionContext = React.createContext();
+const QualityContext = React.createContext();
 
-export const useProfession = () => {
-    return useContext(ProfessionContext);
+export const useQuality = () => {
+    return useContext(QualityContext);
 };
 
-export const ProfessionProvider = ({ children }) => {
-    const [professions, setProfessions] = useState([]);
+export const QualityProvider = ({ children }) => {
+    const [qualities, setQualities] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
-        getProfessionList();
+        getQualityList();
     }, []);
-    function getProfession(id) {
-        return professions.find((p) => p._id === id);
+    function getQuality(id) {
+        return qualities.find((qual) => qual._id === id);
     }
-    async function getProfessionList() {
+    async function getQualityList() {
         try {
-            const { content } = await professionService.fetchAll();
-            setProfessions(content);
+            const { content } = await qualityService.fetchAll();
+            setQualities(content);
             setLoading(false);
         } catch (error) {
             errorCatcher(error);
@@ -41,15 +41,13 @@ export const ProfessionProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <ProfessionContext.Provider
-            value={{ professions, isLoading, getProfession }}
-        >
+        <QualityContext.Provider value={{ isLoading, getQuality }}>
             {children}
-        </ProfessionContext.Provider>
+        </QualityContext.Provider>
     );
 };
 
-ProfessionProvider.propTypes = {
+QualityProvider.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node

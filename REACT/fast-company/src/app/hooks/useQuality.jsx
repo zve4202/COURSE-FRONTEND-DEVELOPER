@@ -41,7 +41,7 @@ export const QualityProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <QualityContext.Provider value={{ isLoading, getQuality }}>
+        <QualityContext.Provider value={{ qualities, isLoading, getQuality }}>
             {children}
         </QualityContext.Provider>
     );

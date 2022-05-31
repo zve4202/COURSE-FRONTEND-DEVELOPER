@@ -19,7 +19,7 @@ const userService = {
         return data;
     },
     delete: async (id) => {
-        const { data } = await httpService.delete(userEndpoint + id + "11");
+        const { data } = await httpService.delete(userEndpoint + id);
         return data;
     }
 };

@@ -1,25 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import userService from "../services/user.service";
+
 import { toast } from "react-toastify";
+import professionService from "../services/profession.service";
 
-const UserContext = React.createContext();
+const ProfessionContext = React.createContext();
 
-export const useUser = () => {
-    return useContext(UserContext);
+export const useProfession = () => {
+    return useContext(ProfessionContext);
 };
 
-const UserProvider = ({ children }) => {
-    const [users, setUsers] = useState([]);
+export const ProfessionProvider = ({ children }) => {
+    const [professions, setProfessions] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
-        getUsers();
+        getProfessionList();
     }, []);
-    async function getUsers() {
+    function getProfession(id) {
+        return professions.find((p) => p._id === id);
+    }
+    async function getProfessionList() {
         try {
-            const { content } = await userService.fetchAll();
-            setUsers(content);
+            const { content } = await professionService.fetchAll();
+            setProfessions(content);
             setLoading(false);
         } catch (error) {
             errorCatcher(error);
@@ -38,16 +42,17 @@ const UserProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <UserContext.Provider value={{ users }}>
-            {!isLoading ? children : "Loading..."}
-        </UserContext.Provider>
+        <ProfessionContext.Provider
+            value={{ professions, isLoading, getProfession }}
+        >
+            {children}
+        </ProfessionContext.Provider>
     );
 };
 
-UserProvider.propTypes = {
+ProfessionProvider.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
     ])
 };
-export default UserProvider;

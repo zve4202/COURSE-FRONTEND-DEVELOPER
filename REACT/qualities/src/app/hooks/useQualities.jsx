@@ -23,8 +23,44 @@ export const QualitiesProvider = ({ children }) => {
     };
     getQualities();
   }, []);
+
+  const getQuality = (id) => {
+    return qualities.find((q) => q._id === id);
+  };
+
+  const updateQuality = async ({ _id: id, ...data }) => {
+    try {
+      const { content } = await qualityService.update(id, data);
+      setQualities((prevState) =>
+        prevState.map((item) => {
+          if (item._id === content._id) {
+            return content;
+          } else {
+            return item;
+          }
+        })
+      );
+      return content;
+    } catch (error) {
+      const { message } = error;
+      setError(message);
+    }
+  };
+  const addQuality = async (data) => {
+    try {
+      const { content } = await qualityService.create(data);
+      setQualities((prevState) => [...prevState, content]);
+      return content;
+    } catch (error) {
+      const { message } = error;
+      setError(message);
+    }
+  };
+
   return (
-    <QualitiesContext.Provider value={{ qualities, isLoading }}>
+    <QualitiesContext.Provider
+      value={{ qualities, getQuality, updateQuality, addQuality, error }}
+    >
       {!isLoading ? children : <h1>Загрузка...</h1>}
     </QualitiesContext.Provider>
   );

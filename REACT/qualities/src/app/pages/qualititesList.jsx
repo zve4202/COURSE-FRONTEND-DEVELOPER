@@ -4,11 +4,7 @@ import QualitiesTable from "../components/ui/qualitiesTable";
 import { useQualities } from "../hooks/useQualities";
 
 const QualitiesListPage = () => {
-  // const [qualities, setQualities] = useState([]);
   const history = useHistory();
-  // useEffect(() => {
-  //   qualityService.fetchAll().then((data) => setQualities(data.content));
-  // }, []);
   const { qualities } = useQualities();
   const handleEdit = (param) => {
     console.log(param);

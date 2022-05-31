@@ -10,6 +10,7 @@ export const QualitiesProvider = ({ children }) => {
   const [qualities, setQualities] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const currState = useState();
   useEffect(() => {
     const getQualities = async () => {
       try {
@@ -56,10 +57,29 @@ export const QualitiesProvider = ({ children }) => {
       setError(message);
     }
   };
+  const deleteQuality = async (id) => {
+    currState.current = qualities;
+    setQualities((prevState) => prevState.filter((item) => item._id !== id));
+    try {
+      const { content } = await qualityService.delete(id);
+      return content;
+    } catch (error) {
+      const { message } = error;
+      setError(message);
+      setQualities(currState.current);
+    }
+  };
 
   return (
     <QualitiesContext.Provider
-      value={{ qualities, getQuality, updateQuality, addQuality, error }}
+      value={{
+        qualities,
+        getQuality,
+        updateQuality,
+        addQuality,
+        deleteQuality,
+        error,
+      }}
     >
       {!isLoading ? children : <h1>Загрузка...</h1>}
     </QualitiesContext.Provider>

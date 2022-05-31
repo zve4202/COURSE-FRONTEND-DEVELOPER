@@ -1,5 +1,4 @@
 import httpService from "./http.service";
-
 const qualityEndpoint = "quality/";
 
 const qualityService = {
@@ -24,5 +23,4 @@ const qualityService = {
     return data;
   },
 };
-
 export default qualityService;

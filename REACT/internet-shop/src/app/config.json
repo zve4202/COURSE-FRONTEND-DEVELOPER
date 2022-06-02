@@ -1,0 +1,4 @@
+{
+    "appTitle": "Музыкальная лавка",
+    "apiEndpoint": "http://localhost:4000/api/v1/"
+}

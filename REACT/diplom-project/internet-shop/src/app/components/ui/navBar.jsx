@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { appTitle } from "../../config.json";
-import logo from "../../assets/brand/logo.svg";
+import logo from "../../assets/brand/favicon.ico";
 
 const NavBar = () => {
     return (
@@ -15,8 +15,8 @@ const NavBar = () => {
                                 alt=""
                                 width="24"
                                 height="24"
-                                className="d-inline-block align-text-top"
-                            />{" "}
+                                className="me-1"
+                            />
                             {appTitle}
                         </Link>
                     </li>
@@ -35,18 +35,21 @@ const NavBar = () => {
                                 <Link
                                     className="nav-link "
                                     aria-current="page"
-                                    to="/login"
+                                    to="/"
                                 >
-                                    Войти
+                                    Корзина
+                                    <span className="position-absolute top-5 end-5 translate-middle badge rounded-pill bg-warning">
+                                        10
+                                    </span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link
                                     className="nav-link "
                                     aria-current="page"
-                                    to="/"
+                                    to="/login"
                                 >
-                                    Выход
+                                    Войти
                                 </Link>
                             </li>
                         </ul>

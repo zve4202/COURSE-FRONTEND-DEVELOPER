@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MainScreen from "../../ui/mainScreen";
 import categories from "../../../mockData/categories.json";
 import GroupList from "../../common/groupList";
+import ProductTable from "../../ui/productTable";
 
 const ProductListPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -31,7 +32,6 @@ const ProductListPage = () => {
                             className="btn btn-secondary mt-2"
                             onClick={clearFilter}
                         >
-                            {" "}
                             Очистить
                         </button>
                     </div>
@@ -42,7 +42,9 @@ const ProductListPage = () => {
                             </div>
                         </div>
                         <div className="card h-100">
-                            <div className="card-body">Список товара</div>
+                            <div className="card-body">
+                                <ProductTable />
+                            </div>
                         </div>
                     </div>
                 </div>

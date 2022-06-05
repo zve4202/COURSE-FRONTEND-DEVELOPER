@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
-import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -40,12 +39,6 @@ const RegisterForm = () => {
                 message: "Пароль должен состоять минимум из 8 символов",
                 value: 8
             }
-        },
-        licence: {
-            isRequired: {
-                message:
-                    "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
-            }
         }
     };
     useEffect(() => {
@@ -83,14 +76,6 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
-            <CheckBoxField
-                value={data.licence}
-                onChange={handleChange}
-                name="licence"
-                error={errors.licence}
-            >
-                Подтвердить <a>лицензионное соглашение</a>
-            </CheckBoxField>
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"

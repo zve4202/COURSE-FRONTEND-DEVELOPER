@@ -16,6 +16,43 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState({});
     const [error, setError] = useState(null);
 
+    async function signIn({ email, password }) {
+        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+
+        try {
+            const { data } = await httpAuth.post(url, {
+                email,
+                password,
+                returnSecureToken: true
+            });
+            setTokens(data);
+        } catch (error) {
+            console.log(error.response.data);
+            const { code, message } = error.response.data.error;
+            if (code === 400) {
+                let errorObject = {};
+                switch (message) {
+                    case "INVALID_PASSWORD":
+                        errorObject.password = "Пароль не подошёл";
+                        break;
+                    case "EMAIL_NOT_FOUND":
+                        errorObject.email =
+                            "Пользователя с таким Email не существует";
+                        break;
+
+                    default:
+                        if (message.includes("TOO_MANY_ATTEMPTS_TRY_LATER")) {
+                            errorObject.email =
+                                "Слишком частые попытки авторизации";
+                        } else errorObject = null;
+                        break;
+                }
+                if (errorObject) {
+                    throw errorObject;
+                }
+            }
+        }
+    }
     async function signUp({ email, password, ...rest }) {
         const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
         try {
@@ -62,7 +99,7 @@ const AuthProvider = ({ children }) => {
         }
     }, [error]);
     return (
-        <AuthContext.Provider value={{ signUp, currentUser }}>
+        <AuthContext.Provider value={{ signUp, signIn, currentUser }}>
             {children}
         </AuthContext.Provider>
     );

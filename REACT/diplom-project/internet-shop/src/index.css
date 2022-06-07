@@ -17,6 +17,10 @@ table.table td {
     vertical-align: middle;
 }
 
+.table > :not(:first-child) {
+    border-top: none;
+}
+
 td.cover-small {
     width: 74px;
 }

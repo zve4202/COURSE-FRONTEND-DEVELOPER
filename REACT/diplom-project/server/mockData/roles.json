@@ -1,12 +1,14 @@
 [
   {
-    "_id": "629b01cb87485f7f1819232a",
-    "name": "Admin",
-    "color": "danger"
+    "_id": "629b01e787485f7f1819233a",
+    "name": "Покупатель",
+    "role": "user",
+    "color": "secondary"
   },
   {
-    "_id": "629b01e787485f7f1819233a",
-    "name": "User",
-    "color": "primary"
+    "_id": "629b01cb87485f7f1819234a",
+    "name": "Администратор",
+    "role": "admin",
+    "color": "danger"
   }
 ]

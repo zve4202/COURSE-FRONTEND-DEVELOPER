@@ -15,6 +15,7 @@ module.exports = model(
   new Schema(
     {
       name: { type: String, required: true },
+      role: { type: String, required: true },
       color: { type: String, enum: colors, required: true },
     },
     { timestamps: true }

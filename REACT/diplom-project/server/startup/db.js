@@ -17,11 +17,14 @@ const generateSimpleEntity = (data, model) => {
         const exm = await model.find({
           name: example.name,
         });
+
         if (exm.length !== 0) {
           return exm[0];
         }
+        const example_id = example._id;
         delete example._id;
         const newExm = new model(example);
+        example._id = example_id;
         await newExm.save();
         return newExm;
       } catch (error) {
@@ -40,10 +43,10 @@ const generateSimpleEntity = (data, model) => {
 const findRoles = (rolesIds, roles) => {
   const newRoles = [];
   for (const roleMosk of rolesMock) {
-    for (const qualityId of rolesIds) {
-      if (qualityId === roleMosk._id) {
+    for (const roleId of rolesIds) {
+      if (roleId === roleMosk._id) {
         for (const role of roles) {
-          if (role.name === roleMosk.name) newRoles.push(role._id);
+          if (role.role === roleMosk.role) newRoles.push(role._id);
         }
       }
     }

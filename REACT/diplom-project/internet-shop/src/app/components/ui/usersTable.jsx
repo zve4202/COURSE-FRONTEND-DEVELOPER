@@ -10,7 +10,9 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
         name: {
             path: "name",
             name: "Имя",
-            component: (user) => <Link to={`/${user._id}`}>{user.name}</Link>
+            component: (user) => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
         },
         email: {
             path: "email",
@@ -22,18 +24,21 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
         },
         delete: {
             component: (user) => (
-                <button
-                    onClick={() => onDelete(user._id)}
-                    className="btn btn-danger"
-                >
-                    delete
-                </button>
+                <div className="d-flex justify-content-end">
+                    <button
+                        onClick={() => onDelete(user._id)}
+                        className="btn btn-sm btn-danger"
+                    >
+                        Удалить
+                    </button>
+                </div>
             )
         }
     };
-    console.log(users);
+
     return (
         <Table
+            caption="Пользователи"
             onSort={onSort}
             selectedSort={selectedSort}
             columns={columns}
@@ -46,7 +51,6 @@ UserTable.propTypes = {
     users: PropTypes.array.isRequired,
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired,
-    onToggleBookMark: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
 };
 

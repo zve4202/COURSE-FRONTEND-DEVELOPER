@@ -1,18 +1,27 @@
 import React from "react";
-// import { useParams } from "react-router-dom";
-// import EditUserPage from "../components/page/editUserPage";
+import { useParams } from "react-router-dom";
+import EditUserPage from "../components/page/editUserPage";
+import UserPage from "../components/page/userPage/userPage";
 import UsersListPage from "../components/page/usersListPage";
 import { RoleProvider } from "../hooks/useRoles";
 import { UserProvider } from "../hooks/useUsers";
 
 const Users = () => {
-    // const params = useParams();
-    // const { userId } = params;
+    const params = useParams();
+    const { userId, edit } = params;
+    console.log(userId, edit);
     return (
         <UserProvider>
             <RoleProvider>
-                <UsersListPage />
-                {/* {userId ? <EditUserPage /> : <UsersListPage />} */}
+                {userId ? (
+                    edit ? (
+                        <EditUserPage />
+                    ) : (
+                        <UserPage userId={userId} />
+                    )
+                ) : (
+                    <UsersListPage />
+                )}
             </RoleProvider>
         </UserProvider>
     );

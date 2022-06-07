@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { appTitle } from "../../config.json";
 import logo from "../../assets/brand/favicon.ico";
+import MenuBasket from "./menuBasket";
 
 const NavBar = () => {
     return (
@@ -26,22 +27,13 @@ const NavBar = () => {
                             aria-current="page"
                             to="/users"
                         >
-                            Users
+                            Пользователи
                         </Link>
                     </li>
                     <li className="nav-item ms-auto">
                         <ul className="nav d-flex">
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link "
-                                    aria-current="page"
-                                    to="/"
-                                >
-                                    Корзина
-                                    <span className="position-absolute top-5 end-5 translate-middle badge rounded-pill bg-warning">
-                                        10
-                                    </span>
-                                </Link>
+                                <MenuBasket />
                             </li>
                             <li className="nav-item">
                                 <Link

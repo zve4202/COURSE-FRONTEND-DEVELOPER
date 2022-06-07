@@ -26,6 +26,9 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    function getUser(id) {
+        return users.find((user) => user._id === id);
+    }
     function errorCatcher(error) {
         const { message } = error.response.data || error;
         setError(message);
@@ -39,7 +42,7 @@ export const UserProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <UserContext.Provider value={{ users }}>
+        <UserContext.Provider value={{ users, getUser }}>
             {!isLoading ? children : "Loading..."}
         </UserContext.Provider>
     );

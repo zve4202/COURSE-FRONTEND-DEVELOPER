@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import WorkScreen from "./workScreen";
 
-const MainScreen = ({ searchValue, onSearch, children }) => {
+const WorkScreenWithSearch = ({ searchValue, onSearch, children }) => {
     return (
-        <div className="container">
-            <div className="card mt-2 p-3">
+        <WorkScreen>
+            <div className="mb-3">
                 <input
                     type="text"
                     name="searchQuery"
@@ -15,11 +16,11 @@ const MainScreen = ({ searchValue, onSearch, children }) => {
                 />
             </div>
             {children}
-        </div>
+        </WorkScreen>
     );
 };
 
-MainScreen.propTypes = {
+WorkScreenWithSearch.propTypes = {
     searchValue: PropTypes.string,
     onSearch: PropTypes.func,
     children: PropTypes.oneOfType([
@@ -28,4 +29,4 @@ MainScreen.propTypes = {
     ])
 };
 
-export default MainScreen;
+export default WorkScreenWithSearch;

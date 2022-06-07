@@ -3,10 +3,9 @@ import PropTypes from "prop-types";
 import TableBody from "./tableBody";
 import TableHeader from "./tableHeader";
 
-const Table = ({ caption, onSort, selectedSort, columns, data, children }) => {
+const Table = ({ onSort, selectedSort, columns, data, children }) => {
     return (
         <table className="table table-hover caption-top">
-            {caption && <caption>{caption}</caption>}
             {children || (
                 <>
                     <TableHeader {...{ onSort, selectedSort, columns }} />
@@ -17,7 +16,6 @@ const Table = ({ caption, onSort, selectedSort, columns, data, children }) => {
     );
 };
 Table.propTypes = {
-    caption: PropTypes.string,
     onSort: PropTypes.func,
     selectedSort: PropTypes.object,
     columns: PropTypes.object,

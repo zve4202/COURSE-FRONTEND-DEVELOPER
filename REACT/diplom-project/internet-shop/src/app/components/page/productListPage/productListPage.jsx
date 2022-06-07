@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MainScreen from "../../ui/mainScreen";
+import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 import categories from "../../../mockData/categories.json";
 import GroupList from "../../common/groupList";
 import ProductTable from "../../ui/productTable";
@@ -19,7 +19,10 @@ const ProductListPage = () => {
         setSelectedCat();
     };
     return (
-        <MainScreen searchValue={searchQuery} onSearch={handleSearchQuery}>
+        <WorkScreenWithSearch
+            searchValue={searchQuery}
+            onSearch={handleSearchQuery}
+        >
             <div className="card mt-2 p-3">
                 <div className="d-flex">
                     <div className="d-flex flex-column flex-shrink-0 me-3">
@@ -49,7 +52,7 @@ const ProductListPage = () => {
                     </div>
                 </div>
             </div>
-        </MainScreen>
+        </WorkScreenWithSearch>
     );
 };
 

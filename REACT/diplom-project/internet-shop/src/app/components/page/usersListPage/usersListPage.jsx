@@ -6,7 +6,7 @@ import GroupList from "../../common/groupList";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
-import MainScreen from "../../ui/mainScreen";
+import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 import { useRole } from "../../../hooks/useRoles";
 
 const UsersListPage = () => {
@@ -76,11 +76,14 @@ const UsersListPage = () => {
         };
 
         return (
-            <MainScreen searchValue={searchQuery} onSearch={handleSearchQuery}>
+            <WorkScreenWithSearch
+                searchValue={searchQuery}
+                onSearch={handleSearchQuery}
+            >
                 <div className="card mt-2 p-3">
                     <div className="d-flex">
                         {roles && (
-                            <div className="d-flex flex-column flex-shrink-0 p-3">
+                            <div className="d-flex flex-column flex-shrink-0 me-3">
                                 <GroupList
                                     selectedItem={selectedRole}
                                     items={roles}
@@ -95,6 +98,11 @@ const UsersListPage = () => {
                             </div>
                         )}
                         <div className="d-flex flex-column w-100">
+                            <div className="card mb-3 bg-light">
+                                <div className="card-body">
+                                    <strong>Пользователи</strong>
+                                </div>
+                            </div>
                             <div className="card h-100">
                                 <div className="card-body">
                                     <div className="d-flex flex-column">
@@ -120,7 +128,7 @@ const UsersListPage = () => {
                         </div>
                     </div>
                 </div>
-            </MainScreen>
+            </WorkScreenWithSearch>
         );
     }
     return "loading...";

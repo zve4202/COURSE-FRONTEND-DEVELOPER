@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Controller = require("../controllers/profession.controller");
+const Controller = require("../controllers/format.controller");
 
 router.get("/", Controller.getList);
 

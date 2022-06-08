@@ -2,13 +2,16 @@ const express = require("express");
 const userRoute = require("./user.route");
 const authRoute = require("./auth.route");
 const roleRoute = require("./role.route");
-// const professionRoute = require("./profession.route");
+const categoryRoute = require("./category.route");
+const formatRoute = require("./format.route");
+
 const router = express.Router({ mergeParams: true });
 
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
 router.use("/role", roleRoute);
-// router.use("/profession", professionRoute);
+router.use("/category", categoryRoute);
+router.use("/format", formatRoute);
 
 module.exports = function (app) {
   app.use(function (req, res, next) {

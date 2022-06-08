@@ -22,11 +22,10 @@ const generateSimpleEntity = (data, model) => {
         if (exm.length !== 0) {
           return exm[0];
         }
-        // const example_id = example._id;
-        // delete example._id;
+        const example_id = example._id;
+        delete example._id;
         const newExm = new model(example);
-        delete newExm._id;
-        // example._id = example_id;
+        example._id = example_id;
         await newExm.save();
         return newExm;
       } catch (error) {
@@ -38,7 +37,7 @@ const generateSimpleEntity = (data, model) => {
 
 const getNewId = (mockId, data, mockData) => {
   const newItem = mockData.find((el) => el._id === mockId);
-  return data.find((findFormat) => findFormat.name === newItem.name)._id;
+  return data.find((el) => el.name === newItem.name)._id;
 };
 
 const findRoles = (rolesIds, roles) => {
@@ -67,17 +66,19 @@ async function setInitialData() {
   }
 
   const formats = await Promise.all(
-    formatsMock.map(async (format) => {
+    formatsMock.map(async (item) => {
       try {
         const findFormat = await models.format.find({
-          name: format.name,
+          name: item.name,
         });
         if (findFormat.length !== 0) {
           return findFormat[0];
         }
-        format.category = getNewId(format.category, categories, formatsMock);
-        const newFormat = new models.format(format);
-        delete newFormat._id;
+        item.category = getNewId(item.category, categories, categoriesMock);
+        const example_id = item._id;
+        delete item._id;
+        const newFormat = new models.format(item);
+        item._id = example_id;
         await newFormat.save();
         return newFormat;
       } catch (error) {
@@ -107,12 +108,11 @@ async function setInitialData() {
         if (findUser.length !== 0) {
           return findUser[0];
         }
-
         user.roles = findRoles(user.roles, roles);
         const salt = await bcrypt.genSalt(5);
         user.password = await bcrypt.hash(user.password, salt);
+        delete user._id;
         const newUser = new models.user(user);
-        delete newUser._id;
         await newUser.save();
         return newUser;
       } catch (error) {

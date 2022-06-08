@@ -5,7 +5,8 @@ const dbConfig = require("../config/db.config");
 const models = require("../models");
 const bcrypt = require("bcryptjs");
 
-// const professionsMock = require("../mockData/professions.json");
+const categoriesMock = require("../mockData/categories.json");
+const formatsMock = require("../mockData/formats.json");
 const rolesMock = require("../mockData/roles.json");
 const usersMock = require("../mockData/users.json");
 const e = require("express");
@@ -21,10 +22,11 @@ const generateSimpleEntity = (data, model) => {
         if (exm.length !== 0) {
           return exm[0];
         }
-        const example_id = example._id;
-        delete example._id;
+        // const example_id = example._id;
+        // delete example._id;
         const newExm = new model(example);
-        example._id = example_id;
+        delete newExm._id;
+        // example._id = example_id;
         await newExm.save();
         return newExm;
       } catch (error) {
@@ -33,13 +35,12 @@ const generateSimpleEntity = (data, model) => {
     })
   );
 };
-// const generateUsers=(data,model)=>{
 
-// }
-// const findProfession = (professionId, professions) => {
-//   const profession = professionsMock.find((el) => el._id === professionId);
-//   return professions.find((prof) => prof.name === profession.name)._id;
-// };
+const getNewId = (mockId, data, mockData) => {
+  const newItem = mockData.find((el) => el._id === mockId);
+  return data.find((findFormat) => findFormat.name === newItem.name)._id;
+};
+
 const findRoles = (rolesIds, roles) => {
   const newRoles = [];
   for (const roleMosk of rolesMock) {
@@ -55,38 +56,63 @@ const findRoles = (rolesIds, roles) => {
 };
 
 async function setInitialData() {
-  // const professionsData = await generateSimpleEntity(
-  //     professionsMock,
-  //     models.profession
-  // );
-  // if (professionsData) {
-  //     debug(`Professions in DB ${chalk.green("✓")}`);
-  // } else {
-  //     debug(`Professions error ${chalk.red("x")}`);
-  // }
+  const categories = await generateSimpleEntity(
+    categoriesMock,
+    models.category
+  );
+  if (categories) {
+    debug(`Categories in DB ${chalk.green("✓")}`);
+  } else {
+    debug(`Categories error ${chalk.red("x")}`);
+  }
 
-  const rolesData = await generateSimpleEntity(rolesMock, models.role);
-  if (rolesData) {
+  const formats = await Promise.all(
+    formatsMock.map(async (format) => {
+      try {
+        const findFormat = await models.format.find({
+          name: format.name,
+        });
+        if (findFormat.length !== 0) {
+          return findFormat[0];
+        }
+        format.category = getNewId(format.category, categories, formatsMock);
+        const newFormat = new models.format(format);
+        delete newFormat._id;
+        await newFormat.save();
+        return newFormat;
+      } catch (error) {
+        return error;
+      }
+    })
+  );
+  if (formats) {
+    debug(`Formats in DB ${chalk.green("✓")}`);
+  } else {
+    debug(`Formats error ${chalk.red("x")}`);
+  }
+
+  const roles = await generateSimpleEntity(rolesMock, models.role);
+  if (roles) {
     debug(`Roles in DB ${chalk.green("✓")}`);
   } else {
     debug(`Roles error ${chalk.red("x")}`);
   }
 
   const users = await Promise.all(
-    usersMock.map(async (userData) => {
+    usersMock.map(async (user) => {
       try {
-        const user = await models.user.find({
-          email: userData.email,
+        const findUser = await models.user.find({
+          email: user.email,
         });
-        if (user.length !== 0) {
-          return user[0];
+        if (findUser.length !== 0) {
+          return findUser[0];
         }
-        delete userData._id;
-        userData.roles = findRoles(userData.roles, rolesData);
-        const salt = await bcrypt.genSalt(5);
-        userData.password = await bcrypt.hash(userData.password, salt);
-        const newUser = new models.user(userData);
 
+        user.roles = findRoles(user.roles, roles);
+        const salt = await bcrypt.genSalt(5);
+        user.password = await bcrypt.hash(user.password, salt);
+        const newUser = new models.user(user);
+        delete newUser._id;
         await newUser.save();
         return newUser;
       } catch (error) {

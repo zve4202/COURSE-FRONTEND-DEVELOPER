@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
-import categories from "../../../mockData/categories.json";
 import GroupList from "../../common/groupList";
 import ProductTable from "../../ui/productTable";
+import { useCategory } from "../../../hooks/useCategories";
 
 const ProductListPage = () => {
+    const { categories } = useCategory();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCat, setSelectedCat] = useState();
     const handleSearchQuery = ({ target }) => {

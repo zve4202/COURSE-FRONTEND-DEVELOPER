@@ -1,20 +1,20 @@
 import React from "react";
-import Roles from "./roles";
+import Role from "./roles";
 import PropTypes from "prop-types";
 
-const RolesCard = ({ data }) => {
+const RoleCard = ({ roleId }) => {
     return (
         <div className="card mb-3">
             <div className="card-body d-flex flex-column justify-content-center text-center">
                 <p className="card-text">
-                    <Roles roles={data} />
+                    <Role roleId={roleId} />
                 </p>
             </div>
         </div>
     );
 };
-RolesCard.propTypes = {
-    data: PropTypes.array
+RoleCard.propTypes = {
+    roleId: PropTypes.string
 };
 
-export default RolesCard;
+export default RoleCard;

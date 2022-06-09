@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import UserCard from "../../ui/userCard";
-import RolesCard from "../../ui/qualitiesCard";
+import RoleCard from "../../ui/roleCard";
 // import Orders from "../../ui/userOrders";
 import { useUser } from "../../../hooks/useUsers";
 import WorkScreen from "../../ui/workScreen";
@@ -20,7 +20,7 @@ const UserPage = ({ userId }) => {
                     <>
                         <div className="col-md-4 mb-3">
                             <UserCard user={user} />
-                            <RolesCard data={user.roles} />
+                            <RoleCard roleId={user.role} />
                         </div>
                         <div className="col-md-8">
                             Orders

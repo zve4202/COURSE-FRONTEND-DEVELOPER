@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import NavBar from "./components/ui/navBar";
 import Basket from "./layouts/basket";
 import Login from "./layouts/login";
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/basket" component={Basket} />
                 <Redirect to="/" />
             </Switch>
+            <ToastContainer />
         </div>
     );
 }

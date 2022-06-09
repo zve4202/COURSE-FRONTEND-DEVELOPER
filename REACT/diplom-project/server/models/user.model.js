@@ -11,7 +11,7 @@ module.exports = model(
       email: { type: String, required: true },
       password: { type: String, required: true },
       sex: { type: String, enum: sexes, required: true },
-      role: { type: ObjectIdType, ref: "Role" },
+      role: { type: String, ref: "Role" },
     },
     { timestamps: true }
   )

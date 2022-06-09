@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Roles from "./roles";
+import Role from "./roles";
 import Table from "../common/table";
 import { Link } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
         },
         roles: {
             name: "Роль",
-            component: (user) => <Roles roles={user.roles} />
+            component: (user) => <Role roleId={user.role} />
         },
         delete: {
             component: (user) => (

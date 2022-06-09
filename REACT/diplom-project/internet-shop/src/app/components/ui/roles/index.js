@@ -1,2 +1,2 @@
-import Roles from "./rolesList";
-export default Roles;
+import Role from "./role";
+export default Role;

@@ -59,9 +59,7 @@ const UsersListPage = () => {
                           .indexOf(searchQuery.toLowerCase()) !== -1
               )
             : selectedRole
-            ? users.filter((user) =>
-                  user.roles.find((role) => role === selectedRole._id)
-              )
+            ? users.filter((user) => user.role === selectedRole._id)
             : users;
 
         const count = filteredUsers.length;

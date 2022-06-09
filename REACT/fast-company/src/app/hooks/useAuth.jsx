@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import axios from "axios";
 import userService from "../services/user.service";
-import { toast } from "react-toastify";
 import { setTokens } from "../services/localStorage.service";
 
 const httpAuth = axios.create({
     baseURL: "https://identitytoolkit.googleapis.com/v1/",
-    params: { key: process.env.REACT_APP_FIREBASE_KEY }
+    params: {
+        key: process.env.REACT_APP_FIREBASE_KEY
+    }
 });
 const AuthContext = React.createContext();
 
@@ -19,10 +21,10 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState({});
     const [error, setError] = useState(null);
 
-    async function signIn({ email, password }) {
+    async function logIn({ email, password }) {
         try {
             const { data } = await httpAuth.post(
-                "accounts:signInWithPassword",
+                `accounts:signInWithPassword`,
                 {
                     email,
                     password,
@@ -31,28 +33,31 @@ const AuthProvider = ({ children }) => {
             );
             setTokens(data);
         } catch (error) {
+            errorCatcher(error);
             const { code, message } = error.response.data.error;
+            console.log(code, message);
             if (code === 400) {
                 switch (message) {
-                    case ("INVALID_PASSWORD", "EMAIL_NOT_FOUND"):
-                        throw new Error("Пароль или Email введены некорректно");
+                    case "INVALID_PASSWORD":
+                        throw new Error("Email или пароль введены некорректно");
                     default:
                         throw new Error(
-                            "Слишком частые попытки авторизации. Попробуйте позднее..."
+                            "Слишком много попыток входа. Попробуйте позже"
                         );
                 }
             }
         }
     }
+
     async function signUp({ email, password, ...rest }) {
         try {
-            const { data } = await httpAuth.post("accounts:signUp", {
+            const { data } = await httpAuth.post(`accounts:signUp`, {
                 email,
                 password,
                 returnSecureToken: true
             });
             setTokens(data);
-            await createUser({ _id: data.localId, email, password, ...rest });
+            await createUser({ _id: data.localId, email, ...rest });
         } catch (error) {
             errorCatcher(error);
             const { code, message } = error.response.data.error;
@@ -65,30 +70,29 @@ const AuthProvider = ({ children }) => {
                     throw errorObject;
                 }
             }
+            // throw new Error
         }
     }
-
     async function createUser(data) {
         try {
-            const { content } = userService.update(data._id, data);
+            const { content } = userService.create(data);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
         }
     }
-
     function errorCatcher(error) {
-        const { message } = error.response.data || error;
+        const { message } = error.response.data;
         setError(message);
     }
     useEffect(() => {
         if (error !== null) {
-            toast.error(error);
+            toast(error);
             setError(null);
         }
     }, [error]);
     return (
-        <AuthContext.Provider value={{ signUp, signIn, currentUser }}>
+        <AuthContext.Provider value={{ signUp, logIn, currentUser }}>
             {children}
         </AuthContext.Provider>
     );
@@ -100,4 +104,5 @@ AuthProvider.propTypes = {
         PropTypes.node
     ])
 };
+
 export default AuthProvider;

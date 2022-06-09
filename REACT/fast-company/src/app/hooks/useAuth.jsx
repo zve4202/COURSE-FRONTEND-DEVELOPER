@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
             console.log(code, message);
             if (code === 400) {
                 switch (message) {
-                    case "INVALID_PASSWORD":
+                    case ("INVALID_PASSWORD", "EMAIL_NOT_FOUND"):
                         throw new Error("Email или пароль введены некорректно");
                     default:
                         throw new Error(

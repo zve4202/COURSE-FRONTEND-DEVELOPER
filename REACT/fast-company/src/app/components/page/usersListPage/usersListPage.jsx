@@ -58,11 +58,12 @@ const UsersListPage = () => {
 
     if (users) {
         const filteredUsers = searchQuery
-            ? users.filter(
-                  (user) =>
-                      user.name
-                          .toLowerCase()
-                          .indexOf(searchQuery.toLowerCase()) !== -1
+            ? users.filter((user) =>
+                  user.name
+                      ? user.name
+                            .toLowerCase()
+                            .indexOf(searchQuery.toLowerCase()) !== -1
+                      : false
               )
             : selectedProf
             ? users.filter(

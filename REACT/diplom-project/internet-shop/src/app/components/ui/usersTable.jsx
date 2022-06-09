@@ -19,7 +19,7 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
             name: "E-Mail"
         },
         roles: {
-            name: "Роли",
+            name: "Роль",
             component: (user) => <Roles roles={user.roles} />
         },
         delete: {

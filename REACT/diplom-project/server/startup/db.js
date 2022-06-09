@@ -35,23 +35,44 @@ const generateSimpleEntity = (data, model) => {
   );
 };
 
+const generateSimpleEntity_AsIs = (data, model) => {
+  return Promise.all(
+    data.map(async (example) => {
+      try {
+        const exm = await model.find({
+          _id: example._id,
+        });
+
+        if (exm.length !== 0) {
+          return exm[0];
+        }
+        const newExm = new model(example);
+        await newExm.save();
+        return newExm;
+      } catch (error) {
+        return error;
+      }
+    })
+  );
+};
+
 const getNewId = (mockId, data, mockData) => {
   const newItem = mockData.find((el) => el._id === mockId);
   return data.find((el) => el.name === newItem.name)._id;
 };
 
-const findRoles = (rolesIds, roles) => {
-  const newRoles = [];
-  for (const roleMosk of rolesMock) {
-    for (const roleId of rolesIds) {
-      if (roleId === roleMosk._id) {
-        for (const role of roles) {
-          if (role.role === roleMosk.role) newRoles.push(role._id);
+const findNewIds = (mockIds, data, mockData) => {
+  const newArray = [];
+  for (const mockItem of mockData) {
+    for (const mockId of mockIds) {
+      if (mockId === mockItem._id) {
+        for (const dataItem of data) {
+          if (dataItem.name === mockItem.name) newArray.push(role._id);
         }
       }
     }
   }
-  return newRoles;
+  return newArray;
 };
 
 async function setInitialData() {
@@ -92,7 +113,7 @@ async function setInitialData() {
     debug(`Formats error ${chalk.red("x")}`);
   }
 
-  const roles = await generateSimpleEntity(rolesMock, models.role);
+  const roles = await generateSimpleEntity_AsIs(rolesMock, models.role);
   if (roles) {
     debug(`Roles in DB ${chalk.green("✓")}`);
   } else {
@@ -108,7 +129,6 @@ async function setInitialData() {
         if (findUser.length !== 0) {
           return findUser[0];
         }
-        user.roles = findRoles(user.roles, roles);
         const salt = await bcrypt.genSalt(5);
         user.password = await bcrypt.hash(user.password, salt);
         delete user._id;

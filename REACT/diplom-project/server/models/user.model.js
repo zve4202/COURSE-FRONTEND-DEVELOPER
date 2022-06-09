@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const ObjectIdType = Schema.Types.ObjectId;
 
+const sexes = ["male", "female"];
+
 module.exports = model(
   "User",
   new Schema(
@@ -8,7 +10,8 @@ module.exports = model(
       name: { type: String, required: true },
       email: { type: String, required: true },
       password: { type: String, required: true },
-      roles: [{ type: ObjectIdType, ref: "Role" }],
+      sex: { type: String, enum: sexes, required: true },
+      role: { type: ObjectIdType, ref: "Role" },
     },
     { timestamps: true }
   )

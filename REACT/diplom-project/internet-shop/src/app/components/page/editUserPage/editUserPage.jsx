@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { useHistory, useParams } from "react-router-dom";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import BackHistoryButton from "../../common/backButton";
 import { useRole } from "../../../hooks/useRoles";
 import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
+import RadioField from "../../common/form/radioField";
+import PasswordControl from "./passwordControl";
+import RoleControl from "./roleControl";
+
+const defaultData = {
+    name: "",
+    email: "",
+    password: "",
+    sex: "male",
+    role: "user"
+};
 
 const EditUserPage = () => {
-    const { currentUser, isAdmin } = useAuth();
     const { userId } = useParams();
-    // const history = useHistory();
     const user = useUser().getUser(userId);
-    const [data, setData] = useState({});
+    const [data, setData] = useState(defaultData);
     useEffect(() => {
         setData(user);
     }, [user]);
@@ -37,7 +44,7 @@ const EditUserPage = () => {
                 message: "Email введен некорректно"
             }
         },
-        new_password: {
+        password: {
             isRequired: {
                 message: "Пароль обязателен для заполнения"
             },
@@ -78,6 +85,14 @@ const EditUserPage = () => {
         return Object.keys(errors).length === 0;
     };
     const isValid = Object.keys(errors).length === 0;
+
+    const handleShowPassvord = () => {
+        setData((prevState) => ({
+            ...prevState,
+            password: "",
+            new_password: true
+        }));
+    };
     return (
         <div className="container mt-5">
             <BackHistoryButton />
@@ -99,17 +114,20 @@ const EditUserPage = () => {
                                 onChange={handleChange}
                                 error={errors.email}
                             />
-                            {currentUser && currentUser.id === data._id && (
+                            <PasswordControl
+                                userId={data._id}
+                                onShow={handleShowPassvord}
+                            >
                                 <TextField
                                     label="Новый пароль"
                                     type="password"
-                                    name="new_password"
-                                    value={data.new_password}
+                                    name="password"
+                                    value={data.password}
                                     onChange={handleChange}
-                                    error={errors.new_password}
+                                    error={errors.password}
                                 />
-                            )}
-                            {isAdmin && (
+                            </PasswordControl>
+                            <RoleControl>
                                 <SelectField
                                     label="Роль пользователя"
                                     defaultOption="Выбрать..."
@@ -123,7 +141,17 @@ const EditUserPage = () => {
                                     value={data.role}
                                     error={errors.role}
                                 />
-                            )}
+                            </RoleControl>
+                            <RadioField
+                                options={[
+                                    { name: "Мужчина", value: "male" },
+                                    { name: "Женщина", value: "female" }
+                                ]}
+                                value={data.sex}
+                                name="sex"
+                                onChange={handleChange}
+                                label="Выберите ваш пол"
+                            />
                             <button
                                 type="submit"
                                 disabled={!isValid}

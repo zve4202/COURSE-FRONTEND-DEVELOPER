@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        setAdmin(currentUser?.rolre === "admin");
+        setAdmin(currentUser && currentUser.role === "admin");
     }, [currentUser]);
 
     async function signIn({ email, password }) {

@@ -1,8 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+// import { useAuth } from "../../../hooks/useAuth";
 
-const MenuBasket = ({ user }) => {
+const MenuBasket = () => {
+    // const { currentUser } = useAuth();
     const productCount = 12;
     const productLabel = productCount > 99 ? "99+" : productCount;
     return (
@@ -19,10 +20,6 @@ const MenuBasket = ({ user }) => {
             </span> */}
         </Link>
     );
-};
-
-MenuBasket.propTypes = {
-    user: PropTypes.object
 };
 
 export default MenuBasket;

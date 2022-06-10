@@ -11,7 +11,6 @@ const UserPage = ({ userId }) => {
     const [user, setUser] = useState(null);
     useEffect(() => {
         setUser(getUser(userId));
-        console.log("UserPage user", user);
     }, [users]);
     return (
         <WorkScreen>

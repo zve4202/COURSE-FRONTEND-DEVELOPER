@@ -7,53 +7,90 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signUp = (req, res) => {
-    const user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 5),
-    });
+  console.log(req.body);
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 5),
+    sex: req.body.sex,
+    role: req.body.role,
+  });
 
-    user.save((err, user) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-        res.send({ message: "User was registered successfully!", user });
+  user.save((err, user) => {
+    if (err) {
+      res.status(500).send({
+        error: {
+          code: 500,
+          message: err,
+        },
+      });
+      return;
+    }
+    var token = jwt.sign({ _id: user._id }, config.secret);
+
+    return res.status(200).json({
+      status: 200,
+      content: user,
+      accessToken: token,
+      message: "SIGNUP_SUCCESS",
     });
+    // res.status(200).send({
+    //   id: user._id,
+    //   name: user.name,
+    //   email: user.email,
+    //   role: user.role,
+    //   accessToken: token,
+    // });
+  });
 };
 
 exports.signIn = (req, res) => {
-    User.findOne({
-        email: req.body.email,
-    }).exec((err, user) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
+  User.findOne({
+    email: req.body.email,
+  }).exec((err, user) => {
+    if (err) {
+      res.status(500).send({
+        error: {
+          code: 500,
+          message: err,
+        },
+      });
+      return;
+    }
 
-        if (!user) {
-            return res.status(404).send({ message: "User Not found." });
-        }
+    if (!user) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          message: "EMAIL_NOT_FOUND",
+        },
+      });
+    }
 
-        var passwordIsValid = bcrypt.compareSync(
-            req.body.password,
-            user.password
-        );
+    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
-        if (!passwordIsValid) {
-            return res.status(401).send({
-                accessToken: null,
-                message: "Invalid Password!",
-            });
-        }
+    if (!passwordIsValid) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          message: "INVALID_PASSWORD",
+        },
+      });
+    }
 
-        var token = jwt.sign({ id: user.id }, config.secret);
-
-        res.status(200).send({
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            accessToken: token,
-        });
+    var token = jwt.sign({ _id: user._id }, config.secret);
+    return res.status(200).json({
+      status: 200,
+      content: user,
+      accessToken: token,
+      message: "SIGNIN_SUCCESS",
     });
+    // res.status(200).send({
+    //   id: user._id,
+    //   name: user.name,
+    //   email: user.email,
+    //   role: user.role,
+    //   accessToken: token,
+    // });
+  });
 };

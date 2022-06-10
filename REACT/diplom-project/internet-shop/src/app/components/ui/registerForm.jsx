@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
+import RadioField from "../common/form/radioField";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
+
+const defaultData = {
+    name: "",
+    email: "",
+    password: "",
+    sex: "male",
+    role: "user"
+};
 
 const RegisterForm = () => {
-    const [data, setData] = useState({
-        email: "",
-        password: "",
-        licence: false
-    });
+    const history = useHistory();
+    const { signUp } = useAuth();
+    const [data, setData] = useState(defaultData);
     const [errors, setErrors] = useState({});
 
     const handleChange = (target) => {
@@ -39,6 +48,11 @@ const RegisterForm = () => {
                 message: "Пароль должен состоять минимум из 8 символов",
                 value: 8
             }
+        },
+        name: {
+            isRequired: {
+                message: "Введите имя пользователя"
+            }
         }
     };
     useEffect(() => {
@@ -51,16 +65,28 @@ const RegisterForm = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log({
-            data
-        });
+        console.log(data);
+        try {
+            await signUp(data);
+            history.push("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
+
     return (
         <form onSubmit={handleSubmit}>
+            <TextField
+                label="Имя пользователя"
+                name="name"
+                value={data.name}
+                onChange={handleChange}
+                error={errors.name}
+            />
             <TextField
                 label="Электронная почта"
                 name="email"
@@ -76,12 +102,23 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
+            <RadioField
+                options={[
+                    { name: "Мужчина", value: "male" },
+                    { name: "Женщина", value: "female" }
+                ]}
+                value={data.sex}
+                name="sex"
+                onChange={handleChange}
+                label="Выберите ваш пол"
+            />
+
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"
                 disabled={!isValid}
             >
-                Зарегнстрировать
+                Зарегистрировать
             </button>
         </form>
     );

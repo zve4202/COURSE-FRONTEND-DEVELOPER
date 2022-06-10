@@ -1,92 +1,32 @@
 import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // import { useHistory, useParams } from "react-router-dom";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
-import MultiSelectField from "../../common/form/multiSelectField";
+import SelectField from "../../common/form/selectField";
 import BackHistoryButton from "../../common/backButton";
 import { useRole } from "../../../hooks/useRoles";
-// import { useUser } from "../../../hooks/useUsers";
+import { useUser } from "../../../hooks/useUsers";
+import { useAuth } from "../../../hooks/useAuth";
 
 const EditUserPage = () => {
-    // const { userId } = useParams();
+    const { currentUser, isAdmin } = useAuth();
+    const { userId } = useParams();
     // const history = useHistory();
-    const [isLoading, setLoading] = useState(false);
-    // const { users } = useUser();
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        roles: []
-    });
+    const user = useUser().getUser(userId);
+    const [data, setData] = useState({});
+    useEffect(() => {
+        setData(user);
+    }, [user]);
+
     const { roles } = useRole();
-    // const [roles, setRoles] = useState([]);
     const [errors, setErrors] = useState({});
-    // const getRoles = (elements) => {
-    //     const qualitiesArray = [];
-    //     for (const elem of elements) {
-    //         for (const quality in roles) {
-    //             if (elem.value === roles[quality].value) {
-    //                 qualitiesArray.push({
-    //                     _id: roles[quality].value,
-    //                     name: roles[quality].label,
-    //                     color: roles[quality].color
-    //                 });
-    //             }
-    //         }
-    //     }
-    //     return qualitiesArray;
-    // };
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        // const { roles } = data;
         console.log(data);
-        // api.users
-        //     .update(userId, {
-        //         ...data,
-        //         profession: getProfessionById(profession),
-        //         roles: getRoles(roles)
-        //     })
-        //     .then((data) => history.push(`/users/${data._id}`));
-        // console.log({
-        //     ...data,
-        //     profession: getProfessionById(profession),
-        //     roles: getRoles(roles)
-        // });
     };
-    // const transformData = (data) => {
-    //     return data.map((qual) => ({ label: qual.name, value: qual._id }));
-    // };
-    // useEffect(() => {
-    //     setLoading(true);
-    //     api.users.getById(userId).then(({ profession, roles, ...data }) =>
-    //         setData((prevState) => ({
-    //             ...prevState,
-    //             ...data,
-    //             roles: transformData(roles),
-    //             profession: profession._id
-    //         }))
-    //     );
-    //     api.professions.fetchAll().then((data) => {
-    //         const professionsList = Object.keys(data).map((professionName) => ({
-    //             label: data[professionName].name,
-    //             value: data[professionName]._id
-    //         }));
-    //         setProfession(professionsList);
-    //     });
-    //     api.roles.fetchAll().then((data) => {
-    //         const qualitiesList = Object.keys(data).map((optionName) => ({
-    //             value: data[optionName]._id,
-    //             label: data[optionName].name,
-    //             color: data[optionName].color
-    //         }));
-    //         setRoles(qualitiesList);
-    //     });
-    // }, []);
-    useEffect(() => {
-        if (data._id) setLoading(false);
-    }, [data]);
 
     const validatorConfig = {
         email: {
@@ -97,7 +37,7 @@ const EditUserPage = () => {
                 message: "Email введен некорректно"
             }
         },
-        password: {
+        new_password: {
             isRequired: {
                 message: "Пароль обязателен для заполнения"
             },
@@ -115,6 +55,11 @@ const EditUserPage = () => {
         name: {
             isRequired: {
                 message: "Введите имя пользователя"
+            }
+        },
+        role: {
+            isRequired: {
+                message: "Введите роль пользователя"
             }
         }
     };
@@ -138,7 +83,7 @@ const EditUserPage = () => {
             <BackHistoryButton />
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {!isLoading && roles.length > 0 ? (
+                    {roles.length > 0 ? (
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="Имя"
@@ -154,21 +99,31 @@ const EditUserPage = () => {
                                 onChange={handleChange}
                                 error={errors.email}
                             />
-                            <TextField
-                                label="Пароль"
-                                type="password"
-                                name="password"
-                                value={data.password}
-                                onChange={handleChange}
-                                error={errors.password}
-                            />
-                            <MultiSelectField
-                                defaultValue={data.roles}
-                                options={roles}
-                                onChange={handleChange}
-                                name="roles"
-                                label="Роли пользователя"
-                            />
+                            {currentUser && currentUser.id === data._id && (
+                                <TextField
+                                    label="Новый пароль"
+                                    type="password"
+                                    name="new_password"
+                                    value={data.new_password}
+                                    onChange={handleChange}
+                                    error={errors.new_password}
+                                />
+                            )}
+                            {isAdmin && (
+                                <SelectField
+                                    label="Роль пользователя"
+                                    defaultOption="Выбрать..."
+                                    defaultValue={data.role}
+                                    options={roles.map((role) => ({
+                                        label: role.name,
+                                        value: role._id
+                                    }))}
+                                    onChange={handleChange}
+                                    name="role"
+                                    value={data.role}
+                                    error={errors.role}
+                                />
+                            )}
                             <button
                                 type="submit"
                                 disabled={!isValid}

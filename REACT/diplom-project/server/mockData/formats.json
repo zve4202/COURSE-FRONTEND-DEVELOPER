@@ -1,32 +1,32 @@
 [
   {
-    "_id": "629c37691b0dd87fd6d0bc5d",
+    "_id": "cd",
     "name": "CD",
-    "category": "67rdca3eeb7f6fgeed471818"
+    "category": "cd"
   },
   {
-    "_id": "629c3a561b0dd87fd6d0bce3",
+    "_id": "dvd",
     "name": "DVD",
-    "category": "67rdca3eeb7f6fgeed471820"
+    "category": "dvd"
   },
   {
-    "_id": "629c3aeb1b0dd87fd6d0bd0d",
+    "_id": "lp",
     "name": "LP",
-    "category": "67rdca3eeb7f6fgeed471814"
+    "category": "vinil"
   },
   {
-    "_id": "629c3b791b0dd87fd6d0bd25",
+    "_id": "blu_rey",
     "name": "BLU-RAY",
-    "category": "67rdca3eeb7f6fgeed471822"
+    "category": "blu_rey"
   },
   {
-    "_id": "629c3bc91b0dd87fd6d0bd34",
+    "_id": "dvd_a",
     "name": "DVD-A",
-    "category": "67rdca3eeb7f6fgeed471824"
+    "category": "dvd_a"
   },
   {
-    "_id": "629c3c3d1b0dd87fd6d0bd51",
+    "_id": "blu_rey_a",
     "name": "BLU-RAY-A",
-    "category": "67rdca3eeb7f6fgeed471829"
+    "category": "blu_rey_pure_audio"
   }
 ]

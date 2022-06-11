@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const ObjectIdType = Schema.Types.ObjectId;
 
 const sexes = ["male", "female"];
 

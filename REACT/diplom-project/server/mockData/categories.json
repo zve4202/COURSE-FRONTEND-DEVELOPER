@@ -1,8 +1,8 @@
 [
-    { "_id": "67rdca3eeb7f6fgeed471818", "name": "CD" },
-    { "_id": "67rdca3eeb7f6fgeed471820", "name": "DVD" },
-    { "_id": "67rdca3eeb7f6fgeed471814", "name": "VINYL" },
-    { "_id": "67rdca3eeb7f6fgeed471822", "name": "BLU-RAY" },
-    { "_id": "67rdca3eeb7f6fgeed471824", "name": "DVD AUDIO DISC" },
-    { "_id": "67rdca3eeb7f6fgeed471829", "name": "BLU-RAY PURE AUDIO" }
+  { "_id": "cd", "name": "CD" },
+  { "_id": "dvd", "name": "DVD" },
+  { "_id": "vinil", "name": "VINYL" },
+  { "_id": "blu_rey", "name": "BLU-RAY" },
+  { "_id": "dvd_a", "name": "DVD AUDIO DISC" },
+  { "_id": "blu_rey_pure_audio", "name": "BLU-RAY PURE AUDIO" }
 ]

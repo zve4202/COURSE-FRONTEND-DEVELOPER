@@ -9,6 +9,9 @@ const categoriesMock = require("../mockData/categories.json");
 const formatsMock = require("../mockData/formats.json");
 const rolesMock = require("../mockData/roles.json");
 const usersMock = require("../mockData/users.json");
+const catalogMock = require("../mockData/catalog.json");
+const labelMock = require("../mockData/labels.json");
+const productMock = require("../mockData/products.json");
 const e = require("express");
 
 const generateSimpleEntity = (data, model) => {

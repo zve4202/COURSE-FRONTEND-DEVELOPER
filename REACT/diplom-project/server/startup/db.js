@@ -13,81 +13,62 @@ const catalogMock = require("../mockData/catalog.json");
 const labelMock = require("../mockData/labels.json");
 const productMock = require("../mockData/products.json");
 const e = require("express");
+const {
+  findNewIds,
+  generateSimpleEntity,
+  generateSimpleEntity_AsIs,
+  getNewId,
+} = require("./utils");
 
-const generateSimpleEntity = (data, model) => {
-  return Promise.all(
-    data.map(async (example) => {
-      try {
-        const exm = await model.find({
-          name: example.name,
-        });
-
-        if (exm.length !== 0) {
-          return exm[0];
-        }
-        const example_id = example._id;
-        delete example._id;
-        const newExm = new model(example);
-        example._id = example_id;
-        await newExm.save();
-        return newExm;
-      } catch (error) {
-        return error;
-      }
-    })
-  );
-};
-
-const generateSimpleEntity_AsIs = (data, model) => {
-  return Promise.all(
-    data.map(async (example) => {
-      try {
-        const exm = await model.find({
-          _id: example._id,
-        });
-
-        if (exm.length !== 0) {
-          return exm[0];
-        }
-        const newExm = new model(example);
-        await newExm.save();
-        return newExm;
-      } catch (error) {
-        return error;
-      }
-    })
-  );
-};
-
-const getNewId = (mockId, data, mockData) => {
-  const newItem = mockData.find((el) => el._id === mockId);
-  return data.find((el) => el.name === newItem.name)._id;
-};
-
-const findNewIds = (mockIds, data, mockData) => {
-  const newArray = [];
-  for (const mockItem of mockData) {
-    for (const mockId of mockIds) {
-      if (mockId === mockItem._id) {
-        for (const dataItem of data) {
-          if (dataItem.name === mockItem.name) newArray.push(role._id);
-        }
-      }
-    }
+async function InitSimpleEntity(name, data, model, asIs = false) {
+  var result = undefined;
+  if (asIs) {
+    result = await generateSimpleEntity_AsIs(data, model);
+  } else {
+    result = await generateSimpleEntity(data, model);
   }
-  return newArray;
-};
+  if (result) {
+    debug(`${name} in DB ${chalk.green("✓")}`);
+  } else {
+    debug(`${name} error ${chalk.red("x")}`);
+  }
+  return result;
+}
 
 async function setInitialData() {
-  const categories = await generateSimpleEntity(
+  const roles = await InitSimpleEntity("roles", rolesMock, models.role, true);
+
+  const users = await Promise.all(
+    usersMock.map(async (user) => {
+      try {
+        const findUser = await models.user.find({
+          email: user.email,
+        });
+        if (findUser.length !== 0) {
+          return findUser[0];
+        }
+        const salt = await bcrypt.genSalt(5);
+        user.password = await bcrypt.hash(user.password, salt);
+        delete user._id;
+        const newUser = new models.user(user);
+        await newUser.save();
+        return newUser;
+      } catch (error) {
+        return error;
+      }
+    })
+  );
+  if (users) {
+    debug(`users in DB ${chalk.green("✓")}`);
+  } else {
+    debug(`users error ${chalk.green("x")}`);
+  }
+
+  const categories = await InitSimpleEntity(
+    "categories",
     categoriesMock,
     models.category
   );
-  if (categories) {
-    debug(`Categories in DB ${chalk.green("✓")}`);
-  } else {
-    debug(`Categories error ${chalk.red("x")}`);
-  }
 
   const formats = await Promise.all(
     formatsMock.map(async (item) => {
@@ -111,43 +92,68 @@ async function setInitialData() {
     })
   );
   if (formats) {
-    debug(`Formats in DB ${chalk.green("✓")}`);
+    debug(`formats in DB ${chalk.green("✓")}`);
   } else {
-    debug(`Formats error ${chalk.red("x")}`);
+    debug(`formats error ${chalk.red("x")}`);
   }
 
-  const roles = await generateSimpleEntity_AsIs(rolesMock, models.role);
-  if (roles) {
-    debug(`Roles in DB ${chalk.green("✓")}`);
-  } else {
-    debug(`Roles error ${chalk.red("x")}`);
-  }
+  const labels = await InitSimpleEntity("labels", labelMock, models.label);
 
-  const users = await Promise.all(
-    usersMock.map(async (user) => {
+  const catalog = await Promise.all(
+    catalogMock.map(async (item) => {
       try {
-        const findUser = await models.user.find({
-          email: user.email,
+        const find = await models.catalog.find({
+          barcode: item.barcode,
         });
-        if (findUser.length !== 0) {
-          return findUser[0];
+        if (find.length !== 0) {
+          return find[0];
         }
-        const salt = await bcrypt.genSalt(5);
-        user.password = await bcrypt.hash(user.password, salt);
-        delete user._id;
-        const newUser = new models.user(user);
-        await newUser.save();
-        return newUser;
+        item.format = getNewId(item.format, formats, formatsMock);
+        item.label = getNewId(item.label, labels, labelMock);
+        const example_id = item._id;
+        delete item._id;
+        const newItem = new models.catalog(item);
+        item._id = example_id;
+        await newItem.save();
+        return newItem;
       } catch (error) {
         return error;
       }
     })
   );
-  if (users) {
-    debug(`Users in DB ${chalk.green("✓")}`);
+  if (catalog) {
+    debug(`catalog in DB ${chalk.green("✓")}`);
   } else {
-    debug(`Users error ${chalk.green("x")}`);
+    debug(`catalog error ${chalk.red("x")}`);
   }
+
+  const products = await Promise.all(
+    productMock.map(async (item) => {
+      try {
+        const find = await models.product.find({
+          articul: item.articul,
+        });
+        if (find.length !== 0) {
+          return find[0];
+        }
+        item.catalog = getNewId(item.catalog, catalog, catalogMock);
+        const example_id = item._id;
+        delete item._id;
+        const newItem = new models.product(item);
+        item._id = example_id;
+        await newItem.save();
+        return newItem;
+      } catch (error) {
+        return error;
+      }
+    })
+  );
+  if (products) {
+    debug(`products in DB ${chalk.green("✓")}`);
+  } else {
+    debug(`products error ${chalk.red("x")}`);
+  }
+  console.log("products", products);
 }
 
 module.exports = function () {

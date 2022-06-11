@@ -6,7 +6,7 @@ const Role = ({ roleId }) => {
     if (isLoading) return "Loading...";
 
     const { name, color } = getRole(roleId);
-    return <span className={"badge m-1 bg-" + color}>{name}</span>;
+    return <span className={"badge mt-3 bg-" + color}>{name}</span>;
 };
 Role.propTypes = {
     roleId: PropTypes.string.isRequired

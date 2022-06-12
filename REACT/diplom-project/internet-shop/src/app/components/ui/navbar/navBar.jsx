@@ -5,6 +5,7 @@ import logo from "../../../assets/brand/favicon.ico";
 import MenuBasket from "./menuBasket";
 import MenuUser from "./menuUser";
 import { useAuth } from "../../../hooks/useAuth";
+import MenuAdmin from "./menuAdmin";
 
 const NavBar = () => {
     const { currentUser } = useAuth();
@@ -24,15 +25,7 @@ const NavBar = () => {
                             {appTitle}
                         </Link>
                     </li>
-                    <li className="nav-item">
-                        <Link
-                            className="nav-link "
-                            aria-current="page"
-                            to="/users"
-                        >
-                            Пользователи
-                        </Link>
-                    </li>
+                    <MenuAdmin />
                     <li className="nav-item ms-auto">
                         <ul className="nav d-flex">
                             <li className="nav-item">

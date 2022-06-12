@@ -3,6 +3,8 @@ const userRoute = require("./user.route");
 const authRoute = require("./auth.route");
 const roleRoute = require("./role.route");
 const categoryRoute = require("./category.route");
+const productRoute = require("./product.route");
+
 const formatRoute = require("./format.route");
 
 const router = express.Router({ mergeParams: true });
@@ -11,6 +13,7 @@ router.use("/auth", authRoute);
 router.use("/user", userRoute);
 router.use("/role", roleRoute);
 router.use("/category", categoryRoute);
+router.use("/product", productRoute);
 router.use("/format", formatRoute);
 
 module.exports = function (app) {

@@ -1,10 +1,13 @@
 import React from "react";
-import ProductListPage from "../components/page/productListPage/productListPage";
+import ProductListPage from "../components/page/productListPage";
 import { CategoryProvider } from "../hooks/useCategories";
+import { ProductProvider } from "../hooks/useProduct";
 const Main = () => {
     return (
         <CategoryProvider>
-            <ProductListPage />
+            <ProductProvider>
+                <ProductListPage />
+            </ProductProvider>
         </CategoryProvider>
     );
 };

@@ -38,7 +38,6 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
 
     return (
         <Table
-            caption="Пользователи"
             onSort={onSort}
             selectedSort={selectedSort}
             columns={columns}

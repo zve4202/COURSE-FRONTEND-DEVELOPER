@@ -21,6 +21,7 @@ table.table td {
     border-top: none;
 }
 
+th.cover-small,
 td.cover-small {
-    width: 74px;
+    width: 81px;
 }

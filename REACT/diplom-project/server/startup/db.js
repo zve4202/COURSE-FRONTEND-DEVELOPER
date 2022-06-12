@@ -35,6 +35,7 @@ async function InitSimpleEntity(name, data, model, asIs = false) {
   return result;
 }
 
+const Service = require("../services/product.service");
 async function setInitialData() {
   const roles = await InitSimpleEntity("roles", rolesMock, models.role, true);
 
@@ -131,7 +132,7 @@ async function setInitialData() {
     productMock.map(async (item) => {
       try {
         const find = await models.product.find({
-          articul: item.articul,
+          article: item.article,
         });
         if (find.length !== 0) {
           return find[0];
@@ -153,7 +154,9 @@ async function setInitialData() {
   } else {
     debug(`products error ${chalk.red("x")}`);
   }
-  console.log("products", products);
+
+  const productEx = await Service.getListEx({});
+  console.log(productEx);
 }
 
 module.exports = function () {

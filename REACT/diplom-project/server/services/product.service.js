@@ -52,3 +52,82 @@ exports.getList = async function (query, page, limit) {
     throw Error("Error while Paginating Product");
   }
 };
+
+const agg = [
+  {
+    $lookup: {
+      from: "catalogs",
+      localField: "catalog",
+      foreignField: "_id",
+      as: "catalog",
+    },
+  },
+  {
+    $unwind: {
+      path: "$catalog",
+    },
+  },
+  {
+    $lookup: {
+      from: "formats",
+      localField: "catalog.format",
+      foreignField: "_id",
+      as: "catalog.format",
+    },
+  },
+  {
+    $unwind: {
+      path: "$catalog.format",
+    },
+  },
+  {
+    $lookup: {
+      from: "labels",
+      localField: "catalog.label",
+      foreignField: "_id",
+      as: "catalog.label",
+    },
+  },
+  {
+    $unwind: {
+      path: "$catalog.label",
+    },
+  },
+];
+
+exports.getListEx = async function (query, page, limit) {
+  try {
+    const data = await Product.aggregate(agg);
+    // .lookup({
+    //   from: "catalogs",
+    //   localField: "catalog",
+    //   foreignField: "_id",
+    //   as: "catalog",
+    // })
+    // .unwind({
+    //   path: "$catalog",
+    // })
+    // .lookup({
+    //   from: "formats",
+    //   localField: "catalog.format",
+    //   foreignField: "_id",
+    //   as: "catalog.format",
+    // })
+    // .unwind({
+    //   path: "$catalog.format",
+    // })
+    // .lookup({
+    //   from: "labels",
+    //   localField: "catalog.label",
+    //   foreignField: "_id",
+    //   as: "catalog.label",
+    // })
+    // .unwind({
+    //   path: "$catalog.label",
+    // });
+    return data;
+  } catch (e) {
+    // Log Errors
+    throw Error("Error while Paginating Product");
+  }
+};

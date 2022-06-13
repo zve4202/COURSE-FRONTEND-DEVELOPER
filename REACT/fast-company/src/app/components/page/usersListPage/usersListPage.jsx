@@ -8,8 +8,10 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 const UsersListPage = () => {
     const { users } = useUser();
+    const { currentUser } = useAuth();
     const { isLoading: professionsLosding, professions } = useProfessions();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
@@ -48,9 +50,9 @@ const UsersListPage = () => {
         setSortBy(item);
     };
 
-    if (users) {
+    function filterUsers(data) {
         const filteredUsers = searchQuery
-            ? users.filter((user) =>
+            ? data.filter((user) =>
                   user.name
                       ? user.name
                             .toLowerCase()
@@ -58,12 +60,17 @@ const UsersListPage = () => {
                       : false
               )
             : selectedProf
-            ? users.filter(
+            ? data.filter(
                   (user) =>
                       JSON.stringify(user.profession) ===
                       JSON.stringify(selectedProf)
               )
-            : users;
+            : data;
+        return filteredUsers.filter((user) => user._id !== currentUser._id);
+    }
+
+    if (users) {
+        const filteredUsers = filterUsers(users);
 
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(

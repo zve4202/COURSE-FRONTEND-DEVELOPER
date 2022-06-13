@@ -54,7 +54,9 @@ const ProductTable = ({ products, onSort, selectedSort, onAdd, ...rest }) => {
         price: {
             path: "price",
             name: "Цена",
-            component: (product) => <div>{product.price} руб.</div>
+            component: (product) => (
+                <div className="text-nowrap">{product.price} руб.</div>
+            )
         },
         add: {
             component: (product) => (

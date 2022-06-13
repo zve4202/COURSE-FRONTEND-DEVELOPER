@@ -43,9 +43,9 @@ exports.generateSimpleEntity_AsIs = (data, model) => {
   );
 };
 
-exports.getNewId = (mockId, data, mockData) => {
+exports.getNewId = (mockId, data, mockData, name = "name") => {
   const newItem = mockData.find((el) => el._id === mockId);
-  return data.find((el) => el.name === newItem.name)._id;
+  return data.find((el) => el[name] === newItem[name])._id;
 };
 
 exports.findNewIds = (mockIds, data, mockData) => {

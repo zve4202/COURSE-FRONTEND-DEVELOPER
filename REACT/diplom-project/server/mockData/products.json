@@ -5,5 +5,54 @@
     "catalog": "1",
     "price": 1365,
     "count": 5
+  },
+  {
+    "_id": "2",
+    "article": "0001581",
+    "catalog": "2",
+    "price": 1575,
+    "count": 4
+  },
+  {
+    "_id": "3",
+    "article": "0001582",
+    "catalog": "3",
+    "price": 3675,
+    "count": 4
+  },
+  {
+    "_id": "4",
+    "article": "0001584",
+    "catalog": "4",
+    "price": 2520,
+    "count": 3
+  },
+  {
+    "_id": "5",
+    "article": "0001585",
+    "catalog": "5",
+    "price": 1680,
+    "count": 10
+  },
+  {
+    "_id": "6",
+    "article": "0001586",
+    "catalog": "6",
+    "price": 2100,
+    "count": 8
+  },
+  {
+    "_id": "7",
+    "article": "0001587",
+    "catalog": "7",
+    "price": 2100,
+    "count": 2
+  },
+  {
+    "_id": "8",
+    "article": "0001588",
+    "catalog": "8",
+    "price": 3150,
+    "count": 4
   }
 ]

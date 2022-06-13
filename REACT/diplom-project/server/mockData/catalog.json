@@ -9,5 +9,82 @@
     "country": "EEC",
     "year_release": 1998,
     "picture": "41p6xPy8nAL._SL160_.jpg"
+  },
+  {
+    "_id": "2",
+    "barcode": "0048612713123",
+    "artist": "KARI SAXTON",
+    "title": "FUMIGATE FUNKY BROADWAY, RARE AND UNREISSUED FUNK...",
+    "format": "cd",
+    "label": "night_train",
+    "country": "USA",
+    "year_release": 2002,
+    "picture": "51JZ2P56NCL._SL160_.jpg"
+  },
+  {
+    "_id": "3",
+    "barcode": "0602547202796",
+    "artist": "QUEEN",
+    "title": "A KIND OF MAGIC",
+    "format": "lp",
+    "label": "universal",
+    "country": "EEC",
+    "year_release": 2015,
+    "picture": "61nAyuWEYlL._SL160_.jpg"
+  },
+  {
+    "_id": "4",
+    "barcode": "0602527355238",
+    "artist": "U-2",
+    "title": "360 AT THE ROSE BOWL",
+    "format": "blu_rey",
+    "label": "island",
+    "country": "DEU",
+    "year_release": 2010,
+    "picture": "51c9BtrtR2L._SL160_.jpg"
+  },
+  {
+    "_id": "5",
+    "barcode": "0093624987727",
+    "artist": "R.E.M.",
+    "title": "ACCELERATE",
+    "format": "dvd",
+    "label": "warner",
+    "country": "USA",
+    "year_release": 2008,
+    "picture": "51TqIWVGB6L._SL160_.jpg"
+  },
+  {
+    "_id": "6",
+    "barcode": "0710215101125",
+    "artist": "DAVID BENOIT",
+    "title": "AMERICAN LANDSCAPE (DTS 5.1 SURROUND)",
+    "format": "dvd_a",
+    "label": "dts",
+    "country": "GBR",
+    "year_release": 1997,
+    "picture": "41L0yIfdI6L._SL160_.jpg"
+  },
+  {
+    "_id": "7",
+    "barcode": "AVI6025",
+    "artist": "DAVID BENOIT",
+    "title": "HEAVIER THAN YESTERDAY",
+    "format": "lp",
+    "label": "avi_records",
+    "country": "USA",
+    "year_release": 1977,
+    "picture": ""
+  },
+  {
+    "_id": "8",
+    "barcode": "0602537489428",
+    "artist": "DALIDA",
+    "title": "40 SUCCESS EN OR (BLU-RAY PURE AUDIO)",
+    "format": "blu_rey_a",
+    "label": "barclay",
+    "country": "EEC",
+    "year_release": 2013,
+    "picture": "51dIhd4cuGL._SL160_.jpg"
   }
 ]

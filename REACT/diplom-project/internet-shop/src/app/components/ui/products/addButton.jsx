@@ -20,7 +20,7 @@ const AddButton = ({ productId, onAdd }) => {
                 onClick={() => handleClick()}
                 className={`btn btn-sm btn-${
                     count === 0 ? "danger" : "secondary"
-                }`}
+                } text-nowrap`}
             >
                 <i className="bi bi-cart" /> {countText}
             </span>

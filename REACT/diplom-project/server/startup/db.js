@@ -137,7 +137,7 @@ async function setInitialData() {
         if (find.length !== 0) {
           return find[0];
         }
-        item.catalog = getNewId(item.catalog, catalog, catalogMock);
+        item.catalog = getNewId(item.catalog, catalog, catalogMock, "barcode");
         const example_id = item._id;
         delete item._id;
         const newItem = new models.product(item);

@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import configFile from "../config.json";
 import { httpAuth } from "../hooks/useAuth";
 import localStorageService from "./localStorage.service";
+
 const http = axios.create({
     baseURL: configFile.apiEndpoint
 });
@@ -20,11 +21,12 @@ http.interceptors.request.use(
                     grant_type: "refresh_token",
                     refresh_token: refreshToken
                 });
+
                 localStorageService.setTokens({
                     refreshToken: data.refresh_token,
                     idToken: data.id_token,
-                    localId: data.user_id,
-                    expiresIn: data.expires_in
+                    expiresIn: data.expires_id,
+                    localId: data.user_id
                 });
             }
             const accessToken = localStorageService.getAccessToken();

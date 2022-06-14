@@ -44,8 +44,9 @@ const AuthProvider = ({ children }) => {
             console.log(code, message);
             if (code === 400) {
                 switch (message) {
-                    case ("INVALID_PASSWORD", "EMAIL_NOT_FOUND"):
+                    case "INVALID_PASSWORD":
                         throw new Error("Email или пароль введены некорректно");
+
                     default:
                         throw new Error(
                             "Слишком много попыток входа. Попробуйте позже"
@@ -55,11 +56,10 @@ const AuthProvider = ({ children }) => {
         }
     }
     function logOut() {
-        localStorageService.rempveAuthData();
-        setUser();
+        localStorageService.removeAuthData();
+        setUser(null);
         history.push("/");
     }
-
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
@@ -100,6 +100,7 @@ const AuthProvider = ({ children }) => {
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
+            console.log(content);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
@@ -109,13 +110,6 @@ const AuthProvider = ({ children }) => {
         const { message } = error.response.data;
         setError(message);
     }
-    useEffect(() => {
-        if (error !== null) {
-            toast(error);
-            setError(null);
-        }
-    }, [error]);
-
     async function getUserData() {
         try {
             const { content } = await userService.getCurrentUser();
@@ -133,7 +127,12 @@ const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     }, []);
-
+    useEffect(() => {
+        if (error !== null) {
+            toast(error);
+            setError(null);
+        }
+    }, [error]);
     return (
         <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut }}>
             {!isLoading ? children : "Loading..."}

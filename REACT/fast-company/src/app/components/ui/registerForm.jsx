@@ -14,10 +14,10 @@ const RegisterForm = () => {
     const history = useHistory();
     const [data, setData] = useState({
         email: "",
-        name: "",
         password: "",
         profession: "",
         sex: "male",
+        name: "",
         qualities: [],
         licence: false
     });

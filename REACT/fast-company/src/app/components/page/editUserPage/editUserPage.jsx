@@ -14,7 +14,7 @@ import { useUser } from "../../../hooks/useUsers";
 const EditUserPage = () => {
     const history = useHistory();
     const { userId } = useParams();
-    const { getUserById, replaceUser } = useUser();
+    const { getUserById } = useUser();
     const [isLoading, setIsLoading] = useState(true);
     const [errors, setErrors] = useState({});
     const { updateUser } = useAuth();

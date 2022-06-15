@@ -6,7 +6,7 @@ const categoryRoute = require("./category.route");
 const productRoute = require("./product.route");
 const formatRoute = require("./format.route");
 const orderRoute = require("./order.route");
-const orderListRoute = require("./order_list.route");
+const orderDetailsRoute = require("./order_details.route");
 
 const router = express.Router({ mergeParams: true });
 
@@ -17,7 +17,7 @@ router.use("/category", categoryRoute);
 router.use("/product", productRoute);
 router.use("/format", formatRoute);
 router.use("/order", orderRoute);
-router.use("/orderlist", orderListRoute);
+router.use("/order/details", orderDetailsRoute);
 
 module.exports = function (app) {
   app.use(function (req, res, next) {

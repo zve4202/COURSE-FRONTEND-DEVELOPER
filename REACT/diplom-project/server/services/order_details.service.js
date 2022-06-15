@@ -1,4 +1,4 @@
-const OrderList = require("../models/order_list.model");
+const OrderList = require("../models/order_details.model");
 
 exports.get = async function (id) {
   try {
@@ -23,9 +23,9 @@ exports.update = async function (id, dataUpdate) {
 
 exports.add = async function (data) {
   try {
-    const order_list = new OrderList(data);
-    await order_list.save();
-    return order_list;
+    const order_details = new OrderList(data);
+    await order_details.save();
+    return order_details;
   } catch (error) {
     throw Error(error);
   }
@@ -33,11 +33,11 @@ exports.add = async function (data) {
 
 exports.delete = async function (id) {
   try {
-    const order_list = await OrderList.findByIdAndDelete(id);
-    if (order_list === null) {
+    const order_details = await OrderList.findByIdAndDelete(id);
+    if (order_details === null) {
       throw Error(`id: ${id} not found`);
     }
-    return order_list;
+    return order_details;
   } catch (error) {
     throw Error("OrderList not Found");
   }

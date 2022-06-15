@@ -13,6 +13,6 @@ db.label = require("./label.model");
 db.catalog = require("./catalog.model");
 db.product = require("./product.model");
 db.order = require("./order.model");
-db.order_list = require("./order_list.model");
+db.order_details = require("./order_details.model");
 
 module.exports = db;

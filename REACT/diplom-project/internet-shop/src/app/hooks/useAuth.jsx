@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import authService from "../services/auth.service";
 import {
     setAccessToken,
-    getAccessToken
+    getAccessToken,
+    removeAccessToken
 } from "../services/localStorage.service";
+import { useHistory } from "react-router-dom";
 
 const AuthContext = React.createContext();
 
@@ -17,6 +19,8 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState(null);
     const [error, setError] = useState(null);
     const [isAdmin, setAdmin] = useState(false);
+    const history = useHistory();
+
     async function getUser() {
         const onBoard = getAccessToken();
         if (onBoard) {
@@ -89,8 +93,9 @@ const AuthProvider = ({ children }) => {
     }
 
     function signOut() {
-        setAccessToken({ accessToken: null });
+        removeAccessToken();
         setUser(null);
+        history.push("/");
     }
     function errorCatcher(error) {
         const { message } = error.response.data;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
-import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 import GroupList from "../../common/groupList";
 import ProductTable from "../../ui/products";
 import { useCategory } from "../../../hooks/useCategories";
 import { useProduct } from "../../../hooks/useProduct";
 import Pagination from "../../common/pagination";
 import { paginate } from "../../../utils/paginate";
+import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 
 const ProductListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -74,17 +74,12 @@ const ProductListPage = () => {
         <WorkScreenWithSearch
             searchValue={searchQuery}
             onSearch={handleSearchQuery}
+            clearFilter={clearFilter}
         >
-            <div className="card mt-2 p-3">
+            <div className="mt-2">
                 <div className="d-flex">
                     {categories && (
-                        <div className="d-flex flex-column flex-shrink-0 me-3">
-                            <button
-                                className="btn btn-secondary mb-2"
-                                onClick={clearFilter}
-                            >
-                                Очистить
-                            </button>
+                        <div className="bg-light flex-column flex-shrink-0 me-3 h-100">
                             <GroupList
                                 items={categories}
                                 selectedItem={selectedCat}
@@ -92,22 +87,22 @@ const ProductListPage = () => {
                             />
                         </div>
                     )}
-                    <div className="d-flex flex-column w-100">
+                    <div className="d-flex flex-column w-100 h-100">
                         <div className="card mb-3">
                             <div className="card-body">
                                 Функции сортировки по стоимости
                             </div>
                         </div>
-                        <div className="card h-100">
+                        <div className="h-100">
                             {count > 0 && (
-                                <div className="card-body">
-                                    <ProductTable
-                                        products={productCrop}
-                                        onSort={handleSort}
-                                        selectedSort={sortBy}
-                                        onAdd={handleDelete}
-                                    />
-                                </div>
+                                // <div className="card-body">
+                                <ProductTable
+                                    products={productCrop}
+                                    onSort={handleSort}
+                                    selectedSort={sortBy}
+                                    onAdd={handleDelete}
+                                />
+                                // </div>
                             )}
                             <div className="d-flex justify-content-center">
                                 <Pagination

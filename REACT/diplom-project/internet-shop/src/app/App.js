@@ -8,6 +8,8 @@ import Login from "./layouts/login";
 import Main from "./layouts/main";
 import Users from "./layouts/users";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./components/common/protectedRoute";
+import LogOut from "./layouts/logOut";
 
 function App() {
     return (
@@ -15,10 +17,14 @@ function App() {
             <AuthProvider>
                 <NavBar />
                 <Switch>
-                    <Route path="/users/:userId?/:edit?" component={Users} />
+                    <ProtectedRoute
+                        path="/users/:userId?/:edit?"
+                        component={Users}
+                    />
                     <Route path="/login/:type?" component={Login} />
                     <Route path="/" exact component={Main} />
                     <Route path="/basket" component={Basket} />
+                    <Route path="/logout" component={LogOut} />
                     <Redirect to="/" />
                 </Switch>
             </AuthProvider>

@@ -3,16 +3,17 @@ import { Link } from "react-router-dom";
 import { appTitle } from "../../../config.json";
 import logo from "../../../assets/brand/favicon.ico";
 import MenuBasket from "./menuBasket";
-import MenuUser from "./menuUser";
 import { useAuth } from "../../../hooks/useAuth";
 import MenuAdmin from "./menuAdmin";
+import NavProfile from "./navProfile";
 
 const NavBar = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, isAdmin } = useAuth();
     return (
-        <div className="container">
-            <div className="card d-flex bg-light mt-1">
-                <ul className="nav d-flex w-100">
+        <nav className="navbar bg-light card mt-1">
+            <div className="container-fluid">
+                {/* <div className="card d-flex bg-light mt-1"> */}
+                <ul className="nav">
                     <li className="nav-item">
                         <Link className="nav-link " aria-current="page" to="/">
                             <img
@@ -25,20 +26,29 @@ const NavBar = () => {
                             {appTitle}
                         </Link>
                     </li>
-                    <MenuAdmin />
-                    <li className="nav-item ms-auto">
-                        <ul className="nav d-flex">
-                            <li className="nav-item">
-                                <MenuBasket user={currentUser} />
-                            </li>
-                            <li className="nav-item">
-                                <MenuUser />
-                            </li>
-                        </ul>
-                    </li>
+                    {currentUser && isAdmin && (
+                        <li className="nav-item">
+                            <MenuAdmin />
+                        </li>
+                    )}
                 </ul>
+                <div className="d-flex">
+                    <MenuBasket user={currentUser} />
+                    {currentUser ? (
+                        <NavProfile />
+                    ) : (
+                        <Link
+                            className="nav-link "
+                            aria-current="page"
+                            to="/login"
+                        >
+                            Login
+                        </Link>
+                    )}
+                </div>
             </div>
-        </div>
+            {/* </div> */}
+        </nav>
     );
 };
 

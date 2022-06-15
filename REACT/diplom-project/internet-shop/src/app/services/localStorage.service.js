@@ -1,8 +1,10 @@
 const TOKEN_KEY = "base-active";
 
 export function setAccessToken({ accessToken }) {
-    if (accessToken === null) localStorage.removeItem(TOKEN_KEY);
-    else localStorage.setItem(TOKEN_KEY, accessToken);
+    localStorage.setItem(TOKEN_KEY, accessToken);
+}
+export function removeAccessToken() {
+    localStorage.removeItem(TOKEN_KEY);
 }
 export function getAccessToken() {
     return localStorage.getItem(TOKEN_KEY);
@@ -10,6 +12,7 @@ export function getAccessToken() {
 
 const localStorageService = {
     setAccessToken,
-    getAccessToken
+    getAccessToken,
+    removeAccessToken
 };
 export default localStorageService;

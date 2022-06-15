@@ -77,6 +77,7 @@ const UsersListPage = () => {
             <WorkScreenWithSearch
                 searchValue={searchQuery}
                 onSearch={handleSearchQuery}
+                clearFilter={clearFilter}
             >
                 <div className="card mt-2 p-3">
                     <div className="d-flex">
@@ -87,12 +88,6 @@ const UsersListPage = () => {
                                     items={roles}
                                     onItemSelect={handleRoleSelect}
                                 />
-                                <button
-                                    className="btn btn-secondary mt-2"
-                                    onClick={clearFilter}
-                                >
-                                    Очистить
-                                </button>
                             </div>
                         )}
                         <div className="d-flex flex-column w-100">

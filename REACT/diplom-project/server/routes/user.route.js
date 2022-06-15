@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const UserController = require("../controllers/user.controller");
+const Controller = require("../controllers/user.controller");
 const authJwt = require("../middleware/authJwt");
 
-router.get("/me", [authJwt.verifyToken], UserController.getUser);
-router.get("/", UserController.getUserList);
-router.get("/:userId", UserController.getUser);
-router.put("/:id", UserController.update);
+router.get("/me", [authJwt.verifyToken], Controller.getUser);
+router.get("/", Controller.getUserList);
+router.get("/:userId", Controller.getUser);
+router.put("/:id", Controller.update);
 
 module.exports = router;

@@ -20,11 +20,6 @@ function ProtectedRoute({ component: Component, children, ...rest }) {
                         />
                     );
                 }
-                const { userId, edit } = props.match.params;
-                if (edit && userId !== currentUser._id) {
-                    return <Redirect to={`/users/${currentUser._id}/edit`} />;
-                }
-
                 return Component ? <Component {...props} /> : children;
             }}
         />

@@ -63,6 +63,14 @@ const AuthProvider = ({ children }) => {
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
+    async function updateUserData(data) {
+        try {
+            const { content } = await userService.update(data);
+            setUser(content);
+        } catch (error) {
+            errorCatcher(error);
+        }
+    }
     async function signUp({ email, password, ...rest }) {
         try {
             const { data } = await httpAuth.post(`accounts:signUp`, {
@@ -100,18 +108,10 @@ const AuthProvider = ({ children }) => {
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
+            console.log(content);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
-        }
-    }
-    async function updateUserData(data) {
-        try {
-            const { content } = await userService.update(data);
-            setUser(content);
-        } catch (error) {
-            errorCatcher(error);
-            throw error;
         }
     }
     function errorCatcher(error) {

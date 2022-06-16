@@ -6,9 +6,9 @@ import UsersListPage from "../components/page/usersListPage";
 import { useAuth } from "../hooks/useAuth";
 import UserProvider from "../hooks/useUsers";
 const Users = () => {
-    const { currentUser } = useAuth();
     const params = useParams();
     const { userId, edit } = params;
+    const { currentUser } = useAuth();
     return (
         <>
             <UserProvider>

@@ -18,10 +18,8 @@ export const ProductProvider = ({ children }) => {
     async function getProducts() {
         try {
             const { content } = await productService.fetchAllEx();
-            console.log(content);
             setProducts(content);
         } catch (error) {
-            console.log(error);
             errorCatcher(error);
         }
     }

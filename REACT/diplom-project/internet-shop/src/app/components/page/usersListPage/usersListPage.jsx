@@ -79,7 +79,7 @@ const UsersListPage = () => {
                 onSearch={handleSearchQuery}
                 clearFilter={clearFilter}
             >
-                <div className="card mt-2 p-3">
+                <div className="mt-2">
                     <div className="d-flex">
                         {roles && (
                             <div className="d-flex flex-column flex-shrink-0 me-3">
@@ -90,32 +90,28 @@ const UsersListPage = () => {
                                 />
                             </div>
                         )}
-                        <div className="d-flex flex-column w-100">
+                        <div className="d-flex flex-column w-100 h-100">
                             <div className="card mb-3 bg-light">
                                 <div className="card-body">
                                     <strong>Пользователи</strong>
                                 </div>
                             </div>
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <div className="d-flex flex-column">
-                                        {count > 0 && (
-                                            <UserTable
-                                                users={usersCrop}
-                                                onSort={handleSort}
-                                                selectedSort={sortBy}
-                                                onDelete={handleDelete}
-                                            />
-                                        )}
-                                        <div className="d-flex justify-content-center">
-                                            <Pagination
-                                                itemsCount={count}
-                                                pageSize={pageSize}
-                                                currentPage={currentPage}
-                                                onPageChange={handlePageChange}
-                                            />
-                                        </div>
-                                    </div>
+                            <div className="h-100">
+                                {count > 0 && (
+                                    <UserTable
+                                        users={usersCrop}
+                                        onSort={handleSort}
+                                        selectedSort={sortBy}
+                                        onDelete={handleDelete}
+                                    />
+                                )}
+                                <div className="d-flex justify-content-center">
+                                    <Pagination
+                                        itemsCount={count}
+                                        pageSize={pageSize}
+                                        currentPage={currentPage}
+                                        onPageChange={handlePageChange}
+                                    />
                                 </div>
                             </div>
                         </div>

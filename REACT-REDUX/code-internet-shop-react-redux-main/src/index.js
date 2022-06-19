@@ -15,13 +15,13 @@ import routes from 'routes'
 const history = createBrowserHistory()
 const middlewares = [thunk, routerMiddleware(history)]
 const store = legacy_createStore(
-  createRootReduser(history),
-  composeWithDevTools(applyMiddleware(...middlewares))
+    createRootReduser(history),
+    composeWithDevTools(applyMiddleware(...middlewares))
 )
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>{routes}</ConnectedRouter>
-  </Provider>,
-  document.getElementById('root')
+    <Provider store={store}>
+        <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+    </Provider>,
+    document.getElementById('root')
 )

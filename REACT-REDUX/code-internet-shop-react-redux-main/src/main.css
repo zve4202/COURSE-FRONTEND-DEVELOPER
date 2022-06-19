@@ -14,7 +14,7 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    background: url("/images/preloader.gif") no-repeat 50% 50%;
+    background: url('/images/preloader.gif') no-repeat 50% 50%;
     margin: -32px 0 0 -32px;
 }
 
@@ -49,7 +49,7 @@
     left: -75%;
     z-index: 2;
     display: block;
-    content: "";
+    content: '';
     width: 50%;
     height: 100%;
     background: -webkit-linear-gradient(
@@ -106,10 +106,10 @@
     cursor: default;
 }
 .rating li i {
-    font-family: "Glyphicons Halflings";
+    font-family: 'Glyphicons Halflings';
 }
 .rating li i:before {
-    content: "\e006";
+    content: '\e006';
 }
 .rating.readonly li.filled {
     color: #666;
@@ -152,7 +152,7 @@
     color: #333;
     cursor: default;
     display: inline-block;
-    font-family: "Glyphicons Halflings";
+    font-family: 'Glyphicons Halflings';
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -166,10 +166,10 @@
     cursor: default;
 }
 .newRaiting li i:before {
-    content: "\e007";
+    content: '\e007';
 }
 .newRaiting li.filled i:before {
-    content: "\e006";
+    content: '\e006';
 }
 .average {
     float: left;
@@ -242,10 +242,10 @@
 .table-list tr td {
     padding: 8px;
 }
-.item-checout .first-column-checkout {
+.item-checkout .first-column-checkout {
     width: 12%;
 }
-.item-checout td {
+.item-checkout td {
     border-bottom: 1px solid #ddd;
     border-top: none !important;
     text-align: center;
@@ -263,7 +263,7 @@
     margin-bottom: 10px;
     width: 100%;
 }
-.item-checout .delete-cart {
+.item-checkout .delete-cart {
     display: block;
     margin: 0 auto;
     text-align: center;
@@ -351,7 +351,7 @@ nav.navbar-inverse .navbar-nav > li > a.Active {
 }
 #dLabel {
     color: #fff;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 12px;
     line-height: 18px;
 }

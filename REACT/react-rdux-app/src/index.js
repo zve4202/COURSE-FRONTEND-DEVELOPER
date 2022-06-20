@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.css";
 
+function creatrStore(initialState) {
+  let state = initialState;
+  function getState() {
+    return state;
+  }
+  return { getState };
+}
+
+const store = creatrStore({ id: 1, description: "Task 1", completed: false });
 const App = () => {
-  const [state, setState] = useState({});
-  const obj1 = { id: 2, name: "Name", author: { name: "A Name" } };
-  const obj2 = { ...obj1, author: { ...obj1.author } };
-  console.log(obj1.author === obj2.author);
+  store.getState();
   return <h1 className="btn btn-dark">App</h1>;
 };
 

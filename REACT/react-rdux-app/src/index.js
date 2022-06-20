@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -27,21 +27,34 @@ function creatrStore(reducer, initialState) {
 
 const store = creatrStore(taskReducer, [
   { id: 1, description: "Task 1", completed: false },
+  { id: 2, description: "Task 2", completed: false },
+  { id: 3, description: "Task 3", completed: false },
 ]);
 const App = () => {
-  console.log(store.getState());
-  function handleClick() {
-    store.dispatch({ type: "task/complited", payload: { id: 1 } });
+  const state = store.getState();
+  function handleClick(taskId) {
+    store.dispatch({ type: "task/complited", payload: { id: taskId } });
     console.log(store.getState());
   }
+
   return (
     <>
-      <h1 className="btn btn-dark">
-        App
-        <button className="btn btn-danger" onClick={handleClick}>
-          Complete
-        </button>
-      </h1>
+      <h1 className="btn btn-dark">App</h1>
+      <ul>
+        {state.map((el) => (
+          <li key={el.id}>
+            <span>{el.description}</span>
+            <span> {`Completed ${el.completed}`}</span>
+            <button
+              className="btn btn-danger"
+              onClick={() => handleClick(el.id)}
+            >
+              Complete
+            </button>
+            <hr />
+          </li>
+        ))}
+      </ul>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { taskReducer } from "../store/taskReducer";
 import { TASK_UPDATED } from "../store/actionTypes";
 import { initiateStore } from "../store/store";
+import * as actions from "../store/actions";
 
 const store = initiateStore();
 const App = () => {
@@ -11,16 +11,10 @@ const App = () => {
   }, []);
 
   function completeTask(taskId) {
-    store.dispatch({
-      type: TASK_UPDATED,
-      payload: { id: taskId, completed: true },
-    });
+    store.dispatch(actions.taskCompleted(taskId));
   }
   function changeTitle(taskId) {
-    store.dispatch({
-      type: TASK_UPDATED,
-      payload: { id: taskId, title: `New Title for Task${taskId}` },
-    });
+    store.dispatch(actions.titleChanged(taskId));
   }
 
   return (

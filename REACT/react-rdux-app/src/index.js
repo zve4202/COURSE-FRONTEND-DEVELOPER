@@ -3,7 +3,13 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.css";
 
 const App = () => {
-  return <h1 className="btn btn-dark">APP</h1>;
+  function someFn() {
+    return function () {
+      return "APP";
+    };
+  }
+  const fn = someFn();
+  return <h1 className="btn btn-dark">{fn()}</h1>;
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

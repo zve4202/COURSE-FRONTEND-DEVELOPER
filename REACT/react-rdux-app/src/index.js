@@ -8,9 +8,9 @@ const App = () => {
   const double = (number) => number * 2;
   const square = (number) => number * number;
   const half = (number) => number / 2;
+  const divide = (num2) => (num1) => num1 / num2;
 
-  // const mathCalc = compose(half, square, double);
-  const mathCalc = pipe(double, square, half);
+  const mathCalc = pipe(double, square, half, divide(3));
   return <h1 className="btn btn-dark">App {mathCalc(x)}</h1>;
 };
 

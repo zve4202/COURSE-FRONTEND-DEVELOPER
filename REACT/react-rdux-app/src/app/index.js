@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TASK_UPDATED } from "../store/actionTypes";
-import { initiateStore } from "../store/store";
-import * as actions from "../store/actions";
+import configureStore from "../store/store";
+import * as actions from "../store/task/actions";
 
-const store = initiateStore();
+const store = configureStore();
 const App = () => {
   const [state, setState] = useState(store.getState());
   useEffect(() => {

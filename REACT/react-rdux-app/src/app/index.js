@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import configureStore from "../store/store";
 import { completeTask, changeTitle, removeTask, getTasks } from "../store/task";
 
 export const store = configureStore();
 const App = () => {
-    const state = useSelector((state) => state);
+    const state = useSelector((state) => state.entities);
+    const isLoading = useSelector((state) => state.isLoading);
+
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(getTasks());
     }, []);
+
+    if (isLoading) {
+        return <h1 className="bg-info text-primary text-center">Loading...</h1>;
+    }
 
     return (
         <div className="container">

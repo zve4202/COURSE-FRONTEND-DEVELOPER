@@ -2,40 +2,50 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import todosService from "../services/todos.service";
 // import { createAction, createReducer, createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = { entities: [], isLoading: true, error: null };
 
 const taskSlice = createSlice({
     name: "task",
     initialState,
     reducers: {
         resived(state, action) {
-            return action.payload;
+            state.entities = action.payload;
+            state.isLoading = false;
         },
         update(state, action) {
-            const index = state.findIndex(
+            const index = state.entities.findIndex(
                 (item) => item.id === action.payload.id
             );
-            state[index] = { ...state[index], ...action.payload };
+            state.entities[index] = {
+                ...state.entities[index],
+                ...action.payload
+            };
         },
         remove(state, action) {
-            return state.filter((item) => item.id !== action.payload.id);
+            state.entities = state.entities.filter(
+                (item) => item.id !== action.payload.id
+            );
+        },
+        taskRequested(state) {
+            state.isLoading = true;
+        },
+        taskRequestFailed(state, action) {
+            state.isLoading = false;
+            state.error = action.payload;
         }
     }
 });
 
 const { actions, reducer: taskReducer } = taskSlice;
-const { update, remove, resived } = actions;
-
-const taskRequested = createAction("task/requested");
-const taskRequestFailed = createAction("task/requestFailed");
+const { update, remove, resived, taskRequested, taskRequestFailed } = actions;
 
 export const getTasks = () => async (dispatch) => {
-    dispatch(taskRequested());
+    dispatch(taskRequested({ isLoading: true }));
     try {
         const data = await todosService.fetch();
         dispatch(resived(data));
     } catch (error) {
-        dispatch(taskRequestFailed(error));
+        dispatch(taskRequestFailed(error.message));
     }
 };
 

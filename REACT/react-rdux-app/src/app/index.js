@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import configureStore from "../store/store";
-import { completeTask, titleChanged, taskDeleted } from "../store/task";
+import { completeTask, changeTitle, removeTask } from "../store/task";
 
 const store = configureStore();
 const App = () => {
@@ -10,12 +10,6 @@ const App = () => {
         store.subscribe(() => setState(store.getState()));
     }, []);
 
-    function changeTitle(taskId) {
-        store.dispatch(titleChanged(taskId));
-    }
-    function deleteTask(taskId) {
-        store.dispatch(taskDeleted(taskId));
-    }
     return (
         <div className="container">
             <h1 className="bg-primary text-white text-center">App</h1>
@@ -32,13 +26,13 @@ const App = () => {
                         </button>
                         <button
                             className="btn btn-outline-dark me-1"
-                            onClick={() => changeTitle(el.id)}
+                            onClick={() => store.dispatch(changeTitle(el.id))}
                         >
                             Change title
                         </button>
                         <button
                             className="btn btn-warning"
-                            onClick={() => deleteTask(el.id)}
+                            onClick={() => store.dispatch(removeTask(el.id))}
                         >
                             Delete
                         </button>

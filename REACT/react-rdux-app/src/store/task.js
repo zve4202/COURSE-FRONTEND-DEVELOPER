@@ -7,21 +7,6 @@ const initialState = [
     { id: 3, title: "Task 3", completed: false }
 ];
 
-// const update = createAction("TASK_UPDATED");
-// const remove = createAction("TASK_REMOVED");
-
-// export function taskCompleted(id) {
-//   return update({ id, completed: true });
-// }
-
-// export function titleChanged(id) {
-//   return update({ id, title: `New Title for Task${id}` });
-// }
-
-// export function taskDeleted(id) {
-//   return remove({ id });
-// }
-
 const taskSlice = createSlice({
     name: "task",
     initialState,
@@ -45,12 +30,12 @@ export const completeTask = (id) => (dispatch, getState) => {
     dispatch(update({ id, completed: true }));
 };
 
-export function titleChanged(id) {
-    return update({ id, title: `New Title for Task${id}` });
-}
+export const changeTitle = (id) => (dispatch, getState) => {
+    dispatch(update({ id, title: `New Title for Task${id}` }));
+};
 
-export function taskDeleted(id) {
-    return remove({ id });
-}
+export const removeTask = (id) => (dispatch, getState) => {
+    dispatch(remove({ id }));
+};
 
 export default taskReducer;

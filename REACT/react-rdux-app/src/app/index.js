@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import configureStore from "../store/store";
-import { completeTask, changeTitle, removeTask } from "../store/task";
+import { completeTask, changeTitle, removeTask, getTasks } from "../store/task";
 
 const store = configureStore();
 const App = () => {
     const [state, setState] = useState(store.getState());
 
     useEffect(() => {
+        store.dispatch(getTasks());
         store.subscribe(() => setState(store.getState()));
     }, []);
 

@@ -17,4 +17,7 @@ export const setError = (message) => (dispatch) => {
     dispatch(set(message));
 };
 
+export const getErrors = () => (state) =>
+    state.errors.entities[state.errors.entities.length - 1];
+
 export default errorReducer;

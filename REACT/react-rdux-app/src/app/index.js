@@ -1,18 +1,26 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { getErrors } from "../store/errors";
 import configureStore from "../store/store";
-import { completeTask, changeTitle, removeTask, getTasks } from "../store/task";
+import {
+    completeTask,
+    changeTitle,
+    removeTask,
+    loadTasks,
+    getTasks,
+    getTasksLoadingStatus
+} from "../store/task";
 
 export const store = configureStore();
 const App = () => {
-    const state = useSelector((state) => state.tasks.entities);
-    const isLoading = useSelector((state) => state.tasks.isLoading);
-    const error = useSelector((state) => state.errors.entities[0]);
+    const state = useSelector(getTasks());
+    const isLoading = useSelector(getTasksLoadingStatus());
+    const error = useSelector(getErrors());
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getTasks());
+        dispatch(loadTasks());
     }, []);
 
     if (isLoading) {

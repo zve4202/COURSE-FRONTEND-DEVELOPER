@@ -8,7 +8,8 @@ import {
     removeTask,
     loadTasks,
     getTasks,
-    getTasksLoadingStatus
+    getTasksLoadingStatus,
+    addTask
 } from "../store/task";
 
 export const store = configureStore();
@@ -32,7 +33,17 @@ const App = () => {
 
     return (
         <div className="container">
-            <h1 className="bg-primary text-white text-center">App</h1>
+            <div>
+                <h1 className="bg-primary text-white text-center">App</h1>
+                <button
+                    className="btn btn-dark mt-2"
+                    onClick={() => dispatch(addTask())}
+                >
+                    Add Task
+                </button>
+                <hr />
+            </div>
+
             <ul>
                 {state.map((el) => (
                     <li key={el.id}>

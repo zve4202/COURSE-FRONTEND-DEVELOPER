@@ -10,6 +10,10 @@ const todosService = {
             }
         });
         return data;
+    },
+    addTask: async (task) => {
+        const { data } = await httpService.post(todoEndpoint, task);
+        return data;
     }
 };
 

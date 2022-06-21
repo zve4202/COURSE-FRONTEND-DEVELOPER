@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import configureStore from "../store/store";
 import { completeTask, changeTitle, removeTask, getTasks } from "../store/task";
 
 export const store = configureStore();
 const App = () => {
     const state = useSelector((state) => state);
-
+    const dispatch = useDispatch();
     useEffect(() => {
-        store.dispatch(getTasks());
+        dispatch(getTasks());
     }, []);
 
     return (
@@ -21,19 +21,19 @@ const App = () => {
                         <p>{el.completed ? "Completed" : "not Completed"}</p>
                         <button
                             className="btn btn-outline-primary me-1"
-                            onClick={() => store.dispatch(completeTask(el.id))}
+                            onClick={() => dispatch(completeTask(el.id))}
                         >
                             Complete
                         </button>
                         <button
                             className="btn btn-outline-dark me-1"
-                            onClick={() => store.dispatch(changeTitle(el.id))}
+                            onClick={() => dispatch(changeTitle(el.id))}
                         >
                             Change title
                         </button>
                         <button
                             className="btn btn-warning"
-                            onClick={() => store.dispatch(removeTask(el.id))}
+                            onClick={() => dispatch(removeTask(el.id))}
                         >
                             Delete
                         </button>

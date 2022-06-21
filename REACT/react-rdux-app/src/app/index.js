@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import configureStore from "../store/store";
 import { completeTask, changeTitle, removeTask, getTasks } from "../store/task";
 
 export const store = configureStore();
 const App = () => {
-    const [state, setState] = useState(store.getState());
+    const state = useSelector((state) => state);
 
     useEffect(() => {
         store.dispatch(getTasks());
-        store.subscribe(() => setState(store.getState()));
     }, []);
 
     return (

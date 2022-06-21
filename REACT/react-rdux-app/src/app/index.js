@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import configureStore from "../store/store";
 import { completeTask, changeTitle, removeTask, getTasks } from "../store/task";
 
-const store = configureStore();
+export const store = configureStore();
 const App = () => {
     const [state, setState] = useState(store.getState());
 

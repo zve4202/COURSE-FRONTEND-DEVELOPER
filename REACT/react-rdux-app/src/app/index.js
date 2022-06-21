@@ -7,6 +7,7 @@ export const store = configureStore();
 const App = () => {
     const state = useSelector((state) => state.entities);
     const isLoading = useSelector((state) => state.isLoading);
+    const error = useSelector((state) => state.error);
 
     const dispatch = useDispatch();
 
@@ -16,6 +17,9 @@ const App = () => {
 
     if (isLoading) {
         return <h1 className="bg-info text-primary text-center">Loading...</h1>;
+    }
+    if (error) {
+        return <h3 className="bg-danger text-white text-center">{error}</h3>;
     }
 
     return (

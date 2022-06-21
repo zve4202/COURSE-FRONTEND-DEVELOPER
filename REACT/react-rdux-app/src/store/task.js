@@ -28,6 +28,7 @@ const taskSlice = createSlice({
         },
         taskRequested(state) {
             state.isLoading = true;
+            state.error = null;
         },
         taskRequestFailed(state, action) {
             state.isLoading = false;

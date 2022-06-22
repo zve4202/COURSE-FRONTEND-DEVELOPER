@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { validator } from "../../utils/validator";
-import TextField from "../common/form/textField";
-import CheckBoxField from "../common/form/checkBoxField";
-import { getAuth, getAuthError, signIn } from "../../store/auth";
+import TextField from "../../common/form/textField";
+import CheckBoxField from "../../common/form/checkBoxField";
+import { validator } from "../../../utils/validator";
+import { getAuth, getAuthError, signIn } from "../../../store/auth";
 
 const LoginForm = () => {
     const currentUser = useSelector(getAuth());

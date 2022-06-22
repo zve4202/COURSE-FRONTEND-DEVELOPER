@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import RadioField from "../common/form/radioField";
-import { validator } from "../../utils/validator";
-import TextField from "../common/form/textField";
-import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import TextField from "../../common/form/textField";
+import RadioField from "../../common/form/radioField";
+import { validator } from "../../../utils/validator";
+
+import { getAuth, getAuthError, signUp } from "../../../store/auth";
 
 const defaultData = {
     name: "",
@@ -14,10 +17,24 @@ const defaultData = {
 };
 
 const RegisterForm = () => {
+    const currentUser = useSelector(getAuth());
+    const error = useSelector(getAuthError());
+    const dispatch = useDispatch();
+
     const history = useHistory();
-    const { signUp } = useAuth();
     const [data, setData] = useState(defaultData);
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (currentUser) {
+            history.push("/");
+        } else if (error) {
+            const errorObject = {
+                email: error
+            };
+            throw errorObject;
+        }
+    }, [currentUser, error]);
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -69,13 +86,7 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
-        try {
-            await signUp(data);
-            history.push("/");
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(signUp(data));
     };
 
     return (

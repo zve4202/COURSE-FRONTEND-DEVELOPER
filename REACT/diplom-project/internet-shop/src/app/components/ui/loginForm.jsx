@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
-import { useHistory } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { getAuth, signIn } from "../../store/auth";
+import { getErrors } from "../../store/errors";
 
 const LoginForm = () => {
+    const currentUser = useSelector(getAuth());
+    const error = useSelector(getErrors());
+
     const history = useHistory();
-    const { signIn } = useAuth();
+    const dispatch = useDispatch();
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -15,6 +21,14 @@ const LoginForm = () => {
     });
     const [errors, setErrors] = useState({});
     const [enterError, setEnterError] = useState(null);
+    useEffect(() => {
+        if (currentUser) {
+            history.push("/");
+        } else if (error) {
+            setEnterError(error);
+        }
+    }, [currentUser, error]);
+
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
@@ -44,16 +58,11 @@ const LoginForm = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        try {
-            await signIn(data);
-            history.push("/");
-        } catch (error) {
-            setEnterError(error.message);
-        }
+        dispatch(signIn(data));
     };
     return (
         <form onSubmit={handleSubmit}>

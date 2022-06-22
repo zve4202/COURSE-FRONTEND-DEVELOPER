@@ -3,16 +3,17 @@ import { Link } from "react-router-dom";
 import { appTitle } from "../../../config.json";
 import logo from "../../../assets/brand/favicon.ico";
 import MenuBasket from "./menuBasket";
-import { useAuth } from "../../../hooks/useAuth";
 import MenuAdmin from "./menuAdmin";
 import NavProfile from "./navProfile";
+import { useSelector } from "react-redux";
+import { getAdmin, getAuth } from "../../../store/auth";
 
 const NavBar = () => {
-    const { currentUser, isAdmin } = useAuth();
+    const currentUser = useSelector(getAuth());
+    const isAdmin = useSelector(getAdmin());
     return (
         <nav className="navbar bg-light card mt-1">
             <div className="container-fluid">
-                {/* <div className="card d-flex bg-light mt-1"> */}
                 <ul className="nav">
                     <li className="nav-item">
                         <Link className="nav-link " aria-current="page" to="/">
@@ -34,20 +35,9 @@ const NavBar = () => {
                 </ul>
                 <div className="d-flex">
                     <MenuBasket user={currentUser} />
-                    {currentUser ? (
-                        <NavProfile />
-                    ) : (
-                        <Link
-                            className="nav-link "
-                            aria-current="page"
-                            to="/login"
-                        >
-                            Login
-                        </Link>
-                    )}
+                    <NavProfile />
                 </div>
             </div>
-            {/* </div> */}
         </nav>
     );
 };

@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import authService from "../services/auth.service";
-import { getAccessToken } from "../services/localStorage.service";
+import {
+    getAccessToken,
+    removeAccessToken,
+    setAccessToken
+} from "../services/localStorage.service";
 import { setError } from "./errors";
 
 const initialState = { currentUser: null, isLoading: true };
@@ -17,9 +21,6 @@ const authSlice = createSlice({
         update(state, action) {
             state.currentUser = action.payload;
         },
-        remove(state) {
-            state.currentUser = null;
-        },
         requested(state) {
             state.isLoading = true;
             state.currentUser = null;
@@ -31,14 +32,14 @@ const authSlice = createSlice({
 });
 
 const { actions, reducer: authReducer } = authSlice;
-const { update, remove, resived, requested, requestFailed } = actions;
+const { update, resived, requested, requestFailed } = actions;
 
 export const loadAuthUser = () => async (dispatch) => {
     const onBoard = getAccessToken();
     if (onBoard) {
         dispatch(requested());
         try {
-            const { content } = await authService.getUser(onBoard);
+            const { content } = await authService.getAuthUser(onBoard);
             dispatch(resived(content));
         } catch (error) {
             dispatch(requestFailed());
@@ -53,23 +54,75 @@ export const loadAuthUser = () => async (dispatch) => {
     }
 };
 
-export const completeTask = (id) => (dispatch, getState) => {
-    dispatch(update({ id, completed: true }));
+export const signIn =
+    ({ email, password }) =>
+    async (dispatch, getState) => {
+        dispatch(requested());
+        try {
+            const data = await authService.signIn({
+                email,
+                password
+            });
+            setAccessToken(data);
+            dispatch(resived(data.content));
+        } catch (error) {
+            dispatch(requestFailed());
+            const { code, message } = error.response.data.error;
+            if (code === 400) {
+                switch (message) {
+                    case "EMAIL_NOT_FOUND":
+                    case "INVALID_PASSWORD":
+                        dispatch(
+                            setError("Email или пароль введены некорректно")
+                        );
+                        break;
+                    default:
+                        dispatch(
+                            setError(
+                                "Слишком много попыток входа. Попробуйте позже"
+                            )
+                        );
+                        break;
+                }
+            }
+        }
+    };
+
+export const signUp =
+    ({ email, password, ...rest }) =>
+    async (dispatch, getState) => {
+        dispatch(requested());
+        try {
+            const data = await authService.signUp({
+                email,
+                password,
+                ...rest
+            });
+            setAccessToken(data);
+            dispatch(resived(data.content));
+        } catch (error) {
+            dispatch(requestFailed());
+            const { code, message } = error.response.data.error;
+            dispatch(setError(message));
+            if (code === 400) {
+                if (message === "EMAIL_EXISTS") {
+                    const errorObject = {
+                        email: "Пользователь с таким Email уже существует"
+                    };
+                    throw errorObject;
+                }
+            }
+        }
+    };
+
+export const signOut = () => (dispatch, getState) => {
+    removeAccessToken();
+    dispatch(update(null));
 };
 
-export const changeTitle = (id) => (dispatch, getState) => {
-    dispatch(update({ id, title: `New Title for Task${id}` }));
-};
-
-export const removeTask = (id) => (dispatch, getState) => {
-    dispatch(remove({ id }));
-};
-
-export const getAuthUser = () => (state) => state.auth.currentUser;
+export const getAuth = () => (state) => state.auth.currentUser;
 export const getAuthLoading = () => (state) => state.auth.isLoading;
-export const getAuthIsAdmin = () => (state) => {
-    const currentUser = state.auth.currentUser;
-    return currentUser && currentUser.role === "admin";
-};
+export const getAdmin = () => (state) =>
+    state.auth.currentUser && state.auth.currentUser.role === "admin";
 
 export default authReducer;

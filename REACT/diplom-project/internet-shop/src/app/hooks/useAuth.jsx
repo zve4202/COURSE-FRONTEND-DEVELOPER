@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
         const onBoard = getAccessToken();
         if (onBoard) {
             try {
-                const { content } = await authService.getUser(onBoard);
+                const { content } = await authService.getAuthUser(onBoard);
                 setUser(content);
             } catch (error) {}
         }

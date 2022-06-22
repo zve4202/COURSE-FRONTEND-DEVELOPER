@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { signOut } from "../store/auth";
 const LogOut = () => {
-    const { signOut } = useAuth();
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     useEffect(() => {
-        signOut();
+        dispatch(signOut());
+        history.push("/");
     }, []);
-    return <h1>Loading</h1>;
+    return <p>Log Out</p>;
 };
 
 export default LogOut;

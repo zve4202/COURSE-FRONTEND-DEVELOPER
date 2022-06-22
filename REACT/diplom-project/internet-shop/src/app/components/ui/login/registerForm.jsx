@@ -29,10 +29,9 @@ const RegisterForm = () => {
         if (currentUser) {
             history.push("/");
         } else if (error) {
-            const errorObject = {
+            setErrors({
                 email: error
-            };
-            throw errorObject;
+            });
         }
     }, [currentUser, error]);
 

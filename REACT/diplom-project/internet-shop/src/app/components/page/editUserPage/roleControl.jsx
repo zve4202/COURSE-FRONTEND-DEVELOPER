@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getAdmin } from "../../../store/auth";
 
 const RoleControl = ({ children }) => {
-    const { isAdmin } = useAuth();
+    const isAdmin = useSelector(getAdmin());
+
     if (isAdmin) {
         return children;
     }

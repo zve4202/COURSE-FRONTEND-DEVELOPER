@@ -1,9 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { useAuth } from "../../../hooks/useAuth";
 
 const MenuBasket = () => {
-    // const { currentUser } = useAuth();
     const productCount = 12;
     const productLabel = productCount > 99 ? "99+" : productCount;
     return (

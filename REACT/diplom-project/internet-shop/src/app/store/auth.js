@@ -101,10 +101,6 @@ export const signUp =
                             "Пользователь с таким Email уже существует"
                         )
                     );
-                    const errorObject = {
-                        email: "Пользователь с таким Email уже существует"
-                    };
-                    throw errorObject;
                 }
             } else dispatch(requestFailed(message));
         }

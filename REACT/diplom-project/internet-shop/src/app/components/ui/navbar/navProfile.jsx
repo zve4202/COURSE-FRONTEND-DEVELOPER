@@ -36,7 +36,7 @@ function NavProfile() {
 
     return (
         <Link className="nav-link" aria-current="page" to="/login">
-            Login
+            Войти
         </Link>
     );
 }

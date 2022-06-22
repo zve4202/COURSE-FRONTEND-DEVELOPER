@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 
 import NavBar from "./components/ui/navbar";
-import AuthProvider from "./hooks/useAuth";
 import Basket from "./layouts/basket";
 import Login from "./layouts/login";
 import Main from "./layouts/main";
@@ -27,20 +26,18 @@ function App() {
 
     return (
         <div>
-            <AuthProvider>
-                <NavBar />
-                <Switch>
-                    <ProtectedRoute
-                        path="/users/:userId?/:edit?"
-                        component={Users}
-                    />
-                    <Route path="/login/:type?" component={Login} />
-                    <Route path="/" exact component={Main} />
-                    <Route path="/basket" component={Basket} />
-                    <Route path="/logout" component={LogOut} />
-                    <Redirect to="/" />
-                </Switch>
-            </AuthProvider>
+            <NavBar />
+            <Switch>
+                <ProtectedRoute
+                    path="/users/:userId?/:edit?"
+                    component={Users}
+                />
+                <Route path="/login/:type?" component={Login} />
+                <Route path="/" exact component={Main} />
+                <Route path="/basket" component={Basket} />
+                <Route path="/logout" component={LogOut} />
+                <Redirect to="/" />
+            </Switch>
             <ToastContainer />
         </div>
     );

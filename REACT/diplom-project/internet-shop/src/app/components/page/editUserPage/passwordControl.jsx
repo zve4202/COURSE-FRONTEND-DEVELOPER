@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getAuth } from "../../../store/auth";
 
 const PasswordControl = ({ userId, onShow, children }) => {
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getAuth());
+
     const [change, setChange] = useState(false);
     const handleChange = () => {
         setChange((prevSatte) => !prevSatte);

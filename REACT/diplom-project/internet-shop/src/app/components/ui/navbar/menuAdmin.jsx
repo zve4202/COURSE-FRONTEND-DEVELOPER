@@ -1,9 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
+import { getAdmin } from "../../../store/auth";
 
 const MenuAdmin = () => {
-    const { isAdmin } = useAuth();
+    const isAdmin = useSelector(getAdmin());
     if (isAdmin) {
         return (
             <Link className="nav-link " aria-current="page" to="/users">

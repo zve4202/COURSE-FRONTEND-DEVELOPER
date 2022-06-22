@@ -22,7 +22,7 @@ const App = () => {
 
     useEffect(() => {
         dispatch(loadTasks());
-    }, []);
+    }, [dispatch]);
 
     if (isLoading) {
         return <h1 className="bg-info text-primary text-center">Loading...</h1>;

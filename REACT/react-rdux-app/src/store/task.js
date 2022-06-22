@@ -64,16 +64,25 @@ export const changeTitle = (id) => (dispatch, getState) => {
 export const removeTask = (id) => (dispatch, getState) => {
     dispatch(remove({ id }));
 };
+const genNewId = (state) => {
+    const { entities } = state.tasks;
+    return (
+        entities.reduce((acc, curr) => {
+            return acc > curr.id ? acc : curr.id;
+        }, 0) + 1
+    );
+};
 
 export const addTask = () => async (dispatch, getState) => {
+    const newId = genNewId(getState());
     try {
         const newTask = {
             userId: 1,
-            title: "New TASK",
+            id: newId,
+            title: "New TASK for " + newId,
             completed: false
         };
         const data = await todosService.addTask(newTask);
-        // console.log("resieved", data);
         dispatch(add(data));
     } catch (error) {
         dispatch(taskRequestFailed());

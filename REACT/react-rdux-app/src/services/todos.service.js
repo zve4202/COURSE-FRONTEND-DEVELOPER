@@ -12,7 +12,7 @@ const todosService = {
         return data;
     },
     addTask: async (task) => {
-        const { data } = await httpService.post(todoEndpoint, task);
+        const { data } = await httpService.put(todoEndpoint + task.id, task);
         return data;
     }
 };

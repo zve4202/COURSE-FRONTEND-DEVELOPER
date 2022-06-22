@@ -5,12 +5,11 @@ import { useHistory } from "react-router-dom";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
-import { getAuth, signIn } from "../../store/auth";
-import { getErrors } from "../../store/errors";
+import { getAuth, getAuthError, signIn } from "../../store/auth";
 
 const LoginForm = () => {
     const currentUser = useSelector(getAuth());
-    const error = useSelector(getErrors());
+    const error = useSelector(getAuthError());
 
     const history = useHistory();
     const dispatch = useDispatch();

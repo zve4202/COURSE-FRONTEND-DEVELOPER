@@ -6,9 +6,8 @@ import {
     removeAccessToken,
     setAccessToken
 } from "../services/localStorage.service";
-import { setError } from "./errors";
 
-const initialState = { currentUser: null, isLoading: true };
+const initialState = { currentUser: null, error: null };
 
 const authSlice = createSlice({
     name: "auth",
@@ -16,17 +15,16 @@ const authSlice = createSlice({
     reducers: {
         resived(state, action) {
             state.currentUser = action.payload;
-            state.isLoading = false;
         },
         update(state, action) {
             state.currentUser = action.payload;
         },
         requested(state) {
-            state.isLoading = true;
+            state.error = null;
             state.currentUser = null;
         },
         requestFailed(state, action) {
-            state.isLoading = false;
+            state.error = action.payload;
         }
     }
 });
@@ -42,15 +40,8 @@ export const loadAuthUser = () => async (dispatch) => {
             const { content } = await authService.getAuthUser(onBoard);
             dispatch(resived(content));
         } catch (error) {
-            dispatch(requestFailed());
-            dispatch(setError(error.message));
+            dispatch(requestFailed(error.message));
         }
-    } else {
-        dispatch(
-            setError(
-                "Нет зарегистрированного пользовательзователя в системе!!!"
-            )
-        );
     }
 };
 
@@ -66,25 +57,26 @@ export const signIn =
             setAccessToken(data);
             dispatch(resived(data.content));
         } catch (error) {
-            dispatch(requestFailed());
             const { code, message } = error.response.data.error;
             if (code === 400) {
                 switch (message) {
                     case "EMAIL_NOT_FOUND":
                     case "INVALID_PASSWORD":
                         dispatch(
-                            setError("Email или пароль введены некорректно")
+                            requestFailed(
+                                "Email или пароль введены некорректно"
+                            )
                         );
                         break;
                     default:
                         dispatch(
-                            setError(
+                            requestFailed(
                                 "Слишком много попыток входа. Попробуйте позже"
                             )
                         );
                         break;
                 }
-            }
+            } else dispatch(requestFailed(message));
         }
     };
 
@@ -101,17 +93,20 @@ export const signUp =
             setAccessToken(data);
             dispatch(resived(data.content));
         } catch (error) {
-            dispatch(requestFailed());
             const { code, message } = error.response.data.error;
-            dispatch(setError(message));
             if (code === 400) {
                 if (message === "EMAIL_EXISTS") {
+                    dispatch(
+                        requestFailed(
+                            "Пользователь с таким Email уже существует"
+                        )
+                    );
                     const errorObject = {
                         email: "Пользователь с таким Email уже существует"
                     };
                     throw errorObject;
                 }
-            }
+            } else dispatch(requestFailed(message));
         }
     };
 
@@ -124,5 +119,6 @@ export const getAuth = () => (state) => state.auth.currentUser;
 export const getAuthLoading = () => (state) => state.auth.isLoading;
 export const getAdmin = () => (state) =>
     state.auth.currentUser && state.auth.currentUser.role === "admin";
+export const getAuthError = () => (state) => state.auth.error;
 
 export default authReducer;

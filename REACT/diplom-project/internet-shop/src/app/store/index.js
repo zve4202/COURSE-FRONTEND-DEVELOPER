@@ -1,11 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
 import authReducer from "./auth";
-import errorReducer from "./errors";
 import logger from "./middleware/logger";
 
 const rootReducer = combineReducers({
-    errors: errorReducer,
     auth: authReducer
 });
 

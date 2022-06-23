@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
+
 import GroupList from "../../common/groupList";
 import ProductTable from "../../ui/products";
-import { useCategory } from "../../../hooks/useCategories";
-import { useProduct } from "../../../hooks/useProduct";
 import Pagination from "../../common/pagination";
 import { paginate } from "../../../utils/paginate";
 import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
+import { getCategories, loadCategories } from "../../../store/categories";
+import { getProducts, loadProducts } from "../../../store/products";
 
 const ProductListPage = () => {
+    const dispatch = useDispatch();
+    const categories = useSelector(getCategories());
+    const products = useSelector(getProducts());
+    useEffect(() => {
+        dispatch(loadCategories());
+        dispatch(loadProducts());
+    }, []);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState({
         path: "catalog.artist",
@@ -18,8 +28,6 @@ const ProductListPage = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCat, setSelectedCat] = useState();
-    const { categories } = useCategory();
-    const { products } = useProduct();
     const handleDelete = (productId) => {
         console.log(productId);
     };

@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+
 import UserCard from "../../ui/userCard";
 // import Orders from "../../ui/userOrders";
-import { useUser } from "../../../hooks/useUsers";
 import WorkScreen from "../../ui/workScreen";
+import { getUser, loadUsers } from "../../../store/users";
+import { loadRoles } from "../../../store/roles";
 
 const UserPage = ({ userId }) => {
-    const { users, getUser } = useUser();
-    const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
+    const user = useSelector(getUser(userId));
     useEffect(() => {
-        setUser(getUser(userId));
-    }, [users]);
+        if (!user) {
+            dispatch(loadRoles());
+            dispatch(loadUsers());
+        }
+    }, []);
     return (
         <WorkScreen>
             <div className="row gutters-sm">

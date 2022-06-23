@@ -9,12 +9,8 @@ const authService = {
         const { data } = await httpService.post("auth/signin/", content);
         return data;
     },
-    getAuthUser: async (content) => {
-        const { data } = await httpService.get("user/me/", {
-            headers: {
-                authorization: content
-            }
-        });
+    getAuthUser: async () => {
+        const { data } = await httpService.get("user/me/");
         return data;
     }
 };

@@ -5,7 +5,7 @@ import Role from "./roles";
 import Table from "../common/table";
 import { Link } from "react-router-dom";
 
-const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
+const UserTable = ({ users, onSort, selectedSort, ...rest }) => {
     const columns = {
         name: {
             path: "name",
@@ -21,18 +21,6 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
         roles: {
             name: "Роль",
             component: (user) => <Role roleId={user.role} />
-        },
-        delete: {
-            component: (user) => (
-                <div className="d-flex justify-content-end">
-                    <button
-                        onClick={() => onDelete(user._id)}
-                        className="btn btn-sm btn-danger"
-                    >
-                        Удалить
-                    </button>
-                </div>
-            )
         }
     };
 
@@ -49,8 +37,7 @@ const UserTable = ({ users, onSort, selectedSort, onDelete, ...rest }) => {
 UserTable.propTypes = {
     users: PropTypes.array.isRequired,
     onSort: PropTypes.func.isRequired,
-    selectedSort: PropTypes.object.isRequired,
-    onDelete: PropTypes.func.isRequired
+    selectedSort: PropTypes.object.isRequired
 };
 
 export default UserTable;

@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import authService from "../services/auth.service";
 import {
-    getAccessToken,
     removeAccessToken,
     setAccessToken
 } from "../services/localStorage.service";
@@ -33,15 +32,12 @@ const { actions, reducer: authReducer } = authSlice;
 const { update, resived, requested, requestFailed } = actions;
 
 export const loadAuthUser = () => async (dispatch) => {
-    const onBoard = getAccessToken();
-    if (onBoard) {
-        dispatch(requested());
-        try {
-            const { content } = await authService.getAuthUser(onBoard);
-            dispatch(resived(content));
-        } catch (error) {
-            dispatch(requestFailed(error.message));
-        }
+    dispatch(requested());
+    try {
+        const { content } = await authService.getAuthUser();
+        dispatch(resived(content));
+    } catch (error) {
+        dispatch(requestFailed(error.message));
     }
 };
 
@@ -112,7 +108,6 @@ export const signOut = () => (dispatch, getState) => {
 };
 
 export const getAuth = () => (state) => state.auth.currentUser;
-export const getAuthLoading = () => (state) => state.auth.isLoading;
 export const getAdmin = () => (state) =>
     state.auth.currentUser && state.auth.currentUser.role === "admin";
 export const getAuthError = () => (state) => state.auth.error;

@@ -1,39 +1,44 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import GroupList from "../../common/groupList";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
-import { useUser } from "../../../hooks/useUsers";
 import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
-import { useRole } from "../../../hooks/useRoles";
+import WorkScreen from "../../ui/workScreen";
+import {
+    getUsers,
+    getUsersError,
+    getUsersLoading,
+    loadUsers
+} from "../../../store/users";
+import { getRoles, loadRoles } from "../../../store/roles";
 
 const UsersListPage = () => {
+    const dispatch = useDispatch();
+    const users = useSelector(getUsers());
+    const roles = useSelector(getRoles());
+
+    const isLoading = useSelector(getUsersLoading());
+    const error = useSelector(getUsersError());
+
+    useEffect(() => {
+        dispatch(loadRoles());
+        dispatch(loadUsers());
+    }, []);
+
     const [currentPage, setCurrentPage] = useState(1);
-    // const [roles, setProfession] = useState();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedRole, setSelectedRole] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
 
-    const { users } = useUser();
-    const { roles } = useRole();
-    const handleDelete = (userId) => {
-        // setUsers(users.filter((user) => user._id !== userId));
-        console.log(userId);
-    };
-
-    // useEffect(() => {
-    //     api.roles.fetchAll().then((data) => setProfession(data));
-    // }, []);
-
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedRole, searchQuery]);
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchQuery]);
 
     const handleRoleSelect = (item) => {
         if (searchQuery !== "") setSearchQuery("");
@@ -50,7 +55,14 @@ const UsersListPage = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
-    if (users) {
+    if (isLoading) {
+        return (
+            <WorkScreen>
+                <span className="text-center">Звгрузка...</span>
+            </WorkScreen>
+        );
+    }
+    if (users.length > 0) {
         const filteredUsers = searchQuery
             ? users.filter(
                   (user) =>
@@ -102,7 +114,6 @@ const UsersListPage = () => {
                                         users={usersCrop}
                                         onSort={handleSort}
                                         selectedSort={sortBy}
-                                        onDelete={handleDelete}
                                     />
                                 )}
                                 <div className="d-flex justify-content-center">
@@ -120,7 +131,13 @@ const UsersListPage = () => {
             </WorkScreenWithSearch>
         );
     }
-    return "loading...";
+    if (error) {
+        return (
+            <WorkScreen>
+                <span className="text-center text-danger">{error}</span>
+            </WorkScreen>
+        );
+    }
 };
 UsersListPage.propTypes = {
     users: PropTypes.array

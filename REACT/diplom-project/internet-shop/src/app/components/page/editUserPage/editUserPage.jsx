@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import BackHistoryButton from "../../common/backButton";
-import { useRole } from "../../../hooks/useRoles";
-import { useUser } from "../../../hooks/useUsers";
 import RadioField from "../../common/form/radioField";
 import PasswordControl from "./passwordControl";
 import RoleControl from "./roleControl";
+import { getUser, loadUsers } from "../../../store/users";
+import { getRoles, loadRoles } from "../../../store/roles";
 
 const defaultData = {
     name: "",
@@ -19,14 +21,25 @@ const defaultData = {
 };
 
 const EditUserPage = () => {
+    const dispatch = useDispatch();
     const { userId } = useParams();
-    const user = useUser().getUser(userId);
+    const user = useSelector(getUser(userId));
+    const roles = useSelector(getRoles());
     const [data, setData] = useState(defaultData);
+
+    useEffect(() => {
+        if (!user) {
+            dispatch(loadUsers());
+        }
+        if (roles.length === 0) {
+            dispatch(loadRoles());
+        }
+    }, []);
+
     useEffect(() => {
         setData(user);
     }, [user]);
 
-    const { roles } = useRole();
     const [errors, setErrors] = useState({});
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -94,7 +107,7 @@ const EditUserPage = () => {
         }));
     };
     return (
-        <div className="container mt-5">
+        <div className="container-fluid mt-5">
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
                     <BackHistoryButton />

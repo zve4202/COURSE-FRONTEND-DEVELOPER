@@ -34,7 +34,7 @@ const AddButton = ({ productId, onAdd }) => {
 };
 
 AddButton.propTypes = {
-    productId: PropTypes.string.isRequired,
+    productId: PropTypes.number.isRequired,
     onAdd: PropTypes.func.isRequired
 };
 export default AddButton;

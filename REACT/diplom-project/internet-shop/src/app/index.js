@@ -2,35 +2,33 @@ import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
 
 import NavBar from "./components/ui/navbar";
 import Basket from "./layouts/basket";
 import Login from "./layouts/login";
 import Main from "./layouts/main";
 import Users from "./layouts/users";
-import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
+import { getAuthLoading, loadAuthUser } from "./store/auth";
 
 import configureStore from "./store";
-import { getAuth, loadAuthUser } from "./store/auth";
 
 export const store = configureStore();
 
 function App() {
     const dispatch = useDispatch();
-    const currentUser = useSelector(getAuth());
+    const isLoading = useSelector(getAuthLoading());
+
     useEffect(() => {
-        if (!currentUser) {
-            console.log("App", currentUser);
-            dispatch(loadAuthUser());
-        }
+        dispatch(loadAuthUser());
     }, []);
 
-    if (currentUser) {
-        return (
-            <div>
-                <NavBar />
+    return (
+        <div>
+            <NavBar />
+            {!isLoading && (
                 <Switch>
                     <ProtectedRoute
                         path="/users/:userId?/:edit?"
@@ -42,14 +40,8 @@ function App() {
                     <Route path="/logout" component={LogOut} />
                     <Redirect to="/" />
                 </Switch>
-                <ToastContainer />
-            </div>
-        );
-    }
-
-    return (
-        <div>
-            <NavBar />
+            )}
+            <ToastContainer />
         </div>
     );
 }

@@ -11,44 +11,39 @@ const ProductTable = ({ products, onSort, selectedSort, onAdd, ...rest }) => {
     const columns = {
         picture: {
             class: "cover-small",
-            name: "Вид",
+            name: "Образ",
             component: (product) => (
-                <ProductPicture
-                    size="small"
-                    picture={product.catalog.picture}
-                />
+                <ProductPicture size="small" picture={product.title.image} />
             )
         },
         name: {
-            path: "catalog.artist",
-            name: "Название",
+            path: "title.artist.alias",
+            name: "Наименоване",
             component: (product) => <ProductName data={product} />
         },
         format: {
-            path: "catalog.format.name",
+            path: "title.format.name",
             name: "Формат",
             component: (product) => (
-                <div className="small">{product.catalog.format.name}</div>
+                <div className="small">{product.title.format.name}</div>
             )
         },
         barcode: {
             name: "Баркоде",
-            component: (product) => (
-                <Barcode barcode={product.catalog.barcode} />
-            )
+            component: (product) => <Barcode barcode={product.title.barcode} />
         },
         label: {
-            path: "catalog.label.name",
+            path: "title.label.name",
             name: "Лейбл",
             component: (product) => (
-                <div className="small">{product.catalog.label.name}</div>
+                <div className="small">{product.title.label.name}</div>
             )
         },
-        country: {
-            path: "catalog.country",
+        origin: {
+            path: "title.origin",
             name: "Страна",
             component: (product) => (
-                <div className="small">{product.catalog.country}</div>
+                <div className="small">{product.title.origin}</div>
             )
         },
         price: {

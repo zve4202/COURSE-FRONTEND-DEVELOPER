@@ -9,6 +9,7 @@ import { paginate } from "../../../utils/paginate";
 import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 import { getCategories, loadCategories } from "../../../store/categories";
 import { getProducts, loadProducts } from "../../../store/products";
+import { slugify } from "../../../utils";
 
 const ProductListPage = () => {
     const dispatch = useDispatch();
@@ -21,10 +22,10 @@ const ProductListPage = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState({
-        path: "catalog.artist",
+        path: "title.artist.name",
         order: "asc"
     });
-    const pageSize = 10;
+    const pageSize = 1000;
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCat, setSelectedCat] = useState();
@@ -52,21 +53,19 @@ const ProductListPage = () => {
     };
 
     function matched(arr) {
-        return arr.some(
-            (item) =>
-                item.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
-        );
+        const alias = slugify(searchQuery);
+        return arr.some((item) => item.indexOf(alias) !== -1);
     }
 
     let filteredProduct = selectedCat
         ? products.filter(
-              (prod) => prod.catalog.format.category === selectedCat._id
+              (prod) => prod.title.format.category === selectedCat._id
           )
         : products;
 
     filteredProduct = searchQuery
         ? filteredProduct.filter((prod) =>
-              matched([prod.catalog.artist, prod.catalog.title])
+              matched([prod.title.artist.alias, prod.title.alias])
           )
         : filteredProduct;
 

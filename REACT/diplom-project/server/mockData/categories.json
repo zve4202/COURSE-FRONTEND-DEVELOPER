@@ -1,8 +1,0 @@
-[
-  { "_id": "cd", "name": "CD" },
-  { "_id": "dvd", "name": "DVD" },
-  { "_id": "vinil", "name": "VINYL" },
-  { "_id": "blu_rey", "name": "BLU-RAY" },
-  { "_id": "dvd_a", "name": "DVD AUDIO DISC" },
-  { "_id": "blu_rey_pure_audio", "name": "BLU-RAY PURE AUDIO" }
-]

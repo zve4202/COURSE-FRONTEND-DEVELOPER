@@ -5,20 +5,20 @@ const dbConfig = require("../config/db.config");
 const models = require("../models");
 const bcrypt = require("bcryptjs");
 
-const categoriesMock = require("../mockData/categories.json");
-const formatsMock = require("../mockData/formats.json");
+const { importXml } = require("./importXml");
+
 const rolesMock = require("../mockData/roles.json");
 const usersMock = require("../mockData/users.json");
-const catalogMock = require("../mockData/catalog.json");
-const labelMock = require("../mockData/labels.json");
-const productMock = require("../mockData/products.json");
+
 const e = require("express");
+
 const {
   findNewIds,
   generateSimpleEntity,
   generateSimpleEntity_AsIs,
   getNewId,
 } = require("./utils");
+const { xml2json } = require("./xml2json");
 
 async function InitSimpleEntity(name, data, model, asIs = false) {
   var result = undefined;
@@ -63,96 +63,6 @@ async function setInitialData() {
   } else {
     debug(`users error ${chalk.green("x")}`);
   }
-
-  const categories = await InitSimpleEntity(
-    "categories",
-    categoriesMock,
-    models.category
-  );
-
-  const formats = await Promise.all(
-    formatsMock.map(async (item) => {
-      try {
-        const findFormat = await models.format.find({
-          name: item.name,
-        });
-        if (findFormat.length !== 0) {
-          return findFormat[0];
-        }
-        item.category = getNewId(item.category, categories, categoriesMock);
-        const example_id = item._id;
-        delete item._id;
-        const newFormat = new models.format(item);
-        item._id = example_id;
-        await newFormat.save();
-        return newFormat;
-      } catch (error) {
-        return error;
-      }
-    })
-  );
-  if (formats) {
-    debug(`formats in DB ${chalk.green("✓")}`);
-  } else {
-    debug(`formats error ${chalk.red("x")}`);
-  }
-
-  const labels = await InitSimpleEntity("labels", labelMock, models.label);
-
-  const catalog = await Promise.all(
-    catalogMock.map(async (item) => {
-      try {
-        const find = await models.catalog.find({
-          barcode: item.barcode,
-        });
-        if (find.length !== 0) {
-          return find[0];
-        }
-        item.format = getNewId(item.format, formats, formatsMock);
-        item.label = getNewId(item.label, labels, labelMock);
-        const example_id = item._id;
-        delete item._id;
-        const newItem = new models.catalog(item);
-        item._id = example_id;
-        await newItem.save();
-        return newItem;
-      } catch (error) {
-        return error;
-      }
-    })
-  );
-  if (catalog) {
-    debug(`catalog in DB ${chalk.green("✓")}`);
-  } else {
-    debug(`catalog error ${chalk.red("x")}`);
-  }
-
-  const products = await Promise.all(
-    productMock.map(async (item) => {
-      try {
-        const find = await models.product.find({
-          article: item.article,
-        });
-        if (find.length !== 0) {
-          return find[0];
-        }
-        item.catalog = getNewId(item.catalog, catalog, catalogMock, "barcode");
-        const example_id = item._id;
-        delete item._id;
-        const newItem = new models.product(item);
-        item._id = example_id;
-        await newItem.save();
-        return newItem;
-      } catch (error) {
-        return error;
-      }
-    })
-  );
-  if (products) {
-    debug(`products in DB ${chalk.green("✓")}`);
-  } else {
-    debug(`products error ${chalk.red("x")}`);
-  }
 }
 
 module.exports = function () {
@@ -166,6 +76,8 @@ module.exports = function () {
   );
   db.once("open", function () {
     debug(`MongoDB status: Connected ${chalk.green("✓")}`);
-    setInitialData();
+    // setInitialData();
+    importXml();
+    // xml2json();
   });
 };

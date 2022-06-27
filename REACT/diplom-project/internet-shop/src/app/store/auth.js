@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import authService from "../services/auth.service";
 import {
+    getAccessToken,
     removeAccessToken,
     setAccessToken
 } from "../services/localStorage.service";
 
-const initialState = { currentUser: null, error: null };
+const initialState = { currentUser: null, isLoading: true, error: null };
 
 const authSlice = createSlice({
     name: "auth",
@@ -14,16 +15,17 @@ const authSlice = createSlice({
     reducers: {
         resived(state, action) {
             state.currentUser = action.payload;
+            state.isLoading = false;
         },
         update(state, action) {
             state.currentUser = action.payload;
         },
         requested(state) {
-            state.error = null;
-            state.currentUser = null;
+            state = initialState;
         },
         requestFailed(state, action) {
             state.error = action.payload;
+            state.isLoading = false;
         }
     }
 });
@@ -33,11 +35,16 @@ const { update, resived, requested, requestFailed } = actions;
 
 export const loadAuthUser = () => async (dispatch) => {
     dispatch(requested());
-    try {
-        const { content } = await authService.getAuthUser();
-        dispatch(resived(content));
-    } catch (error) {
-        dispatch(requestFailed(error.message));
+    const token = getAccessToken();
+    if (token) {
+        try {
+            const { content } = await authService.getAuthUser();
+            dispatch(resived(content));
+        } catch (error) {
+            dispatch(requestFailed(error.message));
+        }
+    } else {
+        dispatch(requestFailed("Нет пользователя в системе"));
     }
 };
 
@@ -110,6 +117,7 @@ export const signOut = () => (dispatch, getState) => {
 export const getAuth = () => (state) => state.auth.currentUser;
 export const getAdmin = () => (state) =>
     state.auth.currentUser && state.auth.currentUser.role === "admin";
+export const getAuthLoading = () => (state) => state.auth.isLoading;
 export const getAuthError = () => (state) => state.auth.error;
 
 export default authReducer;

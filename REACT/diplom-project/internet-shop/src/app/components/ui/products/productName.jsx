@@ -4,19 +4,20 @@ import { Link } from "react-router-dom";
 
 const ProductName = ({ data }) => {
     const { _id: productId, article } = data;
-    const { artist, title } = data.catalog;
+    const { artist, title } = data.title;
     return (
         <div className="small">
             <div className="text-muted text-decoration-none">
-                art:{" "}
+                art: {article}
+            </div>
+            <div>
                 <Link
                     className="text-decoration-none"
-                    to={`product/${productId}`}
+                    to={`artist/${artist._id}`}
                 >
-                    {article}
+                    {artist.name}
                 </Link>
             </div>
-            <div>{artist}</div>
             <div>
                 <Link
                     className="text-decoration-none"

@@ -53,44 +53,74 @@ exports.getList = async function (query, page, limit) {
   }
 };
 
+// {$or: [{"title.artist.alias": {"$regex": "abba"}}, {"title.alias": {"$regex": "abba"}}]}
+/*
+, {
+  '$match': {
+    '$or': [
+      {
+        'title.artist.alias': {
+          '$regex': 'abba'
+        }
+      }, {
+        'title.alias': {
+          '$regex': 'abba'
+        }
+      }
+    ]
+  }
+} */
 const agg = [
   {
     $lookup: {
-      from: "catalogs",
-      localField: "catalog",
+      from: "titles",
+      localField: "title",
       foreignField: "_id",
-      as: "catalog",
+      as: "title",
     },
   },
   {
     $unwind: {
-      path: "$catalog",
+      path: "$title",
+    },
+  },
+  {
+    $lookup: {
+      from: "artists",
+      localField: "title.artist",
+      foreignField: "_id",
+      as: "title.artist",
+    },
+  },
+  {
+    $unwind: {
+      path: "$title.artist",
     },
   },
   {
     $lookup: {
       from: "formats",
-      localField: "catalog.format",
+      localField: "title.format",
       foreignField: "_id",
-      as: "catalog.format",
+      as: "title.format",
     },
   },
   {
     $unwind: {
-      path: "$catalog.format",
+      path: "$title.format",
     },
   },
   {
     $lookup: {
       from: "labels",
-      localField: "catalog.label",
+      localField: "title.label",
       foreignField: "_id",
-      as: "catalog.label",
+      as: "title.label",
     },
   },
   {
     $unwind: {
-      path: "$catalog.label",
+      path: "$title.label",
     },
   },
 ];
@@ -98,33 +128,6 @@ const agg = [
 exports.getListEx = async function (query, page, limit) {
   try {
     const data = await Product.aggregate(agg);
-    // .lookup({
-    //   from: "catalogs",
-    //   localField: "catalog",
-    //   foreignField: "_id",
-    //   as: "catalog",
-    // })
-    // .unwind({
-    //   path: "$catalog",
-    // })
-    // .lookup({
-    //   from: "formats",
-    //   localField: "catalog.format",
-    //   foreignField: "_id",
-    //   as: "catalog.format",
-    // })
-    // .unwind({
-    //   path: "$catalog.format",
-    // })
-    // .lookup({
-    //   from: "labels",
-    //   localField: "catalog.label",
-    //   foreignField: "_id",
-    //   as: "catalog.label",
-    // })
-    // .unwind({
-    //   path: "$catalog.label",
-    // });
     return data;
   } catch (e) {
     // Log Errors

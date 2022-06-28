@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import qualityService from "../services/quality.service";
+import professionService from "../services/profession.service";
 
-const qualitiesSlice = createSlice({
-    name: "qualities",
+const professionsSlice = createSlice({
+    name: "professions",
     initialState: {
         entities: null,
         isLoading: true,
@@ -27,7 +27,7 @@ const qualitiesSlice = createSlice({
     }
 });
 
-const { reducer: qualitiesReucer, actions } = qualitiesSlice;
+const { reducer: professionsReucer, actions } = professionsSlice;
 const { requested, resived, requestFailed } = actions;
 
 function isOutdated(date) {
@@ -37,12 +37,12 @@ function isOutdated(date) {
     return false;
 }
 
-export const loadQualitiesList = () => async (dispatch, getState) => {
-    const { lastFetch } = getState().qualities;
+export const loadProfessionsList = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().professions;
     if (isOutdated(lastFetch)) {
         dispatch(requested());
         try {
-            const { content } = await qualityService.fetchAll();
+            const { content } = await professionService.get();
             dispatch(resived(content));
         } catch (error) {
             requestFailed(error.message);
@@ -50,9 +50,9 @@ export const loadQualitiesList = () => async (dispatch, getState) => {
     }
 };
 
-export const getQualities = () => (state) => state.qualities.entities;
-export const getQuality = (id) => (state) => {
-    for (const item of state.qualities.entities) {
+export const getProfessions = () => (state) => state.professions.entities;
+export const getProfession = (id) => (state) => {
+    for (const item of state.professions.entities) {
         if (item._id === id) {
             return item;
         }
@@ -60,16 +60,7 @@ export const getQuality = (id) => (state) => {
     return null;
 };
 
-export const getQualityByIdis = (ids) => (state) => {
-    const items = [];
-    if (state.qualities.entities) {
-        for (const id of ids) {
-            items.push(getQuality(id)(state));
-        }
-    }
-    return items;
-};
+export const getProfessionsLoading = () => (state) =>
+    state.professions.isLoading;
 
-export const getQualitiesLoading = () => (state) => state.qualities.isLoading;
-
-export default qualitiesReucer;
+export default professionsReucer;

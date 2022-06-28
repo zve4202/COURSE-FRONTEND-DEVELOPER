@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import GroupList from "../../common/groupList";
@@ -7,12 +9,18 @@ import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import {
+    getProfessions,
+    getProfessionsLoading
+} from "../../../store/professions";
+
 const UsersListPage = () => {
     const { users } = useUser();
     const { currentUser } = useAuth();
-    const { isLoading: professionsLoading, professions } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoading());
+
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();

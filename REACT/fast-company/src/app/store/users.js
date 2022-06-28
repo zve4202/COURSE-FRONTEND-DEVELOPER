@@ -107,17 +107,19 @@ export const signUp =
         }
     };
 
-// export const logIn =
-//     ({ email, password }) =>
-//     async (dispatch, getState) => {
-//         dispatch(requestedAuth());
-//         try {
-//             const data = await authService.register({ email, password });
-//             setTokens(data);
-//         } catch (error) {
-//             requestAuthFailed(error.message);
-//         }
-//     };
+export const logIn =
+    ({ email, password, redirect }) =>
+    async (dispatch, getState) => {
+        dispatch(requestedAuth());
+        try {
+            const data = await authService.login({ email, password });
+            setTokens(data);
+            dispatch(resivedAuth({ userId: data.localId }));
+            history.push(redirect);
+        } catch (error) {
+            requestAuthFailed(error.message);
+        }
+    };
 
 function isOutdated(date) {
     if (Date.now() - date > 10 * 60 * 1000) {

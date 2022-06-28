@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import authService from "../services/auth.service";
 import { setTokens } from "../services/localStorage.service";
 import userService from "../services/user.service";
+import history from "../utils/hidtory";
 import randomInt from "../utils/randomInt";
 
 const usersSlice = createSlice({
@@ -72,6 +73,7 @@ function createUser(data) {
         try {
             const { content } = await userService.create(data);
             dispatch(userCreated(content));
+            history.push("/users");
         } catch (error) {
             dispatch(userCreatFailed(error.message));
         }

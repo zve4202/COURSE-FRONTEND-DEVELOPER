@@ -34,7 +34,8 @@ const usersSlice = createSlice({
             state.error = null;
         },
         resivedAuth(state, action) {
-            state.auth = { ...action.payload };
+            state.auth = action.payload;
+            state.isLoggedIn = true;
         },
         requestAuthFailed(state, action) {
             state.error = action.payload;
@@ -152,5 +153,6 @@ export const getUser = (id) => (state) => {
 };
 
 export const getUsersLoading = () => (state) => state.users.isLoading;
+export const getLoggedIn = () => (state) => state.users.isLoggedIn;
 
 export default usersReucer;

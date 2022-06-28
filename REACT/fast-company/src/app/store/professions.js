@@ -12,7 +12,6 @@ const professionsSlice = createSlice({
     reducers: {
         requested(state) {
             state.isLoading = true;
-            state.entities = null;
             state.error = null;
         },
         resived(state, action) {
@@ -52,9 +51,11 @@ export const loadProfessionsList = () => async (dispatch, getState) => {
 
 export const getProfessions = () => (state) => state.professions.entities;
 export const getProfession = (id) => (state) => {
-    for (const item of state.professions.entities) {
-        if (item._id === id) {
-            return item;
+    if (state.professions.entities) {
+        for (const item of state.professions.entities) {
+            if (item._id === id) {
+                return item;
+            }
         }
     }
     return null;

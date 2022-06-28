@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import qualityService from "../services/quality.service";
+import userService from "../services/user.service";
 
-const qualitiesSlice = createSlice({
-    name: "qualities",
+const usersSlice = createSlice({
+    name: "users",
     initialState: {
         entities: null,
         isLoading: true,
@@ -26,7 +26,7 @@ const qualitiesSlice = createSlice({
     }
 });
 
-const { reducer: qualitiesReducer, actions } = qualitiesSlice;
+const { reducer: usersReucer, actions } = usersSlice;
 const { requested, resived, requestFailed } = actions;
 
 function isOutdated(date) {
@@ -36,12 +36,12 @@ function isOutdated(date) {
     return false;
 }
 
-export const loadQualitiesList = () => async (dispatch, getState) => {
-    const { lastFetch } = getState().qualities;
+export const loadUsersList = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().users;
     if (isOutdated(lastFetch)) {
         dispatch(requested());
         try {
-            const { content } = await qualityService.fetchAll();
+            const { content } = await userService.get();
             dispatch(resived(content));
         } catch (error) {
             requestFailed(error.message);
@@ -49,9 +49,9 @@ export const loadQualitiesList = () => async (dispatch, getState) => {
     }
 };
 
-export const getQualities = () => (state) => state.qualities.entities;
-export const getQuality = (id) => (state) => {
-    for (const item of state.qualities.entities) {
+export const getUsers = () => (state) => state.users.entities;
+export const getUser = (id) => (state) => {
+    for (const item of state.users.entities) {
         if (item._id === id) {
             return item;
         }
@@ -59,16 +59,6 @@ export const getQuality = (id) => (state) => {
     return null;
 };
 
-export const getQualityByIdis = (ids) => (state) => {
-    const items = [];
-    if (state.qualities.entities) {
-        for (const id of ids) {
-            items.push(getQuality(id)(state));
-        }
-    }
-    return items;
-};
+export const getUsersLoading = () => (state) => state.users.isLoading;
 
-export const getQualitiesLoading = () => (state) => state.qualities.isLoading;
-
-export default qualitiesReducer;
+export default usersReucer;

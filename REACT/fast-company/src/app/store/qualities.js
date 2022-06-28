@@ -11,6 +11,7 @@ const qualitiesSlice = createSlice({
     reducers: {
         requested(state) {
             state.isLoading = true;
+            state.entities = null;
             state.error = null;
         },
         resived(state, action) {
@@ -36,5 +37,27 @@ export const loadQualitiesList = () => async (dispatch) => {
         requestFailed(error.message);
     }
 };
+
+export const getQualities = () => (state) => state.qualities.entities;
+export const getQuality = (id) => (state) => {
+    for (const item of state.qualities.entities) {
+        if (item._id === id) {
+            return item;
+        }
+    }
+    return null;
+};
+
+export const getQualityByIdis = (ids) => (state) => {
+    const items = [];
+    if (state.qualities.entities) {
+        for (const id of ids) {
+            items.push(getQuality(id)(state));
+        }
+    }
+    return items;
+};
+
+export const getQualitiesLoading = () => (state) => state.qualities.isLoading;
 
 export default qualitiesReucer;

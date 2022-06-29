@@ -1,29 +1,41 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import authService from "../services/auth.service";
-import { setTokens } from "../services/localStorage.service";
+import { getUserId, setTokens } from "../services/localStorage.service";
 import userService from "../services/user.service";
 import history from "../utils/hidtory";
+import { isOutdated } from "../utils/isOutdated";
 import randomInt from "../utils/randomInt";
+
+const userId = getUserId();
+const initialState = userId
+    ? {
+          auth: { userId },
+          isLoggedIn: true,
+          entities: null,
+          isLoading: true,
+          error: null,
+          lastFetch: null,
+          dataLoaded: false
+      }
+    : {
+          auth: null,
+          isLoggedIn: false,
+          entities: null,
+          isLoading: false,
+          error: null,
+          lastFetch: null,
+          dataLoaded: false
+      };
 
 const usersSlice = createSlice({
     name: "users",
-    initialState: {
-        currentUser: null,
-        systemUserChecked: false,
-        isLoggedIn: false,
-        entities: null,
-        isLoading: true,
-        error: null,
-        lastFetch: null,
-        dataLoaded: false
-    },
+    initialState,
     reducers: {
         requested(state) {
             state.isLoading = true;
             state.dataLoaded = false;
             state.error = null;
         },
-
         resived(state, action) {
             state.entities = action.payload;
             state.dataLoaded = true;
@@ -32,31 +44,22 @@ const usersSlice = createSlice({
         },
         requestFailed(state, action) {
             state.error = action.payload;
-            state.isLoading = false;
         },
         requestedAuth(state) {
             state.error = null;
         },
         resivedAuth(state, action) {
+            state.auth = action.payload;
             state.isLoggedIn = true;
         },
         requestAuthFailed(state, action) {
             state.error = action.payload;
         },
         userCreated(state, action) {
-            state.currentUser = action.payload;
             if (!Array.isArray(state.entities)) {
                 state.entities = [];
             }
             state.entities.push(action.payload);
-        },
-        authDataResived(state, action) {
-            state.currentUser = action.payload;
-            state.systemUserChecked = true;
-            state.isLoggedIn = true;
-        },
-        authDataRequestFailed(state, action) {
-            state.systemUserChecked = true;
         }
     }
 });
@@ -68,27 +71,12 @@ const {
     requested,
     resived,
     requestFailed,
-    userCreated,
-    authDataResived,
-    authDataRequestFailed
+    userCreated
 } = actions;
 
 const requestedAuth = createAction("users/requestedAuth");
 const requestedUserCreate = createAction("users/requestedUserCreate");
 const userCreatFailed = createAction("users/userCreatFailed");
-const authDataRequested = createAction("users/authDataRequested");
-
-export function getAuthUserData() {
-    return async function (dispatch) {
-        dispatch(authDataRequested());
-        try {
-            const { content } = await userService.getCurrentUser();
-            dispatch(authDataResived(content));
-        } catch (error) {
-            dispatch(authDataRequestFailed(error.message));
-        }
-    };
-}
 
 function createUser(data) {
     return async function (dispatch) {
@@ -109,7 +97,7 @@ export const signUp =
         try {
             const data = await authService.register({ email, password });
             setTokens(data);
-            dispatch(resivedAuth());
+            dispatch(resivedAuth({ userId: data.localId }));
 
             dispatch(
                 createUser({
@@ -137,20 +125,12 @@ export const logIn =
         try {
             const data = await authService.login({ email, password });
             setTokens(data);
-            dispatch(resivedAuth());
-            dispatch(getAuthUserData());
+            dispatch(resivedAuth({ userId: data.localId }));
             history.push(redirect);
         } catch (error) {
             requestAuthFailed(error.message);
         }
     };
-
-function isOutdated(date) {
-    if (Date.now() - date > 10 * 60 * 1000) {
-        return true;
-    }
-    return false;
-}
 
 export const loadUsersList = () => async (dispatch, getState) => {
     const { lastFetch } = getState().users;
@@ -167,9 +147,11 @@ export const loadUsersList = () => async (dispatch, getState) => {
 
 export const getUsers = () => (state) => state.users.entities;
 export const getUser = (id) => (state) => {
-    for (const item of state.users.entities) {
-        if (item._id === id) {
-            return item;
+    if (Array.isArray(state.users.entities)) {
+        for (const item of state.users.entities) {
+            if (item._id === id) {
+                return item;
+            }
         }
     }
     return null;
@@ -178,9 +160,7 @@ export const getUser = (id) => (state) => {
 export const getUsersLoading = () => (state) => state.users.isLoading;
 export const getLoggedIn = () => (state) => state.users.isLoggedIn;
 export const getDataLoaded = () => (state) => state.users.dataLoaded;
-export const getSystemUserCheckStatus = () => (state) =>
-    state.users.systemUserChecked;
 
-export const getCurrentUser = () => (state) => state.users.currentUser;
+export const getCurrentUserId = () => (state) => state.users.auth.userId;
 
 export default usersReucer;

@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 import { displayDate } from "../../../utils/displayDate";
-import { useAuth } from "../../../hooks/useAuth";
-import { getUser } from "../../../store/users";
+import { getCurrentUser, getUser } from "../../../store/users";
 const Comment = ({
     content,
     created_at: created,
@@ -12,7 +11,8 @@ const Comment = ({
     userId,
     onRemove
 }) => {
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
+
     const user = useSelector(getUser(userId));
 
     return (

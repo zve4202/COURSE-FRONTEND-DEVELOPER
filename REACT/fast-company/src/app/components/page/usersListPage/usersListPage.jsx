@@ -12,10 +12,10 @@ import {
     getProfessions,
     getProfessionsLoading
 } from "../../../store/professions";
-import { getLoggedUser, getUsers } from "../../../store/users";
+import { getCurrentUser, getUsers } from "../../../store/users";
 
 const UsersListPage = () => {
-    const currentUser = useSelector(getLoggedUser());
+    const currentUser = useSelector(getCurrentUser());
     const users = useSelector(getUsers());
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoading());

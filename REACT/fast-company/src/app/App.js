@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { loadQualitiesList } from "./store/qualities";
 import { loadProfessionsList } from "./store/professions";
-import { loadUsersList } from "./store/users";
+import {
+    getAuthUserData,
+    getSystemUserCheckStatus,
+    loadUsersList
+} from "./store/users";
 import Users from "./layouts/users";
 import Login from "./layouts/login";
 import Main from "./layouts/main";
@@ -16,11 +20,24 @@ import LogOut from "./layouts/logOut";
 
 function App() {
     const dispatch = useDispatch();
+    const systemUserChecked = useSelector(getSystemUserCheckStatus());
+    useEffect(() => {
+        dispatch(getAuthUserData());
+    }, []);
+
     useEffect(() => {
         dispatch(loadQualitiesList());
         dispatch(loadProfessionsList());
         dispatch(loadUsersList());
     }, []);
+    if (!systemUserChecked) {
+        return (
+            <div>
+                <NavBar />
+            </div>
+        );
+    }
+
     return (
         <div>
             <AuthProvider>

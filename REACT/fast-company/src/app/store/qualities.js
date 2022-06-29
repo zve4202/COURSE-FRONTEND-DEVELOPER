@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import qualityService from "../services/quality.service";
-import { isOutdated } from "../utils/isOutdated";
+import isOutdated from "../utils/isOutdated";
 
 const qualitiesSlice = createSlice({
     name: "qualities",
@@ -11,16 +11,15 @@ const qualitiesSlice = createSlice({
         lastFetch: null
     },
     reducers: {
-        requested(state) {
+        qualitiesRequested: (state) => {
             state.isLoading = true;
-            state.error = null;
         },
-        resived(state, action) {
+        qualitiesReceived: (state, action) => {
             state.entities = action.payload;
-            state.isLoading = false;
             state.lastFetch = Date.now();
+            state.isLoading = false;
         },
-        requestFailed(state, action) {
+        qualitiesRequestFailed: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
         }
@@ -28,41 +27,39 @@ const qualitiesSlice = createSlice({
 });
 
 const { reducer: qualitiesReducer, actions } = qualitiesSlice;
-const { requested, resived, requestFailed } = actions;
+const { qualitiesRequested, qualitiesReceived, qualitiesRequestFailed } =
+    actions;
 
 export const loadQualitiesList = () => async (dispatch, getState) => {
     const { lastFetch } = getState().qualities;
     if (isOutdated(lastFetch)) {
-        dispatch(requested());
+        dispatch(qualitiesRequested());
         try {
             const { content } = await qualityService.fetchAll();
-            dispatch(resived(content));
+            dispatch(qualitiesReceived(content));
         } catch (error) {
-            requestFailed(error.message);
+            dispatch(qualitiesRequestFailed(error.message));
         }
     }
 };
 
 export const getQualities = () => (state) => state.qualities.entities;
-export const getQuality = (id) => (state) => {
-    for (const item of state.qualities.entities) {
-        if (item._id === id) {
-            return item;
-        }
-    }
-    return null;
-};
-
-export const getQualityByIdis = (ids) => (state) => {
-    const items = [];
+export const getQualitiesLoadingStatus = () => (state) =>
+    state.qualities.isLoading;
+export const getQualitiesByIds = (qualitiesIds) => (state) => {
     if (state.qualities.entities) {
-        for (const id of ids) {
-            items.push(getQuality(id)(state));
+        const qualitiesArray = [];
+        for (const qualId of qualitiesIds) {
+            for (const quality of state.qualities.entities) {
+                if (quality._id === qualId) {
+                    qualitiesArray.push(quality);
+                    break;
+                }
+            }
         }
+        return qualitiesArray;
     }
-    return items;
+    return [];
 };
-
-export const getQualitiesLoading = () => (state) => state.qualities.isLoading;
 
 export default qualitiesReducer;

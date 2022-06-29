@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
-
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import GroupList from "../../common/groupList";
 import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
+import { useSelector } from "react-redux";
 import {
     getProfessions,
-    getProfessionsLoading
+    getProfessionsLoadingStatus
 } from "../../../store/professions";
-import { getCurrentUserId, getUsers } from "../../../store/users";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
+    const users = useSelector(getUsersList());
     const currentUserId = useSelector(getCurrentUserId());
 
-    const users = useSelector(getUsers());
     const professions = useSelector(getProfessions());
-    const professionsLoading = useSelector(getProfessionsLoading());
-
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();
@@ -72,7 +70,11 @@ const UsersListPage = () => {
                               .indexOf(searchQuery.toLowerCase()) !== -1
                   )
                 : selectedProf
-                ? data.filter((user) => user.profession === selectedProf._id)
+                ? data.filter(
+                      (user) =>
+                          JSON.stringify(user.profession) ===
+                          JSON.stringify(selectedProf)
+                  )
                 : data;
             return filteredUsers.filter((u) => u._id !== currentUserId);
         }

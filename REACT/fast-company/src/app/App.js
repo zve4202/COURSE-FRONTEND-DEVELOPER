@@ -1,7 +1,6 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-
 import Users from "./layouts/users";
 import Login from "./layouts/login";
 import Main from "./layouts/main";
@@ -13,11 +12,10 @@ import AppLoader from "./components/ui/hoc/appLoader";
 
 function App() {
     return (
-        <>
-            <AuthProvider>
-                <AppLoader>
+        <div>
+            <AppLoader>
+                <AuthProvider>
                     <NavBar />
-
                     <Switch>
                         <ProtectedRoute
                             path="/users/:userId?/:edit?"
@@ -28,11 +26,10 @@ function App() {
                         <Route path="/" exact component={Main} />
                         <Redirect to="/" />
                     </Switch>
-                </AppLoader>
-            </AuthProvider>
-
+                </AuthProvider>
+            </AppLoader>
             <ToastContainer />
-        </>
+        </div>
     );
 }
 

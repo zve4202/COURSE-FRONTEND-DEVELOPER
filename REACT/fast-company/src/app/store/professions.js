@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import professionService from "../services/profession.service";
-import { isOutdated } from "../utils/isOutdated";
+import isOutdated from "../utils/isOutdated";
 
 const professionsSlice = createSlice({
     name: "professions",
@@ -11,51 +11,45 @@ const professionsSlice = createSlice({
         lastFetch: null
     },
     reducers: {
-        requested(state) {
+        professionsRequested: (state) => {
             state.isLoading = true;
-            state.error = null;
         },
-        resived(state, action) {
+        professionsReceived: (state, action) => {
             state.entities = action.payload;
-            state.isLoading = false;
             state.lastFetch = Date.now();
+            state.isLoading = false;
         },
-        requestFailed(state, action) {
+        professionsRequestFailed: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
         }
     }
 });
 
-const { reducer: professionsReucer, actions } = professionsSlice;
-const { requested, resived, requestFailed } = actions;
+const { reducer: professionsReducer, actions } = professionsSlice;
+const { professionsRequested, professionsReceived, professionsRequestFailed } =
+    actions;
 
 export const loadProfessionsList = () => async (dispatch, getState) => {
     const { lastFetch } = getState().professions;
     if (isOutdated(lastFetch)) {
-        dispatch(requested());
+        dispatch(professionsRequested());
         try {
             const { content } = await professionService.get();
-            dispatch(resived(content));
+            dispatch(professionsReceived(content));
         } catch (error) {
-            requestFailed(error.message);
+            dispatch(professionsRequestFailed(error.message));
         }
     }
 };
 
 export const getProfessions = () => (state) => state.professions.entities;
-export const getProfession = (id) => (state) => {
+export const getProfessionsLoadingStatus = () => (state) =>
+    state.professions.isLoading;
+export const getProfessionById = (id) => (state) => {
     if (state.professions.entities) {
-        for (const item of state.professions.entities) {
-            if (item._id === id) {
-                return item;
-            }
-        }
+        return state.professions.entities.find((p) => p._id === id);
     }
-    return null;
 };
 
-export const getProfessionsLoading = () => (state) =>
-    state.professions.isLoading;
-
-export default professionsReucer;
+export default professionsReducer;

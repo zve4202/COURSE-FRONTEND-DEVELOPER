@@ -8,15 +8,14 @@ import GroupList from "../../common/groupList";
 import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
-import { useAuth } from "../../../hooks/useAuth";
 import {
     getProfessions,
     getProfessionsLoading
 } from "../../../store/professions";
-import { getUsers } from "../../../store/users";
+import { getLoggedUser, getUsers } from "../../../store/users";
 
 const UsersListPage = () => {
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getLoggedUser());
     const users = useSelector(getUsers());
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoading());

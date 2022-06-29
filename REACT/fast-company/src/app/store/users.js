@@ -13,16 +13,19 @@ const usersSlice = createSlice({
         isLoading: true,
         error: null,
         lastFetch: null,
-        isLoggedIn: false
+        isLoggedIn: false,
+        dataLoaded: false
     },
     reducers: {
         requested(state) {
             state.isLoading = true;
+            state.dataLoaded = false;
             state.error = null;
         },
 
         resived(state, action) {
             state.entities = action.payload;
+            state.dataLoaded = true;
             state.isLoading = false;
             state.lastFetch = Date.now();
         },
@@ -154,5 +157,12 @@ export const getUser = (id) => (state) => {
 
 export const getUsersLoading = () => (state) => state.users.isLoading;
 export const getLoggedIn = () => (state) => state.users.isLoggedIn;
+export const getDataLoaded = () => (state) => state.users.dataLoaded;
+export const getLoggedUser = () => (state) => {
+    if (state.users.dataLoaded && state.users.isLoggedIn) {
+        return getUser(state.users.auth.userId)(state);
+    }
+    return null;
+};
 
 export default usersReucer;

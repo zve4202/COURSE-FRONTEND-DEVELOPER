@@ -14,7 +14,7 @@ import {
     getProfessions,
     getProfessionsLoadingStatus
 } from "../../../store/professions";
-import { getCurrentUserData, updateUserData } from "../../../store/users";
+import { getCurrentUserData, updateUser } from "../../../store/users";
 
 const EditUserPage = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -39,9 +39,8 @@ const EditUserPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-
         dispatch(
-            updateUserData({
+            updateUser({
                 ...data,
                 qualities: data.qualities.map((q) => q.value)
             })

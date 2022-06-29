@@ -8,7 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
 import App from "./app/App";
 import { createStore } from "./app/store/createStore";
-import history from "./app/utils/hidtory";
+import history from "./app/utils/history";
 
 const ctore = createStore();
 ReactDOM.render(

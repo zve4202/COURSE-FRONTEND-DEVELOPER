@@ -162,5 +162,9 @@ export const getLoggedIn = () => (state) => state.users.isLoggedIn;
 export const getDataLoaded = () => (state) => state.users.dataLoaded;
 
 export const getCurrentUserId = () => (state) => state.users.auth.userId;
+export const getCurrentUserData = () => (state) =>
+    state.users.entities
+        ? state.users.entities.find((u) => u._Id === state.users.auth.userId)
+        : null;
 
 export default usersReucer;

@@ -8,10 +8,11 @@ import CheckBoxField from "../common/form/checkBoxField";
 import { useDispatch, useSelector } from "react-redux";
 import { getQualities } from "../../store/qualities";
 import { getProfessions } from "../../store/professions";
-import { signUp } from "../../store/users";
+import { getAuthErrors, signUp } from "../../store/users";
 
 const RegisterForm = () => {
     const dispatch = useDispatch();
+    const loginError = useSelector(getAuthErrors());
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -164,6 +165,7 @@ const RegisterForm = () => {
             >
                 Подтвердить <a>лицензионное соглашение</a>
             </CheckBoxField>
+            {loginError && <p className="text-danger">{loginError}</p>}
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"

@@ -1,13 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import WorkScreen from "./workScreen";
+import debounce from "lodash.debounce";
 
 const WorkScreenWithSearch = ({
+    placeholderText,
     searchValue,
     onSearch,
     clearFilter,
     children
 }) => {
+    const handleInputChangeDebounced = debounce(onSearch, 500);
     return (
         <WorkScreen>
             <div className="d-flex mb-3">
@@ -18,12 +21,12 @@ const WorkScreenWithSearch = ({
                     Очистить фильтр
                 </button>
                 <input
-                    type="text"
+                    type="search"
                     name="searchQuery"
-                    placeholder="Поиск по названию..."
+                    placeholder={placeholderText || "Поиск по названию..."}
                     className="form-control"
-                    onChange={onSearch}
-                    value={searchValue}
+                    onChange={handleInputChangeDebounced}
+                    // value={searchValue}
                 />
             </div>
             {children}
@@ -32,6 +35,7 @@ const WorkScreenWithSearch = ({
 };
 
 WorkScreenWithSearch.propTypes = {
+    placeholderText: PropTypes.string,
     searchValue: PropTypes.string,
     onSearch: PropTypes.func,
     clearFilter: PropTypes.func,

@@ -1,4 +1,5 @@
 {
     "appTitle": "Музыкальная лавка",
-    "apiEndpoint": "http://localhost:4001/api/v1/"
+    "apiEndpoint": "http://localhost:4001/api/v1/",
+    "pageSize": 1000
 }

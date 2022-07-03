@@ -1,41 +1,109 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
+import _ from "lodash";
 
 import productService from "../services/product.service";
+import { slugify } from "../utils";
 
-const initialState = { entities: [], isLoading: true, error: null };
+const initialSearch = {
+    category: null,
+    text: "",
+    timer: null
+};
 
-const categorySlice = createSlice({
+const initialState = {
+    search: { ...initialSearch },
+    entities: [],
+    filtred: null,
+    sortBy: {
+        path: "title.artist.name",
+        order: "asc"
+    },
+    isLoading: true,
+    error: null
+};
+
+const productsSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
+        requested(state) {
+            state = initialState;
+        },
         resived(state, action) {
             state.entities = action.payload;
             state.isLoading = false;
         },
-        requested(state) {
-            state = initialState;
-        },
         requestFailed(state, action) {
             state.isLoading = false;
             state.error = action.payload;
+        },
+        setSeacher(state, action) {
+            state.search = { ...state.search, ...action.payload };
+            const { category, text } = state.search;
+            if (!category && text === "") {
+                state.filtred = null;
+            }
+        },
+        setFiltred(state, action) {
+            state.filtred = action.payload;
         }
     }
 });
 
-const { actions, reducer: productsReducer } = categorySlice;
-const { resived, requested, requestFailed } = actions;
+const { actions, reducer: productsReducer } = productsSlice;
+const { resived, requested, requestFailed, setSeacher, setFiltred } = actions;
 
-export const loadProducts = () => async (dispatch) => {
+const searchBegin = createAction("products/filterBegin");
+const searchFailed = createAction("products/filterBegin");
+
+function matched(text, arr) {
+    if (!text) return true;
+
+    const alias = slugify(text);
+    return arr.some((item) => item.indexOf(alias) !== -1);
+}
+
+async function orderBy(entities, sortBy) {
+    return await _.orderBy(entities, [sortBy.path], [sortBy.order]);
+}
+
+async function getFiltered({ search, entities, sortBy }) {
+    const { category, text } = search;
+    const filtred = await entities.filter(
+        (item) =>
+            (category ? item.title.format.category === category : true) &&
+            matched(text, [item.title.artist.alias, item.title.alias])
+    );
+    return await orderBy(filtred, sortBy);
+}
+
+export const filterProducts = (payload) => async (dispatch, getState) => {
+    console.log(payload);
+    dispatch(searchBegin());
+    try {
+        dispatch(setSeacher(payload));
+        const { products } = getState();
+        const filtred = await getFiltered(products);
+        dispatch(setFiltred(filtred));
+    } catch (error) {
+        dispatch(searchFailed(error.message));
+    }
+};
+
+export const loadProducts = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
         const { content } = await productService.fetchAllEx();
-        dispatch(resived(content));
+        const sortBy = getState().products.sortBy;
+        const entities = await orderBy(content, sortBy);
+        dispatch(resived(entities));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
 };
 
-export const getProducts = () => (state) => state.products.entities;
+export const getProducts = () => (state) =>
+    state.products.filtred ? state.products.filtred : state.products.entities;
 export const getProduct = (id) => (state) =>
     state.products.entities.find((item) => item._id === id);
 export const getProductLoading = () => (state) => state.products.isLoading;

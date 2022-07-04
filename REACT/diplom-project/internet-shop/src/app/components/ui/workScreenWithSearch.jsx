@@ -4,13 +4,17 @@ import WorkScreen from "./workScreen";
 import debounce from "lodash.debounce";
 
 const WorkScreenWithSearch = ({
-    placeholderText,
+    seacher,
     searchValue,
     onSearch,
     clearFilter,
     children
 }) => {
-    const handleInputChangeDebounced = debounce(onSearch, 500);
+    const handleSearchQuery = (e) => {
+        onSearch && onSearch(e);
+    };
+
+    const handleInputChangeDebounced = debounce(handleSearchQuery, 500);
     return (
         <WorkScreen>
             <div className="d-flex mb-3">
@@ -20,14 +24,16 @@ const WorkScreenWithSearch = ({
                 >
                     Очистить фильтр
                 </button>
-                <input
-                    type="search"
-                    name="searchQuery"
-                    placeholder={placeholderText || "Поиск по названию..."}
-                    className="form-control"
-                    onChange={handleInputChangeDebounced}
-                    // value={searchValue}
-                />
+                {seacher || (
+                    <input
+                        type="search"
+                        name="searchQuery"
+                        placeholder="Поиск по названию..."
+                        className="form-control"
+                        onChange={handleInputChangeDebounced}
+                        value={searchValue}
+                    />
+                )}
             </div>
             {children}
         </WorkScreen>
@@ -35,7 +41,7 @@ const WorkScreenWithSearch = ({
 };
 
 WorkScreenWithSearch.propTypes = {
-    placeholderText: PropTypes.string,
+    seacher: PropTypes.node,
     searchValue: PropTypes.string,
     onSearch: PropTypes.func,
     clearFilter: PropTypes.func,

@@ -1,47 +1,32 @@
-import React from "react"; // , { useEffect, useState }
-import {
-    useDispatch
-    // , useSelector
-} from "react-redux";
-import { filterProducts } from "../../../store/products";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import debounce from "lodash.debounce";
 
+import { filterProducts, setSeachParams } from "../../../store/products";
+
 const ProductSearch = () => {
-    // const searchQuery = useSelector((state) => state.products.search.search);
     const dispatch = useDispatch();
-    // const [searchChanged, setSearchChanged] = useState(false);
-    // const [searchQuery, setSearchQuery] = useState("");
-    const dispatchFilter = async (text) => {
-        const search = {
-            text
-        };
-        dispatch(filterProducts(search));
+    const searchQuery = useSelector((state) => state.products.search.search);
+
+    const dispatchFilter = async () => {
+        dispatch(filterProducts());
     };
-    // useEffect(async () => {
-    //     if (searchChanged) {
-    //         setSearchChanged(false);
-    //         await dispatchFilter();
-    //     }
-    // }, [searchChanged]);
-    const handleSearchQuery = async ({ target }) => {
-        console.log("handleSearchQuery");
-        dispatchFilter(target.value);
-        // setSearchQuery(target.value);
-        // setSearchChanged(true);
+    const handleDispatchFilterDebounced = debounce(dispatchFilter, 500);
+
+    const handleSearchQuery = ({ target }) => {
+        dispatch(setSeachParams({ text: target.value }));
+        handleDispatchFilterDebounced();
     };
 
-    const handleInputChangeDebounced = debounce(handleSearchQuery, 500);
     return (
-        <div>
-            <input
-                type="search"
-                name="searchQuery"
-                placeholder="Поиск по названию..."
-                className="form-control"
-                onChange={handleInputChangeDebounced}
-                // value={searchQuery}
-            />
-        </div>
+        <input
+            type="search"
+            name="searchQuery"
+            placeholder="Поиск по артисту и названию альбома..."
+            className="form-control"
+            onChange={handleSearchQuery}
+            value={searchQuery}
+        />
     );
 };
 

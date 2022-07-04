@@ -1,4 +1,4 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import _ from "lodash";
 
 import productService from "../services/product.service";
@@ -27,7 +27,7 @@ const productsSlice = createSlice({
     initialState,
     reducers: {
         requested(state) {
-            state = initialState;
+            state.isLoading = true;
         },
         resived(state, action) {
             state.entities = action.payload;
@@ -44,17 +44,30 @@ const productsSlice = createSlice({
                 state.filtred = null;
             }
         },
+        beginFilter(state) {
+            state.isLoading = true;
+        },
         setFiltred(state, action) {
+            state.isLoading = false;
             state.filtred = action.payload;
+        },
+        filterFailed(state, action) {
+            state.isLoading = false;
+            state.error = action.payload;
         }
     }
 });
 
 const { actions, reducer: productsReducer } = productsSlice;
-const { resived, requested, requestFailed, setSeacher, setFiltred } = actions;
-
-const searchBegin = createAction("products/filterBegin");
-const searchFailed = createAction("products/filterBegin");
+const {
+    resived,
+    requested,
+    requestFailed,
+    setSeacher,
+    beginFilter,
+    setFiltred,
+    filterFailed
+} = actions;
 
 function matched(text, arr) {
     if (!text) return true;
@@ -77,17 +90,19 @@ async function getFiltered({ search, entities, sortBy }) {
     return await orderBy(filtred, sortBy);
 }
 
-export const filterProducts = (payload) => async (dispatch, getState) => {
-    console.log(payload);
-    dispatch(searchBegin());
+export const filterProducts = () => async (dispatch, getState) => {
+    dispatch(beginFilter());
     try {
-        dispatch(setSeacher(payload));
         const { products } = getState();
         const filtred = await getFiltered(products);
         dispatch(setFiltred(filtred));
     } catch (error) {
-        dispatch(searchFailed(error.message));
+        dispatch(filterFailed(error.message));
     }
+};
+
+export const setSeachParams = (payload) => async (dispatch) => {
+    dispatch(setSeacher(payload));
 };
 
 export const loadProducts = () => async (dispatch, getState) => {
@@ -103,7 +118,7 @@ export const loadProducts = () => async (dispatch, getState) => {
 };
 
 export const getProducts = () => (state) =>
-    state.products.filtred ? state.products.filtred : state.products.entities;
+    state.products.filtred || state.products.entities;
 export const getProduct = (id) => (state) =>
     state.products.entities.find((item) => item._id === id);
 export const getProductLoading = () => (state) => state.products.isLoading;

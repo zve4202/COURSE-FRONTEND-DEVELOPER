@@ -11,17 +11,20 @@ import { paginate } from "../../../utils/paginate";
 import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 import { getCategories, loadCategories } from "../../../store/categories";
 import {
-    filterProducts,
+    // filterProducts,
     getProducts,
     loadProducts
 } from "../../../store/products";
-// import ProductSearch from "./productSearch";
+import ProductSearch from "./productSearch";
+import ProductLoader from "./productLoader";
 // import { slugify } from "../../../utils";
 
 const ProductListPage = () => {
     const dispatch = useDispatch();
     const categories = useSelector(getCategories());
+
     const products = useSelector(getProducts());
+
     useEffect(() => {
         dispatch(loadCategories());
         dispatch(loadProducts());
@@ -33,7 +36,7 @@ const ProductListPage = () => {
         order: "asc"
     });
 
-    const [searchQuery, setSearchQuery] = useState("");
+    // const [searchQuery, setSearchQuery] = useState("");
     const [selectedCat, setSelectedCat] = useState();
     const handleDelete = (productId) => {
         console.log(productId);
@@ -49,9 +52,9 @@ const ProductListPage = () => {
     //     // setCurrentPage(1);
     // }, [selectedCat, searchQuery]);
 
-    const handleSearchQuery = ({ target }) => {
-        setSearchQuery(target.value);
-    };
+    // const handleSearchQuery = ({ target }) => {
+    //     setSearchQuery(target.value);
+    // };
     const handleCategorySelect = (item) => {
         setSelectedCat(item);
     };
@@ -93,12 +96,9 @@ const ProductListPage = () => {
     // const productCrop = paginate(sortedUsers, currentPage, pageSize);
     const productCrop = paginate(products, currentPage, pageSize);
 
-    console.log("render ProductListPage");
     return (
         <WorkScreenWithSearch
-            placeholderText="Поиск по артисту и названию альбома... (начните вводить текст) "
-            searchValue={searchQuery}
-            onSearch={handleSearchQuery}
+            seacher={<ProductSearch />}
             clearFilter={clearFilter}
         >
             <div className="mt-2">
@@ -112,10 +112,14 @@ const ProductListPage = () => {
                             />
                         </div>
                     )}
-                    <div className="d-flex flex-column w-100 h-100">
+                    <ProductLoader>
                         <div className="card mb-3">
-                            <div className="card-body">
-                                Функции сортировки по стоимости
+                            <div className="card-body d-flex align-content-center justify-content-between">
+                                <span>Функции сортировки по стоимости</span>
+                                <input
+                                    type="text"
+                                    // className="form-control"
+                                />
                             </div>
                         </div>
                         <div className="h-100">
@@ -140,7 +144,7 @@ const ProductListPage = () => {
                                 />
                             </div>
                         </div>
-                    </div>
+                    </ProductLoader>
                 </div>
             </div>
         </WorkScreenWithSearch>

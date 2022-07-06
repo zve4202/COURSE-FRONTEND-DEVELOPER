@@ -4,18 +4,20 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 const ProductLoader = ({ children }) => {
-    const { isLoading, error } = useSelector((state) => state.products);
+    const { isLoading, error, entities } = useSelector(
+        (state) => state.products
+    );
 
     const loadDiv = () => {
-        if (isLoading || error) {
+        if (isLoading || error || entities.length === 0) {
             return (
                 <div className="card mb-3">
                     {isLoading ? (
                         <div className="card-body">Загрузка данных...</div>
+                    ) : error ? (
+                        <div className="card-body text-danger">{error}</div>
                     ) : (
-                        error && (
-                            <div className="card-body text-danger">{error}</div>
-                        )
+                        <div className="card-body">Нет данных</div>
                     )}
                 </div>
             );

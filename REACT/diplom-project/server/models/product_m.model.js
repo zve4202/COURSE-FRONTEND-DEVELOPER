@@ -5,7 +5,7 @@ const schema = new Schema(
   {
     _id: { type: Number, required: true },
     article: { type: String, required: true },
-    title: { type: Number, ref: "Title", required: true },
+    title: { type: Object },
     quality: { type: String },
     price: { type: Number, required: true },
     count: { type: Number, required: true },
@@ -15,4 +15,4 @@ const schema = new Schema(
 
 schema.plugin(aggregatePaginate);
 
-module.exports = model("Product", schema);
+module.exports = model("Products_m", schema);

@@ -8,9 +8,16 @@ const usersSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
+        requested(state) {
+            state = { ...initialState };
+        },
         resived(state, action) {
             state.entities = action.payload;
             state.isLoading = false;
+        },
+        requestFailed(state, action) {
+            state.isLoading = false;
+            state.error = action.payload;
         },
         update(state, action) {
             const index = state.entities.findIndex(
@@ -20,13 +27,6 @@ const usersSlice = createSlice({
                 ...state.entities[index],
                 ...action.payload
             };
-        },
-        requested(state) {
-            state = initialState;
-        },
-        requestFailed(state, action) {
-            state.isLoading = false;
-            state.error = action.payload;
         }
     }
 });
@@ -47,7 +47,7 @@ export const loadUsers = () => async (dispatch) => {
 export const updateUser = (user) => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        const { content } = await userService.update(user.id, user);
+        const { content } = await userService.update(user._id, user);
         dispatch(update(content));
     } catch (error) {
         dispatch(requestFailed(error.message));

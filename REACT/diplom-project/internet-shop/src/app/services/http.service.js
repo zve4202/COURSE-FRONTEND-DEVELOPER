@@ -12,7 +12,6 @@ http.interceptors.request.use(
         if (token) {
             config.headers = { ...config.headers, authorization: token };
         }
-
         return config;
     },
     function (error) {

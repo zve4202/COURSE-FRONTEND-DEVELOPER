@@ -17,6 +17,7 @@
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
+    "mongoose-aggregate-paginate-v2": "^1.0.6",
     "morgan": "~1.9.1",
     "xml-stream": "^0.4.5",
     "xml-to-json-stream": "^1.1.0"

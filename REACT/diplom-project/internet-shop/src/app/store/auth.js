@@ -13,19 +13,19 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+        requested(state) {
+            state = initialState;
+        },
         resived(state, action) {
             state.currentUser = action.payload;
             state.isLoading = false;
         },
-        update(state, action) {
-            state.currentUser = action.payload;
-        },
-        requested(state) {
-            state = initialState;
-        },
         requestFailed(state, action) {
             state.error = action.payload;
             state.isLoading = false;
+        },
+        update(state, action) {
+            state.currentUser = action.payload;
         }
     }
 });

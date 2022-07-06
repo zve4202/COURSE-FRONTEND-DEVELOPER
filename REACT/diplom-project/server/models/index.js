@@ -13,6 +13,7 @@ db.label = require("./label.model");
 db.artist = require("./artist.model");
 db.title = require("./title.model");
 db.product = require("./product.model");
+db.product_m = require("./product_m.model");
 db.order = require("./order.model");
 db.order_details = require("./order_details.model");
 

@@ -18,11 +18,12 @@ exports.getList = async function (req, res, next) {
 };
 exports.getListEx = async function (req, res, next) {
   // Validate request parameters, queries using express-validator
+  const { query } = req;
+  var page = query.page ? query.page : 1;
+  var limit = query.limit ? query.limit : 100;
 
-  var page = req.params.page ? req.params.page : 1;
-  var limit = req.params.limit ? req.params.limit : 100;
   try {
-    var data = await Service.getListEx({}, page, limit);
+    var data = await Service.getListEx(query, page, limit);
     return res.status(200).json({
       status: 200,
       content: data,

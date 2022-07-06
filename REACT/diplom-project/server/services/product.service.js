@@ -1,3 +1,5 @@
+const { slugify } = require("../../internet-shop/src/app/utils");
+const { product_m } = require("../models");
 const Product = require("../models/product.model");
 
 exports.get = async function (id) {
@@ -55,21 +57,23 @@ exports.getList = async function (query, page, limit) {
 
 // {$or: [{"title.artist.alias": {"$regex": "abba"}}, {"title.alias": {"$regex": "abba"}}]}
 /*
-, {
-  '$match': {
-    '$or': [
-      {
-        'title.artist.alias': {
-          '$regex': 'abba'
-        }
-      }, {
-        'title.alias': {
-          '$regex': 'abba'
-        }
-      }
-    ]
-  }
-} */
+  {
+    $match: {
+      $or: [
+        {
+          "title.artist.alias": {
+            $regex: "abba",
+          },
+        },
+        {
+          "title.alias": {
+            $regex: "abba",
+          },
+        },
+      ],
+    },
+  },
+*/
 const agg = [
   {
     $lookup: {
@@ -125,9 +129,55 @@ const agg = [
   },
 ];
 
+//const aggregate = Product.aggregate(agg);
+
+const search_by = ({ search, category }) => {
+  const result = [];
+  let match = {};
+  const $or = [];
+  if (category) {
+    match = {
+      "title.format.category": Number(category),
+    };
+  }
+  if (search) {
+    const alias = slugify(search);
+    $or.push(
+      {
+        "title.artist.alias": {
+          $regex: `${alias}`,
+        },
+      },
+      {
+        "title.alias": {
+          $regex: `${alias}`,
+        },
+      }
+    );
+  }
+  if ($or.length > 0) {
+    match = { ...match, $or };
+  }
+
+  if (Object.keys(match).length > 0) {
+    result.push({ $match: match });
+  }
+  return result;
+};
+
 exports.getListEx = async function (query, page, limit) {
+  const options = {
+    page,
+    limit,
+    sort: { "title.artist.name": 1, "title.title": 1 },
+  };
+
+  const aggr = search_by(query);
+
+  console.log("aggr", aggr);
   try {
-    const data = await Product.aggregate(agg);
+    const aggregate = aggr.length > 0 ? product_m.aggregate(aggr) : {};
+    const data = await product_m.aggregatePaginate(aggregate, options);
     return data;
   } catch (e) {
     // Log Errors

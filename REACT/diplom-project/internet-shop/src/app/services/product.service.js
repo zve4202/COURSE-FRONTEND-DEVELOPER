@@ -14,8 +14,10 @@ const categoryService = {
         const { data } = await httpService.get(endPoint);
         return data;
     },
-    fetchAllEx: async () => {
-        const { data } = await httpService.get(endPoint + "ex/");
+    fetchAllEx: async (params) => {
+        const { data } = await httpService.get(endPoint + "ex/", {
+            params
+        });
         return data;
     },
     create: async (content) => {

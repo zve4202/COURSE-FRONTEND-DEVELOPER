@@ -22,6 +22,9 @@ exports.getListEx = async function (req, res, next) {
   var page = query.page ? query.page : 1;
   var limit = query.limit ? query.limit : 100;
 
+  delete query.page;
+  delete query.limit;
+
   try {
     var data = await Service.getListEx(query, page, limit);
     return res.status(200).json({

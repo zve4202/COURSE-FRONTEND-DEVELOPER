@@ -129,39 +129,85 @@ const agg = [
   },
 ];
 
-//const aggregate = Product.aggregate(agg);
+const sortMap = {
+  name: ["title.artist.name", "title.title"],
+  format: ["title.format.name"],
+  label: ["title.label.name"],
+  origin: ["title.origin"],
+  price: ["price"],
+};
 
-const search_by = ({ search, category }) => {
+const getSort = ({ sort, order }) => {
+  if (sort) {
+    const map = sortMap[sort];
+    if (map) {
+      const result = {};
+
+      map.forEach((field) => {
+        result[field] = Number(order);
+      });
+      return result;
+    }
+  }
+  return null;
+};
+
+const searchMap = {
+  category: "title.format.category",
+  search: ["title.artist.alias", "title.alias"],
+};
+
+const getMatching = (query) => {
+  if (Object.keys(query).length === 0) return null;
+
   const result = [];
-  let match = {};
+  const $match = {};
   const $or = [];
-  if (category) {
-    match = {
-      "title.format.category": Number(category),
-    };
-  }
-  if (search) {
-    const alias = slugify(search);
-    $or.push(
-      {
-        "title.artist.alias": {
-          $regex: `${alias}`,
-        },
-      },
-      {
-        "title.alias": {
-          $regex: `${alias}`,
-        },
+
+  Object.keys(query).forEach((key) => {
+    const map = searchMap[key];
+    if (map) {
+      let value = query[key];
+      const numvalue = Number(value);
+      // console.log("numvalue", typeof numvalue, numvalue);
+      if (numvalue && numvalue == value) {
+        value = numvalue;
       }
-    );
-  }
+      // console.log(key, "typeof value", typeof value, value);
+
+      if (Array.isArray(map)) {
+        const alias = slugify(value);
+        map.forEach((field) => {
+          if (field.includes("alias")) {
+            value = {
+              $regex: `${alias}`,
+            };
+          } else {
+            value = {
+              $regex: `${value}`,
+              $options: "i",
+            };
+          }
+          $or.push({
+            [field]: value,
+          });
+        });
+      } else {
+        $match[map] = value;
+      }
+    }
+  });
+
   if ($or.length > 0) {
-    match = { ...match, $or };
+    console.log("$match", $match);
+    console.log("$or", $or);
+    $match.$or = $or;
   }
 
-  if (Object.keys(match).length > 0) {
-    result.push({ $match: match });
-  }
+  if (Object.keys($match).length === 0) return null;
+
+  result.push({ $match });
+
   return result;
 };
 
@@ -169,14 +215,24 @@ exports.getListEx = async function (query, page, limit) {
   const options = {
     page,
     limit,
-    sort: { "title.artist.name": 1, "title.title": 1 },
   };
 
-  const aggr = search_by(query);
+  const sort = getSort(query);
+  console.log("sort", sort, query);
+  if (sort) {
+    delete query.sort;
+    delete query.order;
+    options.sort = sort;
+  }
+  console.log(query);
+  const match = getMatching(query);
+  console.log("match", match);
+  // const aggr = search_by(query);
 
-  console.log("aggr", aggr);
+  // console.log("aggr", aggr);
   try {
-    const aggregate = aggr.length > 0 ? product_m.aggregate(aggr) : {};
+    const aggregate = match ? product_m.aggregate(match) : {};
+    // const aggregate = aggr.length > 0 ? product_m.aggregate(aggr) : {};
     const data = await product_m.aggregatePaginate(aggregate, options);
     return data;
   } catch (e) {

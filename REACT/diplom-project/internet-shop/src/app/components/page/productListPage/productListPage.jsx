@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
 
@@ -23,11 +23,6 @@ const ProductListPage = () => {
         dispatch(loadProducts());
     }, []);
 
-    const [sortBy, setSortBy] = useState({
-        path: "title.artist.name",
-        order: "asc"
-    });
-
     const addToBasket = (id) => {
         console.log(id);
     };
@@ -43,8 +38,8 @@ const ProductListPage = () => {
 
         dispatch(loadProducts());
     };
-    const handleSort = (item) => {
-        setSortBy(item);
+    const handleSort = () => {
+        dispatch(loadProducts());
     };
 
     const onFilter = () => {
@@ -91,16 +86,14 @@ const ProductListPage = () => {
                                     name={name}
                                 />
                             </div>
-                            <hr />
                             <ProductLoader>
                                 <ProductTable
+                                    name={name}
                                     products={docs}
                                     onSort={handleSort}
-                                    selectedSort={sortBy}
                                     onAdd={addToBasket}
                                 />
                             </ProductLoader>
-                            <hr />
                             <div className="d-flex justify-content-center">
                                 <Pagination
                                     totalDocs={totalDocs}

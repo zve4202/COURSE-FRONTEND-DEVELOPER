@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import basketService from "../services/basket.service";
 import localStorageService from "../services/localStorage.service";
 
+const BASKET_KEY = "basket-id";
 // entities = ["1","2" ...]
 const initialState = { _id: null, entities: [], isLoading: true, error: null };
 

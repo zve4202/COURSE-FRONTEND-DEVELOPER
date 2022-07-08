@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import TableBody from "./tableBody";
 import TableHeader from "./tableHeader";
 
-const Table = ({ onSort, selectedSort, columns, data, children }) => {
+const Table = ({ name, onSort, columns, data, children }) => {
     return (
         <table className="table table-hover caption-top">
             {children || (
                 <>
-                    <TableHeader {...{ onSort, selectedSort, columns }} />
+                    <TableHeader {...{ name, onSort, columns }} />
                     <TableBody {...{ columns, data }} />
                 </>
             )}
@@ -16,8 +16,8 @@ const Table = ({ onSort, selectedSort, columns, data, children }) => {
     );
 };
 Table.propTypes = {
+    name: PropTypes.string.isRequired,
     onSort: PropTypes.func,
-    selectedSort: PropTypes.object,
     columns: PropTypes.object,
     data: PropTypes.array,
     children: PropTypes.array

@@ -25,3 +25,7 @@ th.cover-small,
 td.cover-small {
     width: 81px;
 }
+
+.table-input {
+    width: 40px !important;
+}

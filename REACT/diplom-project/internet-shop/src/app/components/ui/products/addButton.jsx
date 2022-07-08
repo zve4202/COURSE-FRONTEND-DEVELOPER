@@ -25,7 +25,7 @@ const AddButton = ({ productId, onAdd }) => {
                 <i className="bi bi-cart" /> {countText}
             </span>
             {count > 0 && (
-                <span className="position-absolute top-1 end-0 translate-middle badge rounded-pill bg-primary">
+                <span className="top-0 end-0 translate-middle badge rounded-pill bg-primary">
                     {count}
                 </span>
             )}

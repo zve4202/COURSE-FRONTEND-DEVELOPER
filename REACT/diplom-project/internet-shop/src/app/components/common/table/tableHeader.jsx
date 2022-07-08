@@ -1,22 +1,41 @@
 import React from "react";
 import PropTypes from "prop-types";
-const TableHeader = ({ onSort, selectedSort, columns }) => {
-    const handleSort = (item) => {
-        if (selectedSort.path === item) {
-            onSort({
-                ...selectedSort,
-                order: selectedSort.order === "asc" ? "desc" : "asc"
-            });
+import { useDispatch, useSelector } from "react-redux";
+
+import { updateSetting } from "../../../store/setting";
+
+const TableHeader = ({ name, onSort, columns }) => {
+    const selectedSort = useSelector(
+        (state) => state.setting.config[name].sort
+    );
+
+    console.log("selectedSort", selectedSort);
+    const dispatch = useDispatch();
+
+    const handleSort = (sort) => {
+        console.log(sort);
+        let newsort = { ...selectedSort };
+        if (selectedSort.sort === sort) {
+            newsort.order = selectedSort.order === 1 ? -1 : 1;
         } else {
-            onSort({ path: item, order: "asc" });
+            newsort = { sort, order: 1 };
         }
+        dispatch(
+            updateSetting(name, {
+                sort: {
+                    ...newsort
+                }
+            })
+        );
+        onSort();
     };
-    const rendeSortArrow = (selectedSort, currentPath) => {
-        if (selectedSort.path === currentPath) {
-            if (selectedSort.order === "asc") {
-                return <i className="bi bi-caret-up-fill"></i>;
+
+    const rendeSortArrow = (sort) => {
+        if (selectedSort.sort === sort) {
+            if (selectedSort.order === 1) {
+                return <i className="bi bi-caret-up"></i>;
             } else {
-                return <i className="bi bi-caret-down-fill"></i>;
+                return <i className="bi bi-caret-down"></i>;
             }
         }
         return null;
@@ -41,7 +60,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                             scope="col"
                         >
                             {columns[column].name}{" "}
-                            {rendeSortArrow(selectedSort, columns[column].path)}
+                            {rendeSortArrow(columns[column].path)}
                         </th>
                     );
                 })}
@@ -50,8 +69,8 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
     );
 };
 TableHeader.propTypes = {
+    name: PropTypes.string.isRequired,
     onSort: PropTypes.func.isRequired,
-    selectedSort: PropTypes.object.isRequired,
     columns: PropTypes.object.isRequired
 };
 

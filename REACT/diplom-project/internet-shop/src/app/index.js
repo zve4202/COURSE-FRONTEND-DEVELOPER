@@ -14,6 +14,7 @@ import LogOut from "./layouts/logOut";
 import { getAuthLoading, loadAuthUser } from "./store/auth";
 
 import configureStore from "./store";
+import { loadSetting } from "./store/setting";
 
 export const store = configureStore();
 
@@ -22,6 +23,7 @@ function App() {
     const isLoading = useSelector(getAuthLoading());
 
     useEffect(() => {
+        dispatch(loadSetting());
         dispatch(loadAuthUser());
     }, []);
 

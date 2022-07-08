@@ -9,8 +9,8 @@ const initialSearch = {
 
 const initialState = {
     search: { ...initialSearch },
-    entities: [],
-    filtred: null,
+    docs: [],
+    totalDocs: 0,
     sortBy: {
         path: "title.artist.name",
         order: "asc"
@@ -20,77 +20,58 @@ const initialState = {
 };
 
 const productsSlice = createSlice({
-    name: "products",
+    name: "product",
     initialState,
     reducers: {
         requested(state) {
             state.isLoading = true;
         },
         resived(state, action) {
-            state.entities = action.payload;
+            const { docs, totalDocs } = action.payload;
+            state.docs = docs;
+            state.totalDocs = totalDocs;
             state.isLoading = false;
         },
         requestFailed(state, action) {
-            state.isLoading = false;
-            state.error = action.payload;
-        },
-        setSeacher(state, action) {
-            if (!action.payload) {
-                state.search = { ...initialSearch };
-            } else {
-                state.search = { ...state.search, ...action.payload };
-            }
-        },
-        beginFilter(state) {
-            state.isLoading = true;
-        },
-        setFiltred(state, action) {
-            state.isLoading = false;
-            state.filtred = action.payload;
-        },
-        filterFailed(state, action) {
             state.isLoading = false;
             state.error = action.payload;
         }
     }
 });
 
-const { actions, reducer: productsReducer } = productsSlice;
-const {
-    resived,
-    requested,
-    requestFailed,
-    setSeacher
-    // beginFilter,
-    // setFiltred,
-    // filterFailed
-} = actions;
-
-export const setSeachParams = (payload) => async (dispatch) => {
-    dispatch(setSeacher(payload));
-};
-
-export const clearSeachParams = () => async (dispatch) => {
-    dispatch(setSeacher(null));
-};
+const { name, actions, reducer: productsReducer } = productsSlice;
+const { resived, requested, requestFailed } = actions;
 
 export const loadProducts = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        let params = { page: 1, limit: 100 };
-        const { products } = getState();
-        const { category, text: search } = products.search;
-        if (category) params = { ...params, category };
-        if (search !== "") params = { ...params, search };
+        const { pagenation, query, sort } = getState().setting.config[name];
+        let params = {};
+        Object.keys(query).forEach((key) => {
+            const value = query[key];
+            if (value) {
+                params[key] = value;
+            }
+        });
+
+        params = {
+            ...params,
+            page: pagenation.currentPage,
+            limit: pagenation.pageSize,
+            ...sort
+        };
+
+        console.log(params);
 
         const { content } = await productService.fetchAllEx(params);
-        dispatch(resived(content.docs));
+        console.log("loadProducts content", content);
+        dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
 };
 
-export const getProducts = () => (state) => state.products.entities;
+// export const getProducts = () => (state) => state.products.docs;
 export const getProduct = (id) => (state) =>
     state.products.entities.find((item) => item._id === id);
 export const getProductLoading = () => (state) => state.products.isLoading;

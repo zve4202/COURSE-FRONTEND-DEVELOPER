@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const propTypes = {
     value: PropTypes.number,
-    onChange: PropTypes.func.isRequired,
+    onChangePageSize: PropTypes.func.isRequired,
     name: PropTypes.string
 };
 
@@ -14,18 +14,18 @@ const sizeItems = [
     { value: 200, label: "200 / стр." },
     { value: 500, label: "500 / стр." }
 ];
-// const defaultProps = {
-//     value: 50
-// };
 
 class SelectPageSize extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     // this.state = {};
-    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: this.props.value
+        };
+    }
 
     handleChange = ({ target }) => {
-        this.props.onChange({ name: target.name, value: target.value });
+        this.setState({ value: target.value });
+        this.props.onChangePageSize(Number(target.value));
     };
 
     render() {
@@ -35,7 +35,7 @@ class SelectPageSize extends React.Component {
                     className="form-select"
                     id={this.props.name}
                     name={this.props.name}
-                    value={this.props.value}
+                    value={this.state.value}
                     onChange={this.handleChange}
                 >
                     {sizeItems.map((option) => (
@@ -50,5 +50,4 @@ class SelectPageSize extends React.Component {
 }
 
 SelectPageSize.propTypes = propTypes;
-// SelectPageSize.defaultProps = defaultProps;
 export default SelectPageSize;

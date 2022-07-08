@@ -1,39 +1,64 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { setSeachParams } from "../../../store/products";
+import { updateSetting } from "../../../store/setting";
+
 import { getCategories } from "../../../store/categories";
 import classNames from "classnames";
 
-const CategoryList = ({ onItemSelect }) => {
-    const dispatch = useDispatch();
+const CategoryList = ({ name, onItemSelect }) => {
     const categories = useSelector(getCategories());
-    const selectedItem = useSelector((state) => state.products.search.category);
+    if (!categories) return null;
+
+    const dispatch = useDispatch();
+    const query = useSelector((state) => state.setting.config[name].query);
+
     const handleSelectQuery = (id) => {
-        dispatch(setSeachParams({ category: id }));
+        dispatch(
+            updateSetting(name, {
+                query: {
+                    ...query,
+                    category: id
+                }
+            })
+        );
         onItemSelect();
     };
 
     return (
-        <ul className="list-group">
-            {categories.map((item) => (
+        <div className="bg-light flex-column flex-shrink-0 me-3 h-100">
+            <ul className="list-group">
                 <li
-                    key={item._id}
+                    key="item_clear"
                     className={classNames({
-                        "list-group-item": true,
-                        active: item._id === selectedItem
+                        "list-group-item btn-secondary": true,
+                        disabled: !query.category
                     })}
-                    onClick={() => handleSelectQuery(item._id)}
+                    onClick={() => handleSelectQuery(null)}
                     role="button"
                 >
-                    {item.name}
+                    ВСЕ КАТЕГОРИИ
                 </li>
-            ))}
-        </ul>
+                {categories.map((item) => (
+                    <li
+                        key={item._id}
+                        className={classNames({
+                            "list-group-item": true,
+                            active: item._id === query.category
+                        })}
+                        onClick={() => handleSelectQuery(item._id)}
+                        role="button"
+                    >
+                        {item.name}
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 };
 
 CategoryList.propTypes = {
+    name: PropTypes.string.isRequired,
     onItemSelect: PropTypes.func.isRequired
 };
 

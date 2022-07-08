@@ -1,30 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { setSeachParams } from "../../../store/products";
+import { updateSetting } from "../../../store/setting";
 
-const ProductSearch = ({ onSearch }) => {
+const ProductSearch = ({ name, onSearch }) => {
     const dispatch = useDispatch();
-    const searchText = useSelector((state) => state.products.search.text);
-
+    const query = useSelector((state) => state.setting.config[name].query);
     const handleSearchQuery = ({ target }) => {
-        dispatch(setSeachParams({ text: target.value }));
+        dispatch(
+            updateSetting(name, {
+                query: {
+                    ...query,
+                    search: target.value
+                }
+            })
+        );
         onSearch();
     };
 
     return (
         <input
             type="search"
-            name="searchQuery"
             placeholder="Поиск по артисту и названию альбома..."
             className="form-control"
             onChange={handleSearchQuery}
-            value={searchText}
+            value={query.search || ""}
         />
     );
 };
 
 ProductSearch.propTypes = {
+    name: PropTypes.string.isRequired,
     onSearch: PropTypes.func.isRequired
 };
 export default ProductSearch;

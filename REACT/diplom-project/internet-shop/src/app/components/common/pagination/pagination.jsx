@@ -3,13 +3,15 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 import classNames from "classnames";
 import SelectPageSize from "./selectPageSize";
+import { connect } from "react-redux";
+import { updateSetting } from "../../../store/setting";
 
 const propTypes = {
-    itemsCount: PropTypes.number,
+    totalDocs: PropTypes.number,
     onPageChange: PropTypes.func.isRequired,
-    initialPage: PropTypes.number,
-    pageSize: PropTypes.number,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    config: PropTypes.object,
+    updateSetting: PropTypes.func
 };
 
 const defaultProps = {
@@ -21,24 +23,35 @@ class Pagination extends React.Component {
     constructor(props) {
         super(props);
         this.state = { pager: {} };
+        this.pagenation = this.props.config[this.props.name].pagenation;
+        // this.saveSetting = this.saveSetting.bind(this);
     }
 
     componentDidMount() {
-        // set page if itemsCount array isn't empty
-        if (this.props.itemsCount > 0) {
-            this.setPage(this.props.initialPage);
+        // set page if totalDocs array isn't empty
+        console.log("componentDidMount");
+        if (this.props.totalDocs > 0) {
+            this.setPage(1);
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // reset page if itemsCount array has changed
-        if (this.props.itemsCount !== prevProps.itemsCount) {
-            this.setPage(this.props.initialPage);
+        // reset page if totalDocs array has changed
+        if (this.props.totalDocs !== prevProps.totalDocs) {
+            this.setPage(1);
+        }
+    }
+
+    saveSetting() {
+        if (this.pagenation) {
+            this.props.updateSetting(this.props.name, {
+                pagenation: this.pagenation
+            });
         }
     }
 
     setPage(page) {
-        const { itemsCount, pageSize } = this.props;
+        const { totalDocs } = this.props;
         let pager = this.state.pager;
 
         if (page < 1 || page > pager.totalPages) {
@@ -46,21 +59,25 @@ class Pagination extends React.Component {
         }
 
         // get new pager object for specified page
-        pager = this.getPager(itemsCount, page, pageSize);
+        pager = this.getPager(totalDocs, page, this.pagenation.pageSize);
+
+        this.pagenation = {
+            ...this.pagenation,
+            currentPage: page
+        };
+        this.saveSetting();
 
         // update state
         this.setState({ pager: pager });
-
-        // call change page function in parent component
-        this.props.onPageChange(page);
     }
 
     getPager(totalItems, currentPage, pageSize) {
         // default to first page
-        currentPage = currentPage || 1;
+        currentPage = currentPage || this.pagenation.page;
 
         // default page size is 10
-        pageSize = pageSize || 10;
+        // pageSize = pageSize || this.props.config.pagenation.pageSize;
+        pageSize = pageSize || this.pagenation.pageSize;
 
         const showPages = 10;
         const halfPages = showPages / 2;
@@ -75,15 +92,15 @@ class Pagination extends React.Component {
             endPage = totalPages;
         } else {
             // more than 10 total pages so calculate start and end pages
-            if (currentPage <= halfPages + 1) {
+            if (currentPage <= halfPages) {
                 startPage = 1;
                 endPage = showPages;
-            } else if (currentPage + (halfPages - 1) >= totalPages) {
+            } else if (currentPage + halfPages >= totalPages) {
                 startPage = totalPages - (showPages - 1);
                 endPage = totalPages;
             } else {
-                startPage = currentPage - halfPages;
-                endPage = currentPage + (halfPages - 1);
+                startPage = currentPage - (halfPages - 1);
+                endPage = currentPage + halfPages;
             }
         }
 
@@ -108,16 +125,48 @@ class Pagination extends React.Component {
         };
     }
 
+    setPageSize(value) {
+        this.pagenation = {
+            ...this.pagenation,
+            pageSize: value
+        };
+        this.setPage(1);
+        this.saveSetting();
+        this.props.onPageChange(this.pagenation.page);
+    }
+
+    selectPage(page) {
+        this.setPage(page);
+        // call change page function in parent component
+        this.props.onPageChange();
+    }
+
     render() {
         const pager = this.state.pager;
-
-        if (!pager.pages || pager.pages.length < 1) {
-            // don't display pager if there is only 1 page
+        if (!pager.pages) {
             return null;
         }
 
+        if (pager.pages.length <= 1) {
+            // don't display pager if there is only 1 page
+            return (
+                <ul className="pagination">
+                    <div className="page-item disabled ms-2">
+                        <span className="page-link">
+                            {pager.endIndex + 1}/{pager.totalItems}
+                        </span>
+                    </div>
+                    <SelectPageSize
+                        value={this.pagenation.pageSize}
+                        onChangePageSize={(value) => this.setPageSize(value)}
+                        name={this.props.name}
+                    />
+                </ul>
+            );
+        }
+
         return (
-            <ul className="pagination" name={this.props.name}>
+            <ul className="pagination">
                 <li
                     className={classNames({
                         "page-item": true,
@@ -126,7 +175,7 @@ class Pagination extends React.Component {
                 >
                     <a
                         className="page-link"
-                        onClick={() => this.setPage(1)}
+                        onClick={() => this.selectPage(1)}
                         role="button"
                     >
                         В начало
@@ -140,7 +189,7 @@ class Pagination extends React.Component {
                 >
                     <a
                         className="page-link"
-                        onClick={() => this.setPage(pager.currentPage - 1)}
+                        onClick={() => this.selectPage(pager.currentPage - 1)}
                         role="button"
                     >
                         &laquo;
@@ -156,7 +205,7 @@ class Pagination extends React.Component {
                     >
                         <a
                             className="page-link"
-                            onClick={() => this.setPage(page)}
+                            onClick={() => this.selectPage(page)}
                             role="button"
                         >
                             {page}
@@ -171,7 +220,7 @@ class Pagination extends React.Component {
                 >
                     <a
                         className="page-link"
-                        onClick={() => this.setPage(pager.currentPage + 1)}
+                        onClick={() => this.selectPage(pager.currentPage + 1)}
                         role="button"
                     >
                         &raquo;
@@ -185,7 +234,7 @@ class Pagination extends React.Component {
                 >
                     <a
                         className="page-link"
-                        onClick={() => this.setPage(pager.totalPages)}
+                        onClick={() => this.selectPage(pager.totalPages)}
                         role="button"
                     >
                         В конец
@@ -197,8 +246,8 @@ class Pagination extends React.Component {
                     </span>
                 </div>
                 <SelectPageSize
-                    value={this.props.pageSize}
-                    onChange={() => {}}
+                    value={this.pagenation.pageSize}
+                    onChangePageSize={(value) => this.setPageSize(value)}
                     name={this.props.name}
                 />
             </ul>
@@ -208,4 +257,13 @@ class Pagination extends React.Component {
 
 Pagination.propTypes = propTypes;
 Pagination.defaultProps = defaultProps;
-export default Pagination;
+
+const mapStateToProps = (state) => ({
+    config: state.setting.config
+});
+
+const mapDispatchToProps = {
+    updateSetting
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pagination);

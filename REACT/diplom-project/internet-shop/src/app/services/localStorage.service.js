@@ -1,5 +1,5 @@
 const TOKEN_KEY = "base-active";
-// const BASKET_KEY = "basket-id";
+//
 const APP_KEY = "music-shop-";
 
 export function setAccessToken({ accessToken }) {

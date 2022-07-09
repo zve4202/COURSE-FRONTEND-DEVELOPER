@@ -7,6 +7,7 @@ import logger from "./middleware/logger";
 import productsReducer from "./products";
 import rolesReducer from "./roles";
 import settingSlice from "./setting";
+import basketSlice from "./basket";
 import usersReducer from "./users";
 
 const rootReducer = combineReducers({
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     categories: categoriesReducer,
     formats: formatsReducer,
     products: productsReducer,
-    setting: settingSlice.reducer
+    setting: settingSlice.reducer,
+    basket: basketSlice.reducer
 });
 
 function createStore() {

@@ -3,11 +3,8 @@ import PropTypes from "prop-types";
 
 const WorkScreen = ({ children }) => {
     return (
-        <div className="containercontainer-fluid">
+        <div className="cord">
             <div className="card-body">{children}</div>
-            {/* <div className="card mt-2">
-                <div className="card-body">{children}</div>
-            </div> */}
         </div>
     );
 };

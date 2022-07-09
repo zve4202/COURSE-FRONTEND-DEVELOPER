@@ -6,7 +6,7 @@ const schema = new Schema(
   {
     _id: { type: Number, required: true },
     userId: { type: ObjectIdType, ref: "User", unique: true },
-    entities: { type: Object, required: true },
+    docs: { type: Array, required: true },
     totalQty: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true, default: 0 },
   },

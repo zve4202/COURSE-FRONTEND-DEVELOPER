@@ -11,11 +11,12 @@ exports.get = async function (id) {
 
 exports.update = async function (id, dataUpdate) {
   try {
-    const { entities } = dataUpdate;
+    const { docs } = dataUpdate;
     const totals = { totalQty: 0, totalPrice: 0 };
-    Object.keys(entities).forEach((productId) => {
-      totals.totalQty += entities[productId].qty;
-      totals.totalPrice += entities[productId].price;
+    docs.forEach((item) => {
+      const { qty, price } = item;
+      totals.totalQty += qty;
+      totals.totalPrice += qty * price;
     });
     const data = await Model.findByIdAndUpdate(
       id,

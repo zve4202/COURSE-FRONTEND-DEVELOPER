@@ -1,21 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getBasket } from "../../../store/basket";
 
 const MenuBasket = () => {
-    const productCount = 12;
-    const productLabel = productCount > 99 ? "99+" : productCount;
+    const { totalQty } = useSelector(getBasket());
+    const productLabel = totalQty > 99 ? "99+" : totalQty;
     return (
         <Link className="nav-link " aria-current="page" to="/basket">
             <span>Корзина</span>
-            {productCount > 0 && (
+            {totalQty > 0 && (
                 <span className="badge rounded-pill bg-primary ms-1">
                     {productLabel}
                 </span>
             )}
-
-            {/* <span className="position-absolute top-5 end-5 translate-middle badge rounded-pill bg-primary">
-                10
-            </span> */}
         </Link>
     );
 };

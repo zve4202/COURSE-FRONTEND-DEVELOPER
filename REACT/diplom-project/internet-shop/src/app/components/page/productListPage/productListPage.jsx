@@ -9,8 +9,9 @@ import { loadProducts } from "../../../store/products";
 import ProductSearch from "./productSearch";
 import ProductLoader from "./productLoader";
 import CategoryList from "./productCategory";
-import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
+// import WorkScreenWithSearch from "../../ui/workScreenWithSearch";
 import { updateSetting } from "../../../store/setting";
+import WorkScreen from "../../ui/workScreen";
 
 const ProductListPage = () => {
     const name = "product";
@@ -56,25 +57,22 @@ const ProductListPage = () => {
         onPageChangeDebounced();
     };
 
-    // const count = products.length;
-    // const sortedUsers = _.orderBy(
-    //     filteredProduct,
-    //     [sortBy.path],
-    //     [sortBy.order]
-    // );
-    // const productCrop = paginate(sortedUsers, currentPage, pageSize);
-    // const productCrop = paginate(products, currentPage, pageSize);
-
     return (
-        <WorkScreenWithSearch
-            seacher={<ProductSearch onSearch={onSearch} name={name} />}
-            clearFilter={clearFilter}
-        >
+        <WorkScreen>
             <div className="mt-2">
                 <div className="d-flex">
                     <CategoryList name={name} onItemSelect={onFilter} />
+                    <div className="card bg-light w-100 h-100 p-2">
+                        <div className="d-flex mb-3 align-text-bottom">
+                            <div
+                                className="btn btn-secondary me-2 text-nowrap"
+                                onClick={clearFilter}
+                            >
+                                Очистить фильтр
+                            </div>
+                            <ProductSearch onSearch={onSearch} name={name} />
+                        </div>
 
-                    <div className="card w-100 h-100 p-2">
                         <div className="card-body d-flex align-content-center justify-content-between mb-3">
                             <span>Функции сортировки по стоимости</span>
                         </div>
@@ -105,7 +103,7 @@ const ProductListPage = () => {
                     </div>
                 </div>
             </div>
-        </WorkScreenWithSearch>
+        </WorkScreen>
     );
 };
 

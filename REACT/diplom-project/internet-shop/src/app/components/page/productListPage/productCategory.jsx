@@ -26,7 +26,7 @@ const CategoryList = ({ name, onItemSelect }) => {
     };
 
     return (
-        <div className="bg-light flex-column flex-shrink-0 me-3 h-100">
+        <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100">
             <ul className="list-group">
                 <li
                     key="item_clear"

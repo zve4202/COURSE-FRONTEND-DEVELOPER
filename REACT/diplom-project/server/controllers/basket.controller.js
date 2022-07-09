@@ -29,6 +29,20 @@ exports.get = async function (req, res, next) {
     return res.status(404).json({ status: 404, message: e.message });
   }
 };
+exports.getEx = async function (req, res, next) {
+  const { id } = req.params;
+  try {
+    const data = await Service.get(id);
+    return res.status(200).json({
+      status: 200,
+      content: data,
+      message: "Succesfully data Retrieved",
+    });
+  } catch (e) {
+    return res.status(404).json({ status: 404, message: e.message });
+  }
+};
+
 exports.update = async function (req, res, next) {
   const { id } = req.params;
   try {

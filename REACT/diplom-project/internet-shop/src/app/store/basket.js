@@ -1,35 +1,67 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import basketService from "../services/basket.service";
-import localStorageService from "../services/localStorage.service";
+import { getValue, setValue } from "../services/localStorage.service";
 
 const BASKET_KEY = "basket-id";
-// entities = ["1","2" ...]
-const initialState = { _id: null, entities: [], isLoading: true, error: null };
+// docs = ["1","2" ...]
+const initialState = {
+    basket: {
+        _id: null,
+        userId: null,
+        docs: [],
+        totalQty: 0,
+        totalPrice: 0
+    },
+    isLoading: true,
+    error: null
+};
 
-const usersSlice = createSlice({
+const basketSlice = createSlice({
     name: "basket",
     initialState,
     reducers: {
+        requested(state) {
+            state.isLoading = true;
+            state.error = null;
+        },
         resived(state, action) {
-            const { _id, entities } = action.payload;
-            state._id = _id;
-            state.entities = entities;
+            state.basket = action.payload;
             state.isLoading = false;
         },
         add(state, action) {
-            state.entities.push(action.payload);
+            const { docs } = state.basket;
+            const index = docs.findIndex((doc) => doc.id === action.payload.id);
+            if (index < 0) {
+                docs.push(action.payload);
+            } else {
+                docs[index] = action.payload;
+            }
+            const totals = { totalQty: 0, totalPrice: 0 };
+            docs.forEach((item) => {
+                const { qty, price } = item;
+                totals.totalQty += qty;
+                totals.totalPrice += qty * price;
+            });
+            state.basket = { ...state.basket, docs, ...totals };
         },
         remove(state, action) {
-            state.entities = state.entities.filter(
-                (item) => item !== action.payload
+            const { docs } = state.basket;
+            const newdocs = docs.filter(
+                (item) => item.id !== action.payload.id
             );
+            const totals = { totalQty: 0, totalPrice: 0 };
+            newdocs.forEach((item) => {
+                const { qty, price } = item;
+                totals.totalQty += qty;
+                totals.totalPrice += qty * price;
+            });
+            state.basket = { ...state.basket, docs: newdocs, ...totals };
         },
         clear(state, action) {
-            state.entities = [];
-        },
-        requested(state) {
-            state = initialState;
+            const docs = [];
+            const totals = { totalQty: 0, totalPrice: 0 };
+            state.basket = { ...state.basket, docs, ...totals };
         },
         requestFailed(state, action) {
             state.isLoading = false;
@@ -38,32 +70,35 @@ const usersSlice = createSlice({
     }
 });
 
-const { actions, reducer: basketReducer } = usersSlice;
-const { add, remove, clear, resived, requested, requestFailed } = actions;
+const { add, remove, clear, resived, requested, requestFailed } =
+    basketSlice.actions;
 
 export const loadBasket = () => async (dispatch) => {
     dispatch(requested());
     try {
-        const basketId = localStorageService.getBasket();
+        const basketId = getValue(BASKET_KEY);
         if (basketId) {
             const { content } = await basketService.get(basketId);
             dispatch(resived(content));
         } else {
-            const { content } = await basketService.create({ entities: [] });
+            const { content } = await basketService.create({
+                ...initialState.basket
+            });
+            setValue(content._id);
             dispatch(resived(content));
         }
-        dispatch(resived({ ...getState() }));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
 };
 
-export const addBasket = (id) => async (dispatch, getState) => {
-    dispatch(requested());
+export const addBasket = (payload) => async (dispatch, getState) => {
     try {
-        // const { content } = await basketService.update(basket.id, basket);
-        // dispatch(update(content));
-        dispatch(add(id));
+        dispatch(add(payload));
+        const { basket } = getState().basket;
+        dispatch(requested());
+        const { content } = await basketService.update(basket.id, basket);
+        dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
@@ -72,9 +107,11 @@ export const addBasket = (id) => async (dispatch, getState) => {
 export const removeBasket = (id) => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        // const { content } = await basketService.update(basket.id, basket);
-        // dispatch(update(content));
         dispatch(remove(id));
+        const { basket } = getState().basket;
+        dispatch(requested());
+        const { content } = await basketService.update(basket.id, basket);
+        dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
@@ -83,19 +120,19 @@ export const removeBasket = (id) => async (dispatch, getState) => {
 export const clearBasket = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        // const { content } = await basketService.update(basket.id, basket);
-        // dispatch(update(content));
         dispatch(clear());
+        const { basket } = getState().basket;
+        dispatch(requested());
+        const { content } = await basketService.update(basket.id, basket);
+        dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
 };
 
-export const getBasket = () => (state) => ({
-    _id: state.basket._id,
-    entities: state.basket.entities
-});
+export const getBasket = () => (state) => state.basket.basket;
+
 export const getBasketLoading = () => (state) => state.basket.isLoading;
 export const getBasketError = () => (state) => state.basket.error;
 
-export default basketReducer;
+export default basketSlice;

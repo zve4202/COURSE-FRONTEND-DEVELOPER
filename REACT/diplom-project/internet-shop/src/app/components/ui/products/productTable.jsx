@@ -10,6 +10,10 @@ import ProductQty from "./productQty";
 // import ProductFormat from "./productFormat";
 
 const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
+    document.addEventListener("DOMContentLoaded", () => {
+        alert("DOM готов!");
+    });
+
     const columns = {
         image: {
             class: "cover-small",

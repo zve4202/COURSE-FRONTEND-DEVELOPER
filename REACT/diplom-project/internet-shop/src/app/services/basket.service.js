@@ -23,4 +23,4 @@ const basketService = {
         return data;
     }
 };
-export default userService;
+export default basketService;

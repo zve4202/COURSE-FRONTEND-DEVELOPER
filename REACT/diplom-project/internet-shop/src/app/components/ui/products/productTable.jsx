@@ -19,7 +19,7 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
             )
         },
         add: {
-            name: "Заказ",
+            name: "Корзина",
             component: (product) => (
                 <ProductQty
                     productId={product._id}

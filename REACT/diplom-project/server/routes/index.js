@@ -7,6 +7,7 @@ const productRoute = require("./product.route");
 const formatRoute = require("./format.route");
 const orderRoute = require("./order.route");
 const orderDetailsRoute = require("./order_details.route");
+const basketRoute = require("./basket.route");
 
 const router = express.Router({ mergeParams: true });
 
@@ -18,6 +19,7 @@ router.use("/product", productRoute);
 router.use("/format", formatRoute);
 router.use("/order", orderRoute);
 router.use("/order/details", orderDetailsRoute);
+router.use("/basket", basketRoute);
 
 module.exports = function (app) {
   app.use(function (req, res, next) {

@@ -27,5 +27,6 @@ td.cover-small {
 }
 
 .table-input {
-    width: 40px !important;
+    width: 30px !important;
+    background-color: #eee;
 }

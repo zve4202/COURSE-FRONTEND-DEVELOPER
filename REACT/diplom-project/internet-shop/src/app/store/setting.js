@@ -21,6 +21,10 @@ const settingConfig = {
         query: { ...query },
         pagenation: { ...pagenation },
         sort: { ...sort }
+    },
+    basket: {
+        pagenation: { ...pagenation },
+        sort: { ...sort }
     }
 };
 const initialState = {

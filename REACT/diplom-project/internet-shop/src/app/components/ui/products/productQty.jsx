@@ -1,18 +1,55 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
 
-const ProductQty = ({ productId, max, index }) => {
-    const [count, setCount] = useState("");
+import {
+    addBasket,
+    getBasketCountById,
+    removeBasket
+} from "../../../store/basket";
+
+import { curs } from "../../../config.json";
+import { Link } from "react-router-dom";
+
+const ProductQty = ({ productId, max, price }) => {
+    const qty = useSelector(getBasketCountById(productId));
+    const [count, setCount] = useState(String(qty || ""));
+    const dispatch = useDispatch();
     const handleChange = ({ target }) => {
         setCount(target.value);
+        if (target.value === "") {
+            dispatch(removeBasket(productId));
+        } else {
+            const numCount = Math.max(0, Number(target.value));
+            if (numCount === 0) {
+                dispatch(removeBasket(productId));
+            } else {
+                dispatch(
+                    addBasket({
+                        id: productId,
+                        qty: numCount,
+                        price: price * curs
+                    })
+                );
+            }
+        }
+        // setCount(target.value);
     };
 
     const handleBlur = () => {
-        if (!count) return;
-        const numCount = String(Math.min(max, Math.max(0, Number(count))));
+        if (count === "0") {
+            setCount("");
+            return;
+        } else if (!count) return;
 
-        if (numCount === "0") setCount("");
-        else setCount(numCount);
+        const numCount = Math.min(max, Math.max(0, Number(count)));
+        if (numCount === 0) {
+            dispatch(removeBasket(productId));
+        } else {
+            dispatch(
+                addBasket({ id: productId, qty: numCount, price: price * curs })
+            );
+        }
     };
 
     const handleKeyDown = (event) => {
@@ -31,10 +68,7 @@ const ProductQty = ({ productId, max, index }) => {
     };
 
     return (
-        <div
-            className="input-group"
-            title="Введите количество чтобы добавить товар в корзину"
-        >
+        <div className="input-group">
             <input
                 type="number"
                 className="form-control table-input"
@@ -45,9 +79,16 @@ const ProductQty = ({ productId, max, index }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
+                title="Введите количество чтобы добавить товар в корзину"
             />
-            <span className="input-group-text">
-                <i className="bi bi-cart" />
+            <span
+                className="input-group-text"
+                title="Перейти в корзину"
+                role="button"
+            >
+                <Link aria-current="page" to="/basket">
+                    <i className="bi bi-cart" />
+                </Link>
             </span>
         </div>
     );
@@ -56,6 +97,6 @@ const ProductQty = ({ productId, max, index }) => {
 ProductQty.propTypes = {
     productId: PropTypes.number.isRequired,
     max: PropTypes.number,
-    index: PropTypes.number
+    price: PropTypes.number
 };
 export default ProductQty;

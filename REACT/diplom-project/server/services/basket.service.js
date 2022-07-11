@@ -1,4 +1,5 @@
 const Model = require("../models/basket.model");
+const { Types } = require("mongoose");
 
 exports.get = async function (id) {
   try {
@@ -35,9 +36,11 @@ exports.update = async function (id, dataUpdate) {
 exports.add = async function (data) {
   try {
     const model = new Model(data);
+    console.log(model);
     await model.save();
     return model;
   } catch (error) {
+    console.log(error);
     throw Error(error);
   }
 };
@@ -54,10 +57,29 @@ exports.delete = async function (id) {
   }
 };
 
-exports.getList = async function (query, page, limit) {
+const agg = (id) => [
+  {
+    $match: {
+      _id: new Types.ObjectId(id),
+    },
+  },
+  {
+    $lookup: {
+      from: "products_ms",
+      localField: "docs.id",
+      foreignField: "_id",
+      as: "products",
+    },
+  },
+];
+
+exports.getEx = async function (id) {
   try {
-    const data = await Model.find(query);
-    return data;
+    const match = agg(id);
+    console.log(match);
+    const data = await Model.aggregate(match);
+    console.log(data);
+    return data[0];
   } catch (error) {
     throw Error(error);
   }

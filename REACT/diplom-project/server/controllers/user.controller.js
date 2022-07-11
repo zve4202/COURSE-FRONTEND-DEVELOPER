@@ -21,7 +21,7 @@ exports.getUser = async function (req, res, next) {
 
   try {
     const user = await UserService.getUser(req.userId || req.params.userId);
-    console.log(user);
+    // console.log(user);
     return res.status(200).json({
       status: 200,
       content: user,

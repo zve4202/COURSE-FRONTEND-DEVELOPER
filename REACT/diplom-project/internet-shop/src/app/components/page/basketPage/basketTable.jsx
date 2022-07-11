@@ -1,15 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Table from "../../common/table";
-import ProductName from "./productName";
-import ProductPicture from "./productPicture";
-// import AddButton from "./addButton";
-import Barcode from "./barcode";
-import ProductPrice from "./productPrice";
-import ProductQty from "./productQty";
-// import ProductFormat from "./productFormat";
 
-const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
+import ProductName from "./productName";
+import ProductQty from "./productQty";
+import ProductPrice from "./productPrice";
+import Table from "../../common/table";
+import Barcode from "../../ui/products/barcode";
+import ProductPicture from "../../ui/products/productPicture";
+
+const BasketTable = ({ name, products, onSort, onUpdate, ...rest }) => {
     const columns = {
         image: {
             class: "cover-small",
@@ -24,15 +23,12 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
                 <ProductQty
                     productId={product._id}
                     max={product.count}
+                    qty={product.qty}
                     price={product.price}
+                    onUpdate={onUpdate}
                 />
             )
         },
-        // add: {
-        //     component: (product) => (
-        //         <AddButton productId={product._id} onAdd={onAdd} />
-        //     )
-        // },
         price: {
             path: "price",
             name: "Цена",
@@ -75,10 +71,10 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
     );
 };
 
-ProductTable.propTypes = {
+BasketTable.propTypes = {
     name: PropTypes.string.isRequired,
     products: PropTypes.array.isRequired,
     onSort: PropTypes.func.isRequired,
-    onAdd: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired
 };
-export default ProductTable;
+export default BasketTable;

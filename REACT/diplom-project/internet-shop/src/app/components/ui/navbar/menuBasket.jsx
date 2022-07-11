@@ -8,6 +8,7 @@ const MenuBasket = () => {
     const productLabel = totalQty > 99 ? "99+" : totalQty;
     return (
         <Link className="nav-link " aria-current="page" to="/basket">
+            <i className="bi bi-cart me-1" />
             <span>Корзина</span>
             {totalQty > 0 && (
                 <span className="badge rounded-pill bg-primary ms-1">

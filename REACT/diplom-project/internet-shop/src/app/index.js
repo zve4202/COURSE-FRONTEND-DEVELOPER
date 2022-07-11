@@ -15,6 +15,7 @@ import { getAuthLoading, loadAuthUser } from "./store/auth";
 
 import configureStore from "./store";
 import { loadSetting } from "./store/setting";
+import { loadBasket } from "./store/basket";
 
 export const store = configureStore();
 
@@ -25,6 +26,7 @@ function App() {
     useEffect(() => {
         dispatch(loadSetting());
         dispatch(loadAuthUser());
+        dispatch(loadBasket());
     }, []);
 
     return (

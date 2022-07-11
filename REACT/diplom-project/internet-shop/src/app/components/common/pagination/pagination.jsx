@@ -29,7 +29,7 @@ class Pagination extends React.Component {
 
     componentDidMount() {
         // set page if totalDocs array isn't empty
-        console.log("componentDidMount");
+        // console.log("componentDidMount");
         if (this.props.totalDocs > 0) {
             this.setPage(1);
         }

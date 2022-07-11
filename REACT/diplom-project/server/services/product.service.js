@@ -199,8 +199,8 @@ const getMatching = (query) => {
   });
 
   if ($or.length > 0) {
-    console.log("$match", $match);
-    console.log("$or", $or);
+    // console.log("$match", $match);
+    // console.log("$or", $or);
     $match.$or = $or;
   }
 
@@ -218,15 +218,15 @@ exports.getListEx = async function (query, page, limit) {
   };
 
   const sort = getSort(query);
-  console.log("sort", sort, query);
+  // console.log("sort", sort, query);
   if (sort) {
     delete query.sort;
     delete query.order;
     options.sort = sort;
   }
-  console.log(query);
+  // console.log(query);
   const match = getMatching(query);
-  console.log("match", match);
+  // console.log("match", match);
   // const aggr = search_by(query);
 
   // console.log("aggr", aggr);

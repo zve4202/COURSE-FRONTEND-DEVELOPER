@@ -10,8 +10,8 @@ const basketService = {
         const { data } = await httpService.get(endpoint + id);
         return data;
     },
-    fetchAll: async () => {
-        const { data } = await httpService.get(endpoint);
+    getEx: async (id) => {
+        const { data } = await httpService.get(endpoint + "ex/" + id);
         return data;
     },
     create: async (content) => {

@@ -1,11 +1,11 @@
-var Format = require("../models/format.model");
+var Model = require("../models/format.model");
 
-exports.getUsers = async function (query, page, limit) {
+exports.getAll = async function (query, page, limit) {
   try {
-    var users = await Format.find(query);
-    return users;
+    var data = await Model.find(query);
+    return data;
   } catch (e) {
     // Log Errors
-    throw Error("Error while Paginating Format");
+    throw Error("Error while Paginating Model");
   }
 };

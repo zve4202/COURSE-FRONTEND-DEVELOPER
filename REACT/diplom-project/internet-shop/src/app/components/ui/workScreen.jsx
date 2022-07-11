@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const WorkScreen = ({ children }) => {
     return (
-        <div className="cord">
+        <div className="card m-1">
             <div className="card-body">{children}</div>
         </div>
     );

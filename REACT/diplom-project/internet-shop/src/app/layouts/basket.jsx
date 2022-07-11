@@ -1,8 +1,8 @@
 import React from "react";
-import WorkScreen from "../components/ui/workScreen";
+import BasketPage from "../components/page/basketPage";
 
 const Basket = () => {
-    return <WorkScreen>KORZINA</WorkScreen>;
+    return <BasketPage />;
 };
 
 export default Basket;

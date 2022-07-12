@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import Role from "./roles";
+
+import Role from "../role";
+
 const UserCard = ({ user }) => {
     const history = useHistory();
     const handleClick = () => {
@@ -11,15 +13,6 @@ const UserCard = ({ user }) => {
         <div className="card mb-3">
             <div className="card-body">
                 <div className="d-flex flex-column align-items-center text-center position-relative">
-                    {/* <img
-                        src={`https://avatars.dicebear.com/api/avataaars/${(
-                            Math.random() + 1
-                        )
-                            .toString(36)
-                            .substring(7)}.svg`}
-                        className="rounded-circle"
-                        width="150"
-                    /> */}
                     <div className="mt-3">
                         <h4>{user.name}</h4>
                     </div>

@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Role from "./roles";
-import Table from "../common/table";
+import Table from "../../common/table";
 import { Link } from "react-router-dom";
+import Role from "./role";
 
-const UserTable = ({ users, onSort, selectedSort, ...rest }) => {
+const UserTable = ({ name, users, onSort, ...rest }) => {
     const columns = {
         name: {
             path: "name",
@@ -18,26 +18,19 @@ const UserTable = ({ users, onSort, selectedSort, ...rest }) => {
             path: "email",
             name: "E-Mail"
         },
-        roles: {
+        role: {
             name: "Роль",
             component: (user) => <Role roleId={user.role} />
         }
     };
 
-    return (
-        <Table
-            onSort={onSort}
-            selectedSort={selectedSort}
-            columns={columns}
-            data={users}
-        />
-    );
+    return <Table name={name} onSort={onSort} columns={columns} data={users} />;
 };
 
 UserTable.propTypes = {
+    name: PropTypes.string.isRequired,
     users: PropTypes.array.isRequired,
-    onSort: PropTypes.func.isRequired,
-    selectedSort: PropTypes.object.isRequired
+    onSort: PropTypes.func.isRequired
 };
 
 export default UserTable;

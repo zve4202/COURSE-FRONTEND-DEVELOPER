@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 
-import UserCard from "../../ui/userCard";
-// import Orders from "../../ui/userOrders";
-import WorkScreen from "../../ui/workScreen";
-import { getUser, loadUsers } from "../../../store/users";
-import { loadRoles } from "../../../store/roles";
+import UserCard from "./userCard";
+import { getUser, loadUsers } from "../../../../store/users";
+import { loadRoles } from "../../../../store/roles";
+import WorkScreen from "../../../ui/workScreen";
 
 const UserPage = ({ userId }) => {
     const dispatch = useDispatch();

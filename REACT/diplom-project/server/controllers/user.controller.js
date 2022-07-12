@@ -1,12 +1,17 @@
 var UserService = require("../services/user.service");
 
-exports.getUserList = async function (req, res, next) {
+exports.getAll = async function (req, res, next) {
   // Validate request parameters, queries using express-validator
 
-  var page = req.params.page ? req.params.page : 1;
-  var limit = req.params.limit ? req.params.limit : 10;
+  const { query } = req;
+  var page = query.page ? query.page : 1;
+  var limit = query.limit ? query.limit : 100;
+
+  delete query.page;
+  delete query.limit;
+
   try {
-    var users = await UserService.getUserList({}, page, limit);
+    var users = await UserService.getAll(query, page, limit);
     return res.status(200).json({
       status: 200,
       content: users,

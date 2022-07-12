@@ -10,8 +10,10 @@ const userService = {
         const { data } = await httpService.get(userEndpoint + id);
         return data;
     },
-    fetchAll: async () => {
-        const { data } = await httpService.get(userEndpoint);
+    fetchAll: async (params) => {
+        const { data } = await httpService.get(userEndpoint, {
+            params
+        });
         return data;
     },
     create: async (content) => {

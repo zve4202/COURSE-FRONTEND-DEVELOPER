@@ -2,19 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import productService from "../services/product.service";
 
-const initialSearch = {
-    category: null,
-    text: ""
-};
+// const initialSearch = {
+//     category: null,
+//     text: ""
+// };
 
 const initialState = {
-    search: { ...initialSearch },
+    // search: { ...initialSearch },
     docs: [],
     totalDocs: 0,
-    sortBy: {
-        path: "title.artist.name",
-        order: "asc"
-    },
     isLoading: true,
     error: null
 };

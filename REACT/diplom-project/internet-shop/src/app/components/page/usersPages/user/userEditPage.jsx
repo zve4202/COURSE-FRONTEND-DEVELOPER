@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { validator } from "../../../utils/validator";
-import TextField from "../../common/form/textField";
-import SelectField from "../../common/form/selectField";
-import BackHistoryButton from "../../common/backButton";
-import RadioField from "../../common/form/radioField";
+import { validator } from "../../../../utils/validator";
+import TextField from "../../../common/form/textField";
+import SelectField from "../../../common/form/selectField";
+import BackHistoryButton from "../../../common/backButton";
+import RadioField from "../../../common/form/radioField";
+
 import PasswordControl from "./passwordControl";
 import RoleControl from "./roleControl";
-import { getUser, loadUsers } from "../../../store/users";
-import { getRoles, loadRoles } from "../../../store/roles";
+
+import { getRoles, loadRoles } from "../../../../store/roles";
+import { getUser, loadUsers } from "../../../../store/users";
 
 const defaultData = {
     name: "",
@@ -20,7 +22,7 @@ const defaultData = {
     role: "user"
 };
 
-const EditUserPage = () => {
+const UserEditPage = () => {
     const dispatch = useDispatch();
     const { userId } = useParams();
     const user = useSelector(getUser(userId));
@@ -182,4 +184,4 @@ const EditUserPage = () => {
     );
 };
 
-export default EditUserPage;
+export default UserEditPage;

@@ -22,8 +22,12 @@ const settingConfig = {
         pagenation: { ...pagenation },
         sort: { ...sort }
     },
-    basket: {
+    users: {
+        query: { ...query },
         pagenation: { ...pagenation },
+        sort: { ...sort }
+    },
+    basket: {
         sort: { ...sort }
     }
 };

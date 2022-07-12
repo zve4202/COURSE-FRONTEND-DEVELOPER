@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { getAuth } from "../../../store/auth";
+import { getAuth } from "../../../../store/auth";
 
 const PasswordControl = ({ userId, onShow, children }) => {
     const currentUser = useSelector(getAuth());

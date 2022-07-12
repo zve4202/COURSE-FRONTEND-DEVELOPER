@@ -2,7 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import userService from "../services/user.service";
 
-const initialState = { entities: [], isLoading: true, error: null };
+const initialState = {
+    docs: [],
+    totalDocs: 0,
+    isLoading: true,
+    error: null
+};
 
 const usersSlice = createSlice({
     name: "users",
@@ -12,7 +17,9 @@ const usersSlice = createSlice({
             state = { ...initialState };
         },
         resived(state, action) {
-            state.entities = action.payload;
+            const { docs, totalDocs } = action.payload;
+            state.docs = docs;
+            state.totalDocs = totalDocs;
             state.isLoading = false;
         },
         requestFailed(state, action) {
@@ -31,13 +38,31 @@ const usersSlice = createSlice({
     }
 });
 
-const { actions, reducer: usersReducer } = usersSlice;
+const { name, actions, reducer: usersReducer } = usersSlice;
+
 const { update, resived, requested, requestFailed } = actions;
 
-export const loadUsers = () => async (dispatch) => {
+export const loadUsers = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        const { content } = await userService.fetchAll();
+        const { pagenation, query, sort } = getState().setting.config[name];
+        console.log({ pagenation, query, sort });
+        let params = {};
+        Object.keys(query).forEach((key) => {
+            const value = query[key];
+            if (value) {
+                params[key] = value;
+            }
+        });
+
+        params = {
+            ...params,
+            page: pagenation.currentPage,
+            limit: pagenation.pageSize,
+            ...sort
+        };
+
+        const { content } = await userService.fetchAll(params);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
@@ -54,9 +79,9 @@ export const updateUser = (user) => async (dispatch, getState) => {
     }
 };
 
-export const getUsers = () => (state) => state.users.entities;
+export const getUsers = () => (state) => state.users.docs;
 export const getUser = (id) => (state) =>
-    state.users.entities.find((user) => user._id === id);
+    state.users.docs.find((doc) => doc._id === id);
 export const getUsersLoading = () => (state) => state.users.isLoading;
 export const getUsersError = () => (state) => state.users.error;
 

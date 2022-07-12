@@ -12,33 +12,39 @@ const NavBar = () => {
     const currentUser = useSelector(getAuth());
     const isAdmin = useSelector(getAdmin());
     return (
-        <nav className="navbar bg-light card mt-1">
-            <div className="container-fluid">
-                <ul className="nav">
-                    <li className="nav-item">
-                        <Link className="nav-link " aria-current="page" to="/">
-                            <img
-                                src={logo}
-                                alt=""
-                                width="24"
-                                height="24"
-                                className="me-1"
-                            />
-                            {appTitle}
-                        </Link>
-                    </li>
-                    {currentUser && isAdmin && (
+        <header className="sticky-top">
+            <nav className="navbar card bg-light-gray">
+                <div className="container-fluid">
+                    <ul className="nav">
                         <li className="nav-item">
-                            <MenuAdmin />
+                            <Link
+                                className="nav-link "
+                                aria-current="page"
+                                to="/"
+                            >
+                                <img
+                                    src={logo}
+                                    alt=""
+                                    width="24"
+                                    height="24"
+                                    className="me-1"
+                                />
+                                {appTitle}
+                            </Link>
                         </li>
-                    )}
-                </ul>
-                <div className="d-flex">
-                    <MenuBasket />
-                    <NavProfile />
+                        {currentUser && isAdmin && (
+                            <li className="nav-item">
+                                <MenuAdmin />
+                            </li>
+                        )}
+                    </ul>
+                    <div className="d-flex">
+                        <MenuBasket />
+                        <NavProfile />
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </header>
     );
 };
 

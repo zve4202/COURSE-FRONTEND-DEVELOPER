@@ -5,14 +5,13 @@ import { getAdmin } from "../../../store/auth";
 
 const MenuAdmin = () => {
     const isAdmin = useSelector(getAdmin());
-    if (isAdmin) {
-        return (
+    return (
+        isAdmin && (
             <Link className="nav-link " aria-current="page" to="/users">
-                Пользователи
+                Админ-меню
             </Link>
-        );
-    }
-    return null;
+        )
+    );
 };
 
 export default MenuAdmin;

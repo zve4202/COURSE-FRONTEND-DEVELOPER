@@ -9,7 +9,7 @@ const TableHeader = ({ name, onSort, columns }) => {
         (state) => state.setting.config[name].sort
     );
 
-    console.log("selectedSort", selectedSort);
+    // console.log("selectedSort", selectedSort);
     const dispatch = useDispatch();
 
     const handleSort = (sort) => {

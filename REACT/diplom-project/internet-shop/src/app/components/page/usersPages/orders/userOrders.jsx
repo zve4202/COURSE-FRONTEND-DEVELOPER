@@ -1,7 +1,7 @@
 import { orderBy } from "lodash";
 import React, { useEffect, useState } from "react";
 // import { useParams } from "react-router-dom";
-import OrdersList from "../common/orders";
+import OrdersList from ".";
 
 const Comments = () => {
     // const { userId } = useParams();

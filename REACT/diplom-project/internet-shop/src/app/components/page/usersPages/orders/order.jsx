@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { displayDate } from "../../../utils/displayDate";
+import { displayDate } from "../../../../utils/displayDate";
 import { useUser } from "../../../hooks/useUsers";
 const Order = ({ content, created_at: created, _id: id, userId, onRemove }) => {
     const user = useUser().getUser(userId) || null;

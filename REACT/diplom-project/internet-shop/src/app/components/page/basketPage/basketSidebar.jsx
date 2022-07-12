@@ -1,15 +1,26 @@
 import React from "react";
 import classNames from "classnames";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { getBasket } from "../../../store/basket";
+import { getBasket, clearBasket } from "../../../store/basket";
 import BackButton from "./backButton";
+import ClearBasketButton from "./clearBasketButton";
+import GoToPayButton from "./goToPayButton";
 
 const BasketSidebar = () => {
     // console.log("BasketSidebar count", count);
     const basket = useSelector(getBasket());
+    const dispatch = useDispatch();
 
     const nf = Intl.NumberFormat();
+
+    const handleCheckAndPay = () => {
+        console.log(basket);
+    };
+
+    const handleClearBasket = () => {
+        dispatch(clearBasket());
+    };
 
     return (
         <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100">
@@ -26,10 +37,6 @@ const BasketSidebar = () => {
                     <div className="card-header list-group-item-success mb-3">
                         <i className="bi bi-cart-check me-2" />
                         Ваша корзина
-                    </div>
-                    <div className="list-group-item list-group-item-danger mb-3">
-                        <i className="bi bi-x-lg me-2" />
-                        Очистить корзину
                     </div>
                     <div className="card mb-3">
                         <div className="card-header">Итого заказно</div>
@@ -57,13 +64,11 @@ const BasketSidebar = () => {
                         </div>
                     </div>
 
-                    <li
-                        className="list-group-item list-group-item-warning"
-                        onClick={() => {}}
-                        role="button"
-                    >
-                        <i className="bi bi-credit-card me-2" />
-                        Перейти к оплате
+                    <li className="list-group-item list-group-item-danger mb-4">
+                        <ClearBasketButton onAccept={handleClearBasket} />
+                    </li>
+                    <li className="list-group-item list-group-item-warning">
+                        <GoToPayButton onAccept={handleCheckAndPay} />
                     </li>
                 </ul>
             )}

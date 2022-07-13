@@ -7,13 +7,13 @@ import {
     UserPage,
     UserEditPage
 } from "../components/page/usersPages";
-import { getAuth, getAdmin } from "../store/auth";
+import { getAuth } from "../store/auth";
 
 const Users = () => {
     const params = useParams();
     const { userId, edit } = params;
-    const currentUser = useSelector(getAuth());
-    const isAdmin = useSelector(getAdmin());
+    const { currentUser, isAdmin } = useSelector(getAuth());
+
     return (
         <>
             {userId ? (

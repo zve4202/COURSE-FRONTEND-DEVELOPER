@@ -17,7 +17,7 @@ const BasketLoader = ({ isLoading, error, length, children }) => {
                             ? "Загрузка данных..."
                             : error
                             ? { error }
-                            : "Ваша корзина пуста"}
+                            : "(ПУСТО)"}
                     </div>
                 </div>
             );

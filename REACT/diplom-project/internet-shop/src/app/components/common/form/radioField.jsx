@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const RadioField = ({ options, name, onChange, value, label }) => {
+const RadioField = ({ options, name, onChange, value, label, readOnly }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
     };
@@ -22,6 +22,7 @@ const RadioField = ({ options, name, onChange, value, label }) => {
                             checked={option.value === value}
                             value={option.value}
                             onChange={handleChange}
+                            disabled={readOnly}
                         />
                         <label
                             className="form-check-label"
@@ -41,7 +42,8 @@ RadioField.propTypes = {
     name: PropTypes.string,
     onChange: PropTypes.func,
     value: PropTypes.string,
-    label: PropTypes.string
+    label: PropTypes.string,
+    readOnly: PropTypes.bool
 };
 
 export default RadioField;

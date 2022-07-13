@@ -17,7 +17,7 @@ const defaultData = {
 };
 
 const RegisterForm = () => {
-    const currentUser = useSelector(getAuth());
+    const { currentUser } = useSelector(getAuth());
     const error = useSelector(getAuthError());
     const dispatch = useDispatch();
 

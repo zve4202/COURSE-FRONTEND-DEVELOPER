@@ -26,7 +26,6 @@ const BasketPage = () => {
                   return doc;
               });
 
-    console.log("products", entities);
     const handleSort = () => {};
     const handleReload = () => {
         // dispatch(loadBasketEx());
@@ -37,19 +36,26 @@ const BasketPage = () => {
             <div className="d-flex">
                 <BasketSidebar />
                 <div className="content_wrapper card bg-light p-2">
-                    <div className="h-100">
-                        <BasketLoader
-                            isLoading={isLoading}
-                            error={error}
-                            length={entities?.length}
-                        >
-                            <BasketTable
-                                name={name}
-                                products={entities}
-                                onSort={handleSort}
-                                onUpdate={handleReload}
-                            />
-                        </BasketLoader>
+                    <div className="card">
+                        <div className="card-header">
+                            <i className="bi bi-cart-check me-2" />
+                            КОРЗИНА
+                        </div>
+
+                        <div className="h-100">
+                            <BasketLoader
+                                isLoading={isLoading}
+                                error={error}
+                                length={entities?.length}
+                            >
+                                <BasketTable
+                                    name={name}
+                                    products={entities}
+                                    onSort={handleSort}
+                                    onUpdate={handleReload}
+                                />
+                            </BasketLoader>
+                        </div>
                     </div>
                 </div>
             </div>

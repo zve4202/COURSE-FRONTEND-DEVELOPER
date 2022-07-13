@@ -1,7 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const CheckBoxField = ({ name, value, onChange, children, error }) => {
+const CheckBoxField = ({
+    name,
+    value,
+    onChange,
+    children,
+    error,
+    readOnly
+}) => {
     const handleChange = () => {
         onChange({ name: name, value: !value });
     };
@@ -17,6 +24,7 @@ const CheckBoxField = ({ name, value, onChange, children, error }) => {
                 id={name}
                 onChange={handleChange}
                 checked={value}
+                readOnly={readOnly}
             />
             <label className="form-check-label" htmlFor={name}>
                 {children}
@@ -33,7 +41,8 @@ CheckBoxField.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
     ]),
-    error: PropTypes.string
+    error: PropTypes.string,
+    readOnly: PropTypes.bool
 };
 
 export default CheckBoxField;

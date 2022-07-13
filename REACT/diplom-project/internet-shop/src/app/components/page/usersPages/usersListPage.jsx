@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
 
-import WorkScreen from "../../ui/workScreen";
 import Pagination from "../../common/pagination/pagination";
-import CategoryList from "./usersCategory";
 import UserTable from "./usersTable";
 import UsersLoader from "./usersLoader";
 import UsersSearch from "./usersSearch";
@@ -58,46 +56,37 @@ const UsersListPage = () => {
     };
 
     return (
-        <WorkScreen>
-            <div className="d-flex">
-                <CategoryList name={name} onItemSelect={onFilter} />
-                <div className="content_wrapper card bg-light p-2">
-                    <div className="d-flex mb-3 align-text-bottom">
-                        <div
-                            className="btn btn-secondary me-2 text-nowrap"
-                            onClick={clearFilter}
-                        >
-                            Очистить фильтр
-                        </div>
-                        <UsersSearch onSearch={onSearch} name={name} />
-                    </div>
+        <div>
+            <div className="d-flex mb-3 align-text-bottom">
+                <div
+                    className="btn btn-secondary me-2 text-nowrap"
+                    onClick={clearFilter}
+                >
+                    Очистить фильтр
+                </div>
+                <UsersSearch onSearch={onSearch} name={name} />
+            </div>
 
-                    <div className="h-100">
-                        <div className="d-flex justify-content-center">
-                            <Pagination
-                                totalDocs={totalDocs}
-                                onPageChange={onPageChange}
-                                name={name}
-                            />
-                        </div>
-                        <UsersLoader>
-                            <UserTable
-                                name={name}
-                                users={docs}
-                                onSort={handleSort}
-                            />
-                        </UsersLoader>
-                        <div className="d-flex justify-content-center">
-                            <Pagination
-                                totalDocs={totalDocs}
-                                onPageChange={onPageChange}
-                                name={name}
-                            />
-                        </div>
-                    </div>
+            <div className="h-100">
+                <div className="d-flex justify-content-center">
+                    <Pagination
+                        totalDocs={totalDocs}
+                        onPageChange={onPageChange}
+                        name={name}
+                    />
+                </div>
+                <UsersLoader>
+                    <UserTable name={name} users={docs} onSort={handleSort} />
+                </UsersLoader>
+                <div className="d-flex justify-content-center">
+                    <Pagination
+                        totalDocs={totalDocs}
+                        onPageChange={onPageChange}
+                        name={name}
+                    />
                 </div>
             </div>
-        </WorkScreen>
+        </div>
     );
 };
 UsersListPage.propTypes = {

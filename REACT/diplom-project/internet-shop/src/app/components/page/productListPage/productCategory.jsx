@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSetting } from "../../../store/setting";
+import classNames from "classnames";
 
 import { getCategories } from "../../../store/categories";
-import classNames from "classnames";
+import { updateSetting } from "../../../store/setting";
 
 const CategoryList = ({ name, onItemSelect }) => {
     const categories = useSelector(getCategories());

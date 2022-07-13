@@ -4,13 +4,12 @@ import { appTitle } from "../../../config.json";
 import logo from "../../../assets/brand/favicon.ico";
 import MenuBasket from "./menuBasket";
 import MenuAdmin from "./menuAdmin";
-import NavProfile from "./navProfile";
+import MenuProfile from "./menuProfile";
 import { useSelector } from "react-redux";
-import { getAdmin, getAuth } from "../../../store/auth";
+import { getAuth } from "../../../store/auth";
 
 const NavBar = () => {
-    const currentUser = useSelector(getAuth());
-    const isAdmin = useSelector(getAdmin());
+    const { currentUser, isAdmin } = useSelector(getAuth());
     return (
         <header className="sticky-top">
             <nav className="navbar card bg-light-gray">
@@ -40,7 +39,7 @@ const NavBar = () => {
                     </ul>
                     <div className="d-flex">
                         <MenuBasket />
-                        <NavProfile />
+                        <MenuProfile />
                     </div>
                 </div>
             </nav>

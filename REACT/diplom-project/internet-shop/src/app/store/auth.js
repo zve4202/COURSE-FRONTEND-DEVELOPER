@@ -7,7 +7,12 @@ import {
     setAccessToken
 } from "../services/localStorage.service";
 
-const initialState = { currentUser: null, isLoading: true, error: null };
+const initialState = {
+    currentUser: null,
+    isAdmin: false,
+    isLoading: true,
+    error: null
+};
 
 const authSlice = createSlice({
     name: "auth",
@@ -18,6 +23,7 @@ const authSlice = createSlice({
         },
         resived(state, action) {
             state.currentUser = action.payload;
+            state.isAdmin = state.currentUser.role === "admin";
             state.isLoading = false;
         },
         requestFailed(state, action) {
@@ -114,9 +120,10 @@ export const signOut = () => (dispatch, getState) => {
     dispatch(update(null));
 };
 
-export const getAuth = () => (state) => state.auth.currentUser;
-export const getAdmin = () => (state) =>
-    state.auth.currentUser && state.auth.currentUser.role === "admin";
+export const getAuth = () => (state) => ({
+    currentUser: state.auth.currentUser,
+    isAdmin: state.auth.isAdmin
+});
 export const getAuthLoading = () => (state) => state.auth.isLoading;
 export const getAuthError = () => (state) => state.auth.error;
 

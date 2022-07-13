@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getAuth } from "../../store/auth";
 
 function ProtectedRoute({ component: Component, children, ...rest }) {
-    const currentUser = useSelector(getAuth());
+    const { currentUser } = useSelector(getAuth());
 
     return (
         <Route

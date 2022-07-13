@@ -1,50 +1,67 @@
-import { orderBy } from "lodash";
-import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-import OrdersList from ".";
+import classNames from "classnames";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSetting } from "../../../../store/setting";
 
-const Comments = () => {
-    // const { userId } = useParams();
-    const [orders, setOrders] = useState([]);
-    useEffect(() => {
-        setOrders([]);
-        // api.orders
-        //     .fetchCommentsForUser(userId)
-        //     .then((data) => setOrders(data));
-    }, []);
-    // const handleSubmit = (data) => {
-    //     api.orders
-    //         .add({ ...data, pageId: userId })
-    //         .then((data) => setOrders([...orders, data]));
-    // };
-    const handleRemoveRoder = (id) => {
-        console.log(id);
-        // api.orders.remove(id).then((id) => {
-        //     setOrders(orders.filter((x) => x._id !== id));
-        // });
+const UserOrders = () => {
+    const dispatch = useDispatch();
+    const name = "users";
+    const menu = useSelector(
+        (state) => state.setting.config[name].selectedMenu
+    );
+
+    const orderName = "orders";
+    const selectedTab = useSelector(
+        (state) => state.setting.config[orderName].selectedTab
+    );
+
+    const onItemSelect = (item) => {
+        dispatch(
+            updateSetting(orderName, {
+                selectedTab: item
+            })
+        );
     };
-    const sortedOrders = orderBy(orders, ["created_at"], ["desc"]);
+
     return (
-        <>
-            <div className="card mb-2">
-                <div className="card-body ">
-                    <h2>Заказы покупателя</h2>
-                </div>
+        <div className="card">
+            <div className="card-header">
+                {menu && <i className={`bi ${menu.icon} me-2`}></i>}
+                {menu && menu.name}
             </div>
-            {sortedOrders.length > 0 && (
-                <div className="card mb-3">
-                    <div className="card-body ">
-                        <h2>Comments</h2>
-                        <hr />
-                        <OrdersList
-                            orders={sortedOrders}
-                            onRemove={handleRemoveRoder}
-                        />
+
+            <div className="card-body">
+                <div className="nav nav-tabs">
+                    <div className="nav-item">
+                        <span
+                            className={classNames({
+                                "nav-link": true,
+                                active: selectedTab === "current"
+                            })}
+                            aria-current="page"
+                            onClick={() => onItemSelect("current")}
+                            role="button"
+                        >
+                            Текущие
+                        </span>
+                    </div>
+                    <div className="nav-item">
+                        <span
+                            className={classNames({
+                                "nav-link": true,
+                                active: selectedTab === "archive"
+                            })}
+                            aria-current="page"
+                            onClick={() => onItemSelect("archive")}
+                            role="button"
+                        >
+                            Архив
+                        </span>
                     </div>
                 </div>
-            )}
-        </>
+            </div>
+        </div>
     );
 };
 
-export default Comments;
+export default UserOrders;

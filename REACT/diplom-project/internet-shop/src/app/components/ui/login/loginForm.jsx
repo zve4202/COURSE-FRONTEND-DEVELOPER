@@ -8,7 +8,7 @@ import { validator } from "../../../utils/validator";
 import { getAuth, getAuthError, signIn } from "../../../store/auth";
 
 const LoginForm = () => {
-    const currentUser = useSelector(getAuth());
+    const { currentUser } = useSelector(getAuth());
     const error = useSelector(getAuthError());
 
     const history = useHistory();

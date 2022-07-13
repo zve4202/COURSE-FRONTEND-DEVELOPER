@@ -8,7 +8,8 @@ const SelectField = ({
     defaultOption,
     options,
     error,
-    name
+    name,
+    readOnly
 }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
@@ -33,6 +34,7 @@ const SelectField = ({
                 name={name}
                 value={value}
                 onChange={handleChange}
+                disabled={readOnly}
             >
                 <option disabled value="">
                     {defaultOption}
@@ -56,7 +58,8 @@ SelectField.propTypes = {
     onChange: PropTypes.func,
     error: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    name: PropTypes.string
+    name: PropTypes.string,
+    readOnly: PropTypes.bool
 };
 
 export default SelectField;

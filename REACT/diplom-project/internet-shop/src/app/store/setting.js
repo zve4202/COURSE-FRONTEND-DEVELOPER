@@ -25,8 +25,16 @@ const settingConfig = {
     users: {
         query: { ...query },
         pagenation: { ...pagenation },
-        sort: { ...sort }
+        sort: { ...sort },
+        selectedMenu: "orders"
     },
+    orders: {
+        query: { ...query },
+        pagenation: { ...pagenation },
+        sort: { ...sort },
+        selectedTab: "current"
+    },
+
     basket: {
         sort: { ...sort }
     }

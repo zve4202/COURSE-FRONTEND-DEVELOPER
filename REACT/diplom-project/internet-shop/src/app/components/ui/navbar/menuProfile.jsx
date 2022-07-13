@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAuth } from "../../../store/auth";
 
-function NavProfile() {
-    const currentUser = useSelector(getAuth());
+function MenuProfile() {
+    const { currentUser } = useSelector(getAuth());
     const [isOpen, setOpen] = useState(false);
     const toggleMenu = () => {
         setOpen((prevState) => !prevState);
@@ -41,4 +41,4 @@ function NavProfile() {
     );
 }
 
-export default NavProfile;
+export default MenuProfile;

@@ -68,10 +68,6 @@ const UserEditPage = () => {
     const roles = useSelector(getRoles());
     const [data, setData] = useState(defaultData);
 
-    const name = "users";
-    const menu = useSelector(
-        (state) => state.setting.config[name].selectedMenu
-    );
     useEffect(() => {
         if (!user) {
             dispatch(loadUsers());
@@ -82,7 +78,9 @@ const UserEditPage = () => {
     }, []);
 
     useEffect(() => {
-        setData({ ...user });
+        if (user) {
+            setData({ ...user });
+        }
     }, [user]);
 
     const [errors, setErrors] = useState({});
@@ -119,14 +117,8 @@ const UserEditPage = () => {
     };
 
     return (
-        // <div className="container-fluid">
-        <div className="col-md-6 card">
-            <div className="card-header">
-                {menu && <i className={`bi ${menu.icon} me-2`}></i>}
-                {menu && menu.name}
-            </div>
-
-            <div className="card-body">
+        <div className="col-md-6 mx-3">
+            <div>
                 <form onSubmit={handleSubmit}>
                     <TextField
                         label="Имя"

@@ -36,6 +36,7 @@ exports.getUser = async function (req, res, next) {
     return res.status(400).json({ status: 400, message: e.message });
   }
 };
+
 exports.update = async function (req, res, next) {
   const { id } = req.params;
   try {

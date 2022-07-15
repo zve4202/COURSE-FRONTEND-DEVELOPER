@@ -17,6 +17,13 @@ const sort = {
 };
 
 const settingConfig = {
+    admin: {
+        selectedMenu: {
+            path: "users",
+            name: "ПОЛЬЗОВАТЕЛИ",
+            icon: "bi-people-fill"
+        }
+    },
     product: {
         query: { ...query },
         pagenation: { ...pagenation },

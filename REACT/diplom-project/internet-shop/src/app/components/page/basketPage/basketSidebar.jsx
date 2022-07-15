@@ -41,26 +41,16 @@ const BasketSidebar = () => {
                     <div className="card mb-3">
                         <div className="card-header">Итого заказно</div>
                         <div className="card-body">
-                            <table className="table-borderless w-100">
-                                <tbody>
-                                    <tr>
-                                        <td>Количество:</td>
-                                        <td>
-                                            <strong>{basket.totalQty}</strong>
-                                        </td>
-                                        <td>шт.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>На сумма:</td>
-                                        <td>
-                                            <strong>
-                                                {nf.format(basket.totalPrice)}
-                                            </strong>
-                                        </td>
-                                        <td>руб.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div className="d-flex justify-content-between">
+                                Количество:
+                                <strong>{basket.totalQty}</strong>
+                                шт.
+                            </div>
+                            <div className="d-flex justify-content-between">
+                                На сумма:
+                                <strong>{nf.format(basket.totalPrice)}</strong>
+                                руб.
+                            </div>
                         </div>
                     </div>
 

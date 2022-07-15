@@ -17,6 +17,8 @@ import { getAuthLoading, loadAuthUser } from "./store/auth";
 import configureStore from "./store";
 import { loadSetting } from "./store/setting";
 import { loadBasket } from "./store/basket";
+import { loadRoles } from "./store/roles";
+import { loadCategories } from "./store/categories";
 
 export const store = configureStore();
 
@@ -27,6 +29,8 @@ function App() {
     useEffect(() => {
         dispatch(loadSetting());
         dispatch(loadAuthUser());
+        dispatch(loadRoles());
+        dispatch(loadCategories());
         dispatch(loadBasket());
     }, []);
 
@@ -35,8 +39,7 @@ function App() {
             <NavBar />
             {!isLoading && (
                 <Switch>
-                    <ProtectedRoute path="/users" exact component={Admin} />
-                    <ProtectedRoute path="/products" exact component={Admin} />
+                    <ProtectedRoute path="/admin" exact component={Admin} />
                     <ProtectedRoute
                         path="/users/:userId/:edit?"
                         component={Users}

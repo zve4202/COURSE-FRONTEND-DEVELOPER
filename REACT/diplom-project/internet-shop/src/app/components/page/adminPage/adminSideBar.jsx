@@ -1,37 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import classNames from "classnames";
-
-import SideBarWrapper from "../../common/sideBar/sideBarWrapper";
 import BackButton from "./backButton";
+import SideBarWrapper from "../../common/wrappers/sideBar";
 
 const AdminSideBar = ({ menu, selected, onItemSelect, children }) => {
     return (
-        <SideBarWrapper backBtn={<BackButton />} caption="Меню администратора">
-            <ul className="list-group">
-                {menu.map((item) => (
-                    <li
-                        key={item.path}
-                        className={classNames({
-                            "list-group-item": true,
-                            active: item.path === selected
-                        })}
-                        onClick={() => onItemSelect(item.path)}
-                        role="button"
-                    >
-                        {item.name}
-                    </li>
-                ))}
-                {children}
-            </ul>
+        <SideBarWrapper
+            backBtn={<BackButton />}
+            {...{ menu, selected, onItemSelect }}
+        >
+            {children}
         </SideBarWrapper>
     );
 };
 
 AdminSideBar.propTypes = {
-    menu: PropTypes.array.isRequired,
-    selected: PropTypes.string.isRequired,
+    menu: PropTypes.object.isRequired,
+    selected: PropTypes.object.isRequired,
     onItemSelect: PropTypes.func.isRequired,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),

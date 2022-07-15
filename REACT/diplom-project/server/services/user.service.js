@@ -32,18 +32,17 @@ exports.getAll = async function (query, page, limit) {
 
     const data = await Model.aggregatePaginate(aggregate, options);
     return data;
-  } catch (e) {
-    // Log Errors
-    throw Error(e.message);
+  } catch (error) {
+    throw Error(error.message);
   }
 };
+
 exports.getUser = async function (id) {
   try {
     var data = await Model.findById(id);
     return data;
-  } catch (e) {
-    // Log Errors
-    throw Error("Error while Paginating Users");
+  } catch (error) {
+    throw Error(error.message);
   }
 };
 
@@ -51,9 +50,8 @@ exports.addUser = async function (query, page, limit) {
   try {
     var data = await Model.find(query);
     return data;
-  } catch (e) {
-    // Log Errors
-    throw Error("Error while Paginating Users");
+  } catch (error) {
+    throw Error(error.message);
   }
 };
 
@@ -64,12 +62,14 @@ exports.update = async function (id, user) {
       const salt = await bcrypt.genSalt(5);
       user.password = await bcrypt.hash(user.password, salt);
     }
+
     const data = await Model.findByIdAndUpdate(id, user, {
       new: true,
     });
+
     console.log(data);
     return data;
   } catch (error) {
-    throw Error("Role not found");
+    throw Error(error.message);
   }
 };

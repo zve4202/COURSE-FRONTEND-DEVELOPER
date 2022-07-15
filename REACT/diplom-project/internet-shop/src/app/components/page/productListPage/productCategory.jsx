@@ -5,6 +5,7 @@ import classNames from "classnames";
 
 import { getCategories } from "../../../store/categories";
 import { updateSetting } from "../../../store/setting";
+import SideBarWrapper from "../../common/wrappers/sideBar";
 
 const CategoryList = ({ name, onItemSelect }) => {
     const categories = useSelector(getCategories());
@@ -26,10 +27,9 @@ const CategoryList = ({ name, onItemSelect }) => {
     };
 
     return (
-        <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100">
-            <ul className="list-group">
-                <li
-                    key="item_clear"
+        <SideBarWrapper>
+            <div className="list-group">
+                <div
                     className={classNames({
                         "list-group-item btn-secondary": true,
                         disabled: !query.category
@@ -38,22 +38,30 @@ const CategoryList = ({ name, onItemSelect }) => {
                     role="button"
                 >
                     ВСЕ КАТЕГОРИИ
-                </li>
+                </div>
                 {categories.map((item) => (
-                    <li
+                    <div
                         key={item._id}
                         className={classNames({
-                            "list-group-item": true,
+                            "d-flex justify-content-between list-group-item": true,
                             active: item._id === query.category
                         })}
                         onClick={() => handleSelectQuery(item._id)}
                         role="button"
                     >
-                        {item.name}
-                    </li>
+                        <div className="text-truncate">{item.name}</div>
+                        <div
+                            className={classNames({
+                                small: true,
+                                "text-muted": item._id !== query.category
+                            })}
+                        >
+                            ({item.count})
+                        </div>
+                    </div>
                 ))}
-            </ul>
-        </div>
+            </div>
+        </SideBarWrapper>
     );
 };
 

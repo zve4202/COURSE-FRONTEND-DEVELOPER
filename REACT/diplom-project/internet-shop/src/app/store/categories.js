@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import categoryService from "../services/category.service";
+import isOutdated from "../utils/isOutdated";
 
 const initialState = { entities: [], isLoading: true, error: null };
 
@@ -8,12 +9,13 @@ const categorySlice = createSlice({
     name: "categories",
     initialState,
     reducers: {
-        resived(state, action) {
-            state.entities = action.payload;
-            state.isLoading = false;
-        },
         requested(state) {
             state = initialState;
+        },
+        resived(state, action) {
+            state.entities = action.payload;
+            state.lastFetch = Date.now();
+            state.isLoading = false;
         },
         requestFailed(state, action) {
             state.isLoading = false;
@@ -25,13 +27,16 @@ const categorySlice = createSlice({
 const { actions, reducer: categoriesReducer } = categorySlice;
 const { resived, requested, requestFailed } = actions;
 
-export const loadCategories = () => async (dispatch) => {
-    dispatch(requested());
-    try {
-        const { content } = await categoryService.fetchAll();
-        dispatch(resived(content));
-    } catch (error) {
-        dispatch(requestFailed(error.message));
+export const loadCategories = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().categories;
+    if (isOutdated(lastFetch)) {
+        dispatch(requested());
+        try {
+            const { content } = await categoryService.fetchAll();
+            dispatch(resived(content));
+        } catch (error) {
+            dispatch(requestFailed(error.message));
+        }
     }
 };
 

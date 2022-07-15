@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import WorkScreen from "../../ui/workScreen";
 import BasketLoader from "./basketLoader";
 import BasketSidebar from "./basketSidebar";
 import BasketTable from "./basketTable";
 import { loadBasketEx } from "../../../store/basket";
+import WorkScreen from "../../common/wrappers/workScreen";
 
 const BasketPage = () => {
     const name = "basket";
@@ -33,29 +33,27 @@ const BasketPage = () => {
 
     return (
         <WorkScreen>
-            <div className="d-flex">
-                <BasketSidebar />
-                <div className="content_wrapper card bg-light p-2">
-                    <div className="card">
-                        <div className="card-header">
-                            <i className="bi bi-cart-check me-2" />
-                            КОРЗИНА
-                        </div>
+            <BasketSidebar />
+            <div className="content_wrapper card bg-light p-2">
+                <div className="card">
+                    <div className="card-header">
+                        <i className="bi bi-cart-check me-2" />
+                        КОРЗИНА
+                    </div>
 
-                        <div className="h-100">
-                            <BasketLoader
-                                isLoading={isLoading}
-                                error={error}
-                                length={entities?.length}
-                            >
-                                <BasketTable
-                                    name={name}
-                                    products={entities}
-                                    onSort={handleSort}
-                                    onUpdate={handleReload}
-                                />
-                            </BasketLoader>
-                        </div>
+                    <div className="px-2 h-100">
+                        <BasketLoader
+                            isLoading={isLoading}
+                            error={error}
+                            length={entities?.length}
+                        >
+                            <BasketTable
+                                name={name}
+                                products={entities}
+                                onSort={handleSort}
+                                onUpdate={handleReload}
+                            />
+                        </BasketLoader>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ const MenuAdmin = () => {
     const { isAdmin } = useSelector(getAuth());
     return (
         isAdmin && (
-            <Link className="nav-link " aria-current="page" to="/users">
+            <Link className="nav-link " aria-current="page" to="/admin">
                 Меню администратора
                 <i className="bi bi-award ms-1" />
             </Link>

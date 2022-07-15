@@ -12,13 +12,14 @@ const BasketTable = ({ name, products, onSort, onUpdate, ...rest }) => {
     const columns = {
         image: {
             class: "cover-small",
-            name: "Имидж",
+            // name: "Имидж",
             component: (product) => (
                 <ProductPicture size="small" picture={product.title.image} />
             )
         },
         add: {
-            name: "Корзина",
+            class: "intut",
+            // name: "Корзина",
             component: (product) => (
                 <ProductQty
                     productId={product._id}
@@ -30,45 +31,43 @@ const BasketTable = ({ name, products, onSort, onUpdate, ...rest }) => {
             )
         },
         price: {
-            path: "price",
-            name: "Цена",
+            // path: "price",
+            // name: "Цена",
             component: (product) => <ProductPrice price={product.price} />
         },
         name: {
-            path: "name",
-            name: "Наименоване",
+            // path: "name",
+            // name: "Наименоване",
             component: (product) => <ProductName data={product} />
         },
         format: {
-            path: "format",
-            name: "Формат",
+            // path: "format",
+            // name: "Формат",
             component: (product) => (
                 <div className="small">{product.title.format.name}</div>
             )
         },
         barcode: {
-            name: "Баркоде",
+            // name: "Баркоде",
             component: (product) => <Barcode barcode={product.title.barcode} />
         },
         label: {
-            path: "label",
-            name: "Лейбл",
+            // path: "label",
+            // name: "Лейбл",
             component: (product) => (
                 <div className="small">{product.title.label.name}</div>
             )
         },
         origin: {
-            path: "origin",
-            name: "Страна",
+            // path: "origin",
+            // name: "Страна",
             component: (product) => (
                 <div className="small">{product.title.origin}</div>
             )
         }
     };
 
-    return (
-        <Table name={name} onSort={onSort} columns={columns} data={products} />
-    );
+    return <Table name={name} columns={columns} data={products} />;
 };
 
 BasketTable.propTypes = {

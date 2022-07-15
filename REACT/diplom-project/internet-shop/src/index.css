@@ -7,10 +7,20 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.small,
+small {
+    font-size: 75% !important;
+}
+
 img.cover-small {
     width: 64px;
     height: 64px;
     background-color: #eee;
+}
+
+img.cover-big {
+    width: 160px;
+    height: 160px;
 }
 
 table.table td {
@@ -23,9 +33,13 @@ table.table td {
 
 th.cover-small,
 td.cover-small {
-    width: 81px;
+    width: 80px;
 }
 
+.input,
+td.input {
+    width: 80px !important;
+}
 .table-input {
     width: 40px !important;
 }

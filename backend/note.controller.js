@@ -1,23 +1,29 @@
-const fs = require('fs/promises')
-const path = require('path')
-const notePath = path.join(__dirname, db.json )
+const fs = require("fs/promises");
+const path = require("path");
+const chalk = require("chalk");
+
+const notePath = path.join(__dirname, "db.json");
 
 async function setNote(title) {
-  const notes = getNotes()
+  const notes = await getNotes();
 
   const note = {
-    title, id: Date.now().toString()
-  }
+    title,
+    id: Date.now().toString(),
+  };
 
-  notes.push(note)
-  await fs.writeFile(notePath, JSON.stringify(notes))
+  notes.push(note);
+  await fs.writeFile(notePath, JSON.stringify(notes));
 }
 
 async function getNotes() {
-  const buffer = await fs.readFile(notePath, {encoding: "utf-8"})
-  return JSON.parse(buffer)
+  const notes = await JSON.parse(
+    await fs.readFile(notePath, { encoding: "utf-8" })
+  );
+  return Array.isArray(notes) ? notes : [];
 }
 
 module.exports = {
-  setNote,  getNotes
-}
+  setNote,
+  getNotes,
+};

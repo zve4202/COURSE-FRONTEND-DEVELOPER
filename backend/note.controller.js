@@ -2,28 +2,48 @@ const fs = require("fs/promises");
 const path = require("path");
 const chalk = require("chalk");
 
-const notePath = path.join(__dirname, "db.json");
+const notesPath = path.join(__dirname, "db.json");
 
-async function setNote(title) {
+async function addNote(title) {
   const notes = await getNotes();
-
   const note = {
     title,
     id: Date.now().toString(),
   };
 
   notes.push(note);
-  await fs.writeFile(notePath, JSON.stringify(notes));
+
+  await saveNotes(notes);
+  console.log(chalk.bgGreen("Note was added!"));
 }
 
 async function getNotes() {
-  const notes = await JSON.parse(
-    await fs.readFile(notePath, { encoding: "utf-8" })
-  );
-  return Array.isArray(notes) ? notes : [];
+  const notes = await fs.readFile(notesPath, { encoding: "utf-8" });
+  return Array.isArray(JSON.parse(notes)) ? JSON.parse(notes) : [];
+}
+
+async function saveNotes(notes) {
+  await fs.writeFile(notesPath, JSON.stringify(notes));
+}
+
+async function printNotes() {
+  const notes = await getNotes();
+
+  console.log(chalk.redBright("Here is the list of notes:"));
+  notes.forEach((note) => {
+    console.log(chalk.red(note.id), chalk.blue(note.title));
+  });
+}
+
+async function removeNote(id) {
+  const notes = await getNotes();
+  saveNotes(await notes.filter((note) => note.id !== id));
+  console.log(id, chalk.green("Note was deleted"));
+  printNotes();
 }
 
 module.exports = {
-  setNote,
-  getNotes,
+  addNote,
+  printNotes,
+  removeNote,
 };

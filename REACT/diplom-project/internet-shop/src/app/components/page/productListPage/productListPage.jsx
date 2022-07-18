@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
 
 import ProductTable from "../../ui/products";
-import Pagination from "../../common/pagination/pagination";
 import { loadCategories } from "../../../store/categories";
 import { loadProducts } from "../../../store/products";
 import ProductSearch from "./productSearch";
@@ -11,6 +10,7 @@ import ProductLoader from "./productLoader";
 import CategoryList from "./productCategory";
 import { updateSetting } from "../../../store/setting";
 import WorkScreen from "../../common/wrappers/workScreen";
+import PaginationWrapper from "../../common/pagination";
 
 const ProductListPage = () => {
     const name = "product";
@@ -74,28 +74,20 @@ const ProductListPage = () => {
                     <span>Функции сортировки по стоимости</span>
                 </div>
                 <div className="h-100">
-                    <div className="d-flex justify-content-center">
-                        <Pagination
-                            totalDocs={totalDocs}
-                            onPageChange={onPageChange}
-                            name={name}
-                        />
-                    </div>
-                    <ProductLoader>
-                        <ProductTable
-                            name={name}
-                            products={docs}
-                            onSort={handleSort}
-                            onAdd={addToBasket}
-                        />
-                    </ProductLoader>
-                    <div className="d-flex justify-content-center">
-                        <Pagination
-                            totalDocs={totalDocs}
-                            onPageChange={onPageChange}
-                            name={name}
-                        />
-                    </div>
+                    <PaginationWrapper
+                        name={name}
+                        totalDocs={totalDocs}
+                        onChange={onPageChange}
+                    >
+                        <ProductLoader>
+                            <ProductTable
+                                name={name}
+                                products={docs}
+                                onSort={handleSort}
+                                onAdd={addToBasket}
+                            />
+                        </ProductLoader>
+                    </PaginationWrapper>
                 </div>
             </div>
         </WorkScreen>

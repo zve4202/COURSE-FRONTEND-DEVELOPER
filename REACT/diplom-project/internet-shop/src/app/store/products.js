@@ -41,7 +41,7 @@ const { resived, requested, requestFailed } = actions;
 export const loadProducts = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        const { pagenation, query, sort } = getState().setting.config[name];
+        const { pagination, query, sort } = getState().setting.config[name];
         let params = {};
         Object.keys(query).forEach((key) => {
             const value = query[key];
@@ -52,8 +52,8 @@ export const loadProducts = () => async (dispatch, getState) => {
 
         params = {
             ...params,
-            page: pagenation.currentPage,
-            limit: pagenation.pageSize,
+            page: pagination.currentPage,
+            limit: pagination.pageSize,
             ...sort
         };
 

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { getValue, setValue } from "../services/localStorage.service";
 
-const pagenation = {
+const pagination = {
     pageSize: 50,
     currentPage: 1
 };
@@ -26,18 +26,18 @@ const settingConfig = {
     },
     product: {
         query: { ...query },
-        pagenation: { ...pagenation },
+        pagination: { ...pagination },
         sort: { ...sort }
     },
     users: {
         query: { ...query },
-        pagenation: { ...pagenation },
+        pagination: { ...pagination },
         sort: { ...sort },
         selectedMenu: "orders"
     },
     orders: {
         query: { ...query },
-        pagenation: { ...pagenation },
+        pagination: { ...pagination },
         sort: { ...sort },
         selectedTab: "current"
     },

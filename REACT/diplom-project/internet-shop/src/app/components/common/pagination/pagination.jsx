@@ -7,9 +7,9 @@ import { connect } from "react-redux";
 import { updateSetting } from "../../../store/setting";
 
 const propTypes = {
+    name: PropTypes.string.isRequired,
     totalDocs: PropTypes.number,
     onPageChange: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
     config: PropTypes.object,
     updateSetting: PropTypes.func
 };
@@ -23,7 +23,7 @@ class Pagination extends React.Component {
     constructor(props) {
         super(props);
         this.state = { pager: {} };
-        this.pagenation = this.props.config[this.props.name].pagenation;
+        this.pagination = this.props.config[this.props.name].pagination;
         // this.saveSetting = this.saveSetting.bind(this);
     }
 
@@ -43,9 +43,9 @@ class Pagination extends React.Component {
     }
 
     saveSetting() {
-        if (this.pagenation) {
+        if (this.pagination) {
             this.props.updateSetting(this.props.name, {
-                pagenation: this.pagenation
+                pagination: this.pagination
             });
         }
     }
@@ -59,10 +59,10 @@ class Pagination extends React.Component {
         }
 
         // get new pager object for specified page
-        pager = this.getPager(totalDocs, page, this.pagenation.pageSize);
+        pager = this.getPager(totalDocs, page, this.pagination.pageSize);
 
-        this.pagenation = {
-            ...this.pagenation,
+        this.pagination = {
+            ...this.pagination,
             currentPage: page
         };
         this.saveSetting();
@@ -73,11 +73,11 @@ class Pagination extends React.Component {
 
     getPager(totalItems, currentPage, pageSize) {
         // default to first page
-        currentPage = currentPage || this.pagenation.page;
+        currentPage = currentPage || this.pagination.page;
 
         // default page size is 10
-        // pageSize = pageSize || this.props.config.pagenation.pageSize;
-        pageSize = pageSize || this.pagenation.pageSize;
+        // pageSize = pageSize || this.props.config.pagination.pageSize;
+        pageSize = pageSize || this.pagination.pageSize;
 
         const showPages = 10;
         const halfPages = showPages / 2;
@@ -126,13 +126,13 @@ class Pagination extends React.Component {
     }
 
     setPageSize(value) {
-        this.pagenation = {
-            ...this.pagenation,
+        this.pagination = {
+            ...this.pagination,
             pageSize: value
         };
         this.setPage(1);
         this.saveSetting();
-        this.props.onPageChange(this.pagenation.page);
+        this.props.onPageChange(this.pagination.page);
     }
 
     selectPage(page) {
@@ -157,7 +157,7 @@ class Pagination extends React.Component {
                         </span>
                     </div>
                     <SelectPageSize
-                        value={this.pagenation.pageSize}
+                        value={this.pagination.pageSize}
                         onChangePageSize={(value) => this.setPageSize(value)}
                         name={this.props.name}
                     />
@@ -246,7 +246,7 @@ class Pagination extends React.Component {
                     </span>
                 </div>
                 <SelectPageSize
-                    value={this.pagenation.pageSize}
+                    value={this.pagination.pageSize}
                     onChangePageSize={(value) => this.setPageSize(value)}
                     name={this.props.name}
                 />

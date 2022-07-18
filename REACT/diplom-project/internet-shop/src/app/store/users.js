@@ -45,8 +45,8 @@ const { update, resived, requested, requestFailed } = actions;
 export const loadUsers = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        const { pagenation, query, sort } = getState().setting.config[name];
-        console.log({ pagenation, query, sort });
+        const { pagination, query, sort } = getState().setting.config[name];
+        console.log({ pagination, query, sort });
         let params = {};
         Object.keys(query).forEach((key) => {
             const value = query[key];
@@ -57,8 +57,8 @@ export const loadUsers = () => async (dispatch, getState) => {
 
         params = {
             ...params,
-            page: pagenation.currentPage,
-            limit: pagenation.pageSize,
+            page: pagination.currentPage,
+            limit: pagination.pageSize,
             ...sort
         };
 

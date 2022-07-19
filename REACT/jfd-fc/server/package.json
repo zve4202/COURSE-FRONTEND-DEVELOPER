@@ -4,7 +4,8 @@
   "description": "Backend of fast company",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "cross-env NODE_ENV=production node app.js",
+    "dev": "cross-env NODE_ENV=development nodemon app.js"
   },
   "keywords": [
     "js",
@@ -13,9 +14,13 @@
   "author": "Viacheslav E. Zubachev",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^5.0.1",
+    "chalk": "^4.1.2",
     "config": "^3.3.7",
     "express": "^4.18.1",
     "mongoose": "^6.4.5"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.19"
   }
 }

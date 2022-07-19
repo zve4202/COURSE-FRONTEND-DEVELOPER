@@ -1,23 +1,67 @@
-document.addEventListener("click", (event) => {
-  if (event.target.dataset.type === "remove") {
-    const id = event.target.dataset.id;
-
-    remove(id).then(() => {
-      event.target.closest("li").remove();
-    });
-  }
-
-  if (event.target.dataset.type === "edit") {
-    const id = event.target.dataset.id;
-    const title = event.target.dataset.title;
-    const newTitle = prompt("Введите новое название", title);
-    if (newTitle !== null) {
-      update({ id, title: newTitle }).then(() => {
-        event.target.closest("li").querySelector("span").innerText = newTitle;
-      });
-    }
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && event.target.id === "save-cancel-input") {
+    save(event.target.dataset.id, event.target.closest("li"));
   }
 });
+document.addEventListener("click", ({ target }) => {
+  switch (target.dataset.type) {
+    case "remove":
+      {
+        const id = target.dataset.id;
+
+        remove(id).then(() => {
+          target.closest("li").remove();
+        });
+      }
+      break;
+
+    case "edit":
+      {
+        const root = target.closest("li");
+        revert(root);
+        const input = root.querySelector("input");
+        input.value = root.querySelector("span").innerText;
+        input.select();
+        input.focus();
+      }
+      break;
+    case "cancel":
+      {
+        const root = target.closest("li");
+        const input = root.querySelector("input");
+        input.value = null;
+        revert(root);
+      }
+      break;
+    case "save":
+      {
+        save(target.dataset.id, target.closest("li"));
+      }
+      break;
+    default:
+      break;
+  }
+});
+
+function save(id, root) {
+  const input = root.querySelector("input");
+  const title = input.value;
+  if (title) {
+    update({ id, title }).then(() => {
+      input.value = null;
+      revert(root);
+      root.querySelector("span").innerText = title;
+    });
+  }
+}
+
+function revert(root) {
+  for (const item of root.children) {
+    if (item.style.display) {
+      item.style.display = item.style.display === "block" ? "none" : "block";
+    }
+  }
+}
 
 async function update(newNote) {
   await fetch(`/${newNote.id}`, {

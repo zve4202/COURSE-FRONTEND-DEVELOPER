@@ -38,13 +38,12 @@
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
           >
-            <span><%= notes[i].title %></span>
-            <div>
+            <span style="display: block"><%= notes[i].title %></span>
+            <div id="edit-remove-control" style="display: block">
               <button
                 class="btn btn-primary"
                 data-type="edit"
                 data-id="<%= notes[i].id %>"
-                data-title="<%= notes[i].title %>"
               >
                 Редактировать
               </button>
@@ -54,6 +53,26 @@
                 data-id="<%= notes[i].id %>"
               >
                 &times;
+              </button>
+            </div>
+
+            <input
+              id="save-cancel-input"
+              type="text"
+              class="form-control w-75"
+              style="display: none"
+              data-id="<%= notes[i].id %>"
+            />
+            <div id="save-cancel-control" style="display: none">
+              <button
+                class="btn btn-success"
+                data-type="save"
+                data-id="<%= notes[i].id %>"
+              >
+                Сохранить
+              </button>
+              <button class="btn btn-danger" data-type="cancel">
+                Отменить
               </button>
             </div>
           </li>

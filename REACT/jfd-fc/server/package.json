@@ -1,0 +1,21 @@
+{
+  "name": "jfd-server",
+  "version": "1.0.0",
+  "description": "Backend of fast company",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "js",
+    "backend"
+  ],
+  "author": "Viacheslav E. Zubachev",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "config": "^3.3.7",
+    "express": "^4.18.1",
+    "mongoose": "^6.4.5"
+  }
+}

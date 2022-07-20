@@ -13,9 +13,10 @@ exports.getList = async function (req, res, next) {
       message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.getListEx = async function (req, res, next) {
   // Validate request parameters, queries using express-validator
   const { query } = req;
@@ -33,7 +34,7 @@ exports.getListEx = async function (req, res, next) {
       message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 
@@ -47,9 +48,10 @@ exports.get = async function (req, res, next) {
       message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.update = async function (req, res, next) {
   const { id } = req.params;
   try {
@@ -60,9 +62,10 @@ exports.update = async function (req, res, next) {
       message: "Succesfully updated",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.add = async function (req, res, next) {
   try {
     const data = await Service.add(req.body);
@@ -72,9 +75,10 @@ exports.add = async function (req, res, next) {
       message: "Succesfully created",
     });
   } catch (e) {
-    return res.status(400).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.delete = async function (req, res, next) {
   const { id } = req.params;
   try {
@@ -85,6 +89,6 @@ exports.delete = async function (req, res, next) {
       message: "Succesfully deleted",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };

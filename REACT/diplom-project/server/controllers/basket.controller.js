@@ -10,9 +10,10 @@ exports.get = async function (req, res, next) {
       message: "Succesfully data Retrieved",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.getEx = async function (req, res, next) {
   const { id } = req.params;
   try {
@@ -23,7 +24,7 @@ exports.getEx = async function (req, res, next) {
       message: "Succesfully data Retrieved",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 
@@ -37,9 +38,10 @@ exports.update = async function (req, res, next) {
       message: "Succesfully updated",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.add = async function (req, res, next) {
   try {
     const data = await Service.add(req.body);
@@ -49,9 +51,10 @@ exports.add = async function (req, res, next) {
       message: "Succesfully created",
     });
   } catch (e) {
-    return res.status(400).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
+
 exports.delete = async function (req, res, next) {
   const { id } = req.params;
   try {
@@ -62,6 +65,6 @@ exports.delete = async function (req, res, next) {
       message: "Succesfully deleted",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };

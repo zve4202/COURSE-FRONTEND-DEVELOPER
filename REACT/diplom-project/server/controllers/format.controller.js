@@ -9,9 +9,9 @@ exports.getAll = async function (req, res, next) {
     return res.status(200).json({
       status: 200,
       content: content,
-      message: "Succesfully Formats Retrieved",
+      message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };

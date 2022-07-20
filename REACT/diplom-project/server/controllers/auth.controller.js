@@ -7,7 +7,6 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signUp = (req, res) => {
-  console.log(req.body);
   const user = new User({
     name: req.body.name,
     email: req.body.email,
@@ -34,13 +33,6 @@ exports.signUp = (req, res) => {
       accessToken: token,
       message: "SIGNUP_SUCCESS",
     });
-    // res.status(200).send({
-    //   id: user._id,
-    //   name: user.name,
-    //   email: user.email,
-    //   role: user.role,
-    //   accessToken: token,
-    // });
   });
 };
 
@@ -85,12 +77,5 @@ exports.signIn = (req, res) => {
       accessToken: token,
       message: "SIGNIN_SUCCESS",
     });
-    // res.status(200).send({
-    //   id: user._id,
-    //   name: user.name,
-    //   email: user.email,
-    //   role: user.role,
-    //   accessToken: token,
-    // });
   });
 };

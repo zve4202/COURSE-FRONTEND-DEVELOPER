@@ -15,10 +15,10 @@ exports.getAll = async function (req, res, next) {
     return res.status(200).json({
       status: 200,
       content: users,
-      message: "Succesfully Users Retrieved",
+      message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 exports.getUser = async function (req, res, next) {
@@ -30,10 +30,10 @@ exports.getUser = async function (req, res, next) {
     return res.status(200).json({
       status: 200,
       content: user,
-      message: "Succesfully Users Retrieved",
+      message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 
@@ -47,6 +47,6 @@ exports.update = async function (req, res, next) {
       message: "Succesfully updated",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };

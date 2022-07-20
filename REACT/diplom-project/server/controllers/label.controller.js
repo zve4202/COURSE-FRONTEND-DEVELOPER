@@ -10,10 +10,10 @@ exports.getList = async function (req, res, next) {
     return res.status(200).json({
       status: 200,
       content: roles,
-      message: "Succesfully Roles Retrieved",
+      message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 exports.get = async function (req, res, next) {
@@ -23,10 +23,10 @@ exports.get = async function (req, res, next) {
     return res.status(200).json({
       status: 200,
       content: role,
-      message: "Succesfully role Retrieved",
+      message: "Succesfully retrieved",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 exports.update = async function (req, res, next) {
@@ -39,7 +39,7 @@ exports.update = async function (req, res, next) {
       message: "Succesfully updated",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 exports.add = async function (req, res, next) {
@@ -51,7 +51,7 @@ exports.add = async function (req, res, next) {
       message: "Succesfully created",
     });
   } catch (e) {
-    return res.status(400).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };
 exports.delete = async function (req, res, next) {
@@ -64,6 +64,6 @@ exports.delete = async function (req, res, next) {
       message: "Succesfully deleted",
     });
   } catch (e) {
-    return res.status(404).json({ status: 404, message: e.message });
+    return res.status(500).json({ status: 500, message: e.message });
   }
 };

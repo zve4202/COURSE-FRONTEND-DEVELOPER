@@ -5,16 +5,20 @@ const db = {};
 
 db.mongoose = mongoose;
 
-db.role = require("./role.model");
-db.user = require("./user.model");
-db.category = require("./category.model");
-db.format = require("./format.model");
-db.label = require("./label.model");
-db.artist = require("./artist.model");
-db.title = require("./title.model");
-db.product = require("./product.model");
-db.product_m = require("./product_m.model");
-db.order = require("./order.model");
-db.order_details = require("./order_details.model");
+db.role = require("./Role");
+db.user = require("./User");
+
+db.category = require("./Category");
+db.format = require("./Format");
+db.label = require("./Label");
+db.artist = require("./Artist");
+db.title = require("./Title");
+db.title_m = require("./TitleMerged");
+
+db.product = require("./Product");
+db.product_m = require("./ProductMerged");
+
+db.order = require("./Order");
+db.order_dtls = require("./OrderList");
 
 module.exports = db;

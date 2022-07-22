@@ -2,19 +2,8 @@ const { Schema, model } = require("mongoose");
 
 const schema = new Schema(
     {
-        userId: {
-            type: Schema.Types.ObjectId,
-            ref: "User"
-        },
-        accessToken: {
-            type: String,
-            require: true
-        },
-        refreshToken: {
-            type: String,
-            require: true
-        },
-        expiresIn: Number
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        refreshToken: { type: String, require: true }
     },
     { timestamps: true }
 );

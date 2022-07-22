@@ -1,1 +1,5 @@
-{ "secret": "react-course-fullstack", "auth": true, "port": 4001 }
+{
+    "accessSecret": "My Super Access Secret",
+    "refreshSecret": "My Super Refresh Key",
+    "port": 4001
+}

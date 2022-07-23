@@ -121,7 +121,7 @@ router.post("/token", async (req, res) => {
 
         if (isTokenInvalid(data, dbToken)) {
             return res.status(401).json({
-                message: "Unathorized"
+                message: "Unauthorized"
             });
         }
 

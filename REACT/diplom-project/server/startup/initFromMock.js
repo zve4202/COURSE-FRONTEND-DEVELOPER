@@ -2,10 +2,12 @@ const debug = require("debug")("server:db");
 const chalk = require("chalk");
 const bcrypt = require("bcryptjs");
 
+const config = require("../config");
+
 const models = require("../models");
 const rolesMock = require("../mockData/roles.json");
 const usersMock = require("../mockData/users.json");
-const { generateImage } = require("../utils");
+const { generateUserData } = require("../utils");
 
 async function generate(data, model) {
     return Promise.all(
@@ -67,35 +69,34 @@ async function InitEntities(name, data, model, ASIS = false) {
 }
 
 module.exports = async () => {
-    const roles = await InitEntities("roles", rolesMock, models.role, true);
+    const usersExists = await models.user.find();
+    if (usersExists.length !== usersMock.length) {
+        const roles = await InitEntities("roles", rolesMock, models.role, true);
 
-    // models.user.collection.drop();
-    const users = await Promise.all(
-        usersMock.map(async (user) => {
-            try {
-                const exists = await models.user.find({
-                    email: user.email
-                });
-                if (exists.length !== 0) {
-                    return exists[0];
+        models.user.collection.drop();
+        const users = await Promise.all(
+            usersMock.map(async (user) => {
+                try {
+                    user.password = await bcrypt.hash(
+                        user.password,
+                        config.salt
+                    );
+                    delete user._id;
+                    return await models.user.create({
+                        ...user,
+                        ...generateUserData()
+                    });
+                } catch (error) {
+                    console.log(error.message);
+                    return error;
                 }
-                const salt = await bcrypt.genSalt(5);
-                user.password = await bcrypt.hash(user.password, salt);
-                user.image = generateImage().image;
-
-                delete user._id;
-                const newUser = new models.user(user);
-                await newUser.save();
-                return newUser;
-            } catch (error) {
-                return error;
-            }
-        })
-    );
-    if (users) {
-        debug(`users in DB ${chalk.green("✓")}`);
-    } else {
-        debug(`users error ${chalk.red("x")}`);
+            })
+        );
+        if (users) {
+            debug(`users in DB ${chalk.green("✓")}`);
+        } else {
+            debug(`users error ${chalk.red("x")}`);
+        }
     }
 
     debug(`mock init is complete ${chalk.green("✓")}`);

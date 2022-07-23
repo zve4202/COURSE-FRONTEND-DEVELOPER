@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import authService from "../services/auth.service";
 import {
     getAccessToken,
-    removeAccessToken,
-    setAccessToken
+    removeAuthData,
+    setTokens
 } from "../services/localStorage.service";
 
 const initialState = {
@@ -63,7 +63,7 @@ export const signIn =
                 email,
                 password
             });
-            setAccessToken(data);
+            setTokens(data);
             dispatch(resived(data.content));
         } catch (error) {
             const { code, message } = error.response.data.error;
@@ -99,10 +99,10 @@ export const signUp =
                 password,
                 ...rest
             });
-            setAccessToken(data);
+            setTokens(data);
             dispatch(resived(data.content));
         } catch (error) {
-            const { code, message } = error.response.data.error;
+            const { code, message } = error.response.data.error || error;
             if (code === 400) {
                 if (message === "EMAIL_EXISTS") {
                     dispatch(
@@ -116,7 +116,7 @@ export const signUp =
     };
 
 export const signOut = () => (dispatch, getState) => {
-    removeAccessToken();
+    removeAuthData();
     dispatch(update(null));
 };
 

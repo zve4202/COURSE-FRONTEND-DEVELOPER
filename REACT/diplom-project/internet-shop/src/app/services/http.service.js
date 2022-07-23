@@ -2,13 +2,29 @@ import axios from "axios";
 // import logger from "./log.service";
 import configFile from "../config.json";
 import { toast } from "react-toastify";
-import { getAccessToken } from "./localStorage.service";
+import {
+    getAccessToken,
+    getRefreshToken,
+    getTokenExpiresDate,
+    setTokens
+} from "./localStorage.service";
+import authService from "./auth.service";
 
 const http = axios.create({ baseURL: configFile.apiEndpoint });
 
 http.interceptors.request.use(
-    function (config) {
+    async function (config) {
+        const expiresDate = getTokenExpiresDate();
+        const refreshToken = getRefreshToken();
+        if (refreshToken && expiresDate < Date.now()) {
+            const data = await authService.refresh(refreshToken);
+            if (data) {
+                setTokens(data);
+            }
+        }
+
         const token = getAccessToken();
+
         if (token) {
             config.headers = { ...config.headers, authorization: token };
         }
@@ -31,7 +47,7 @@ http.interceptors.response.use(
 
         if (!expectedErrors) {
             console.log(error);
-            toast.error("Somthing was wrong. Try it later");
+            toast.error(error.message);
         }
         return Promise.reject(error);
     }

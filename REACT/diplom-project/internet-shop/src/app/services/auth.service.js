@@ -2,11 +2,17 @@ import httpService from "./http.service";
 
 const authService = {
     signUp: async (content) => {
-        const { data } = await httpService.post("auth/signup/", content);
+        const { data } = await httpService.post("auth/signUp/", content);
         return data;
     },
     signIn: async (content) => {
-        const { data } = await httpService.post("auth/signin/", content);
+        const { data } = await httpService.post("auth/signIn/", content);
+        return data;
+    },
+    refresh: async (refreshToken) => {
+        const { data } = await httpService.post("auth/token/", {
+            refreshToken
+        });
         return data;
     },
     getAuthUser: async () => {

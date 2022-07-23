@@ -43,7 +43,10 @@ router.post("/signUp", [
                 password: hashedPassword
             });
 
-            const tokens = tokenService.generate({ _id: newUser._id });
+            const tokens = tokenService.generate({
+                _id: newUser._id,
+                role: newUser.role
+            });
             await tokenService.save(newUser._id, tokens.refreshToken);
 
             res.status(201).send({ ...tokens, content: newUser });
@@ -97,7 +100,10 @@ router.post("/signIn", [
                 });
             }
 
-            const tokens = tokenService.generate({ _id: existingUser._id });
+            const tokens = tokenService.generate({
+                _id: existingUser._id,
+                role: existingUser.role
+            });
             await tokenService.save(existingUser._id, tokens.refreshToken);
 
             res.status(200).send({ ...tokens, content: existingUser });

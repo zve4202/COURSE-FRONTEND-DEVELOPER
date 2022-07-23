@@ -4,7 +4,6 @@ const config = require("../config");
 const Token = require("../models/Token");
 
 class TokenService {
-    // userId: accessToken:	refreshToken: expiresIn:
     generate(payload) {
         const accessToken = jwt.sign(payload, config.accessSecret, {
             expiresIn: "1h"
@@ -23,7 +22,7 @@ class TokenService {
         const data = await Token.findOne({ user });
         if (data) {
             data.refreshToken = refreshToken;
-            return data.save();
+            return await data.save();
         }
 
         return await Token.create({ user, refreshToken });
@@ -32,6 +31,13 @@ class TokenService {
     validateRefresh(refreshToken) {
         try {
             return jwt.verify(refreshToken, config.refreshSecret);
+        } catch (e) {
+            return null;
+        }
+    }
+    validateAccess(accessToken) {
+        try {
+            return jwt.verify(accessToken, config.accessSecret);
         } catch (e) {
             return null;
         }

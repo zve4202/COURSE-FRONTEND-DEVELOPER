@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const Controller = require("../controllers/order.controller");
-const authJwt = require("../middleware/authJwt");
+const auth = require("../middleware/auth.middleware");
 
-router.get("/", [authJwt.verifyToken], Controller.getList);
-router.get("/:userId", [authJwt.verifyToken], Controller.get);
-router.put("/:id", [authJwt.verifyToken], Controller.update);
-router.post("/:id", [authJwt.verifyToken], Controller.add);
-router.delete("/:id", [authJwt.verifyToken], Controller.delete);
+router.get("/", [auth], Controller.getList);
+router.get("/:userId", [auth], Controller.get);
+router.put("/:id", [auth], Controller.update);
+router.post("/:id", [auth], Controller.add);
+router.delete("/:id", [auth], Controller.delete);
 
 module.exports = router;

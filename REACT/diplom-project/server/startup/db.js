@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const debug = require("debug")("server:db");
 const chalk = require("chalk");
-const dbConfig = require("../config/db.config");
+const { dbConfig } = require("../config");
 
 const initFromMock = require("./initFromMock");
 const initFromXml = require("./initFromXml");

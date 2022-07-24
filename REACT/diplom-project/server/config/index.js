@@ -1,1 +1,6 @@
-module.exports = require("./config.json");
+const dbConfig = require("./db.config");
+const config = require("./config");
+module.exports = {
+    config,
+    dbConfig
+};

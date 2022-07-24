@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-const config = require("../config/config.json");
+const { config } = require("../config");
 const app = require("../app");
 const debug = require("debug")("server:server");
 const http = require("http");

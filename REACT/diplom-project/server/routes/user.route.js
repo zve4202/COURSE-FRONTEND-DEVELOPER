@@ -3,10 +3,11 @@ const router = express.Router();
 
 const Controller = require("../controllers/user.controller");
 const auth = require("../middleware/auth.middleware");
+const authAdmin = require("../middleware/authAdmin.middleware");
 
 router.get("/me", [auth], Controller.getUser);
-router.get("/", [auth], Controller.getAll);
+router.get("/", [auth, authAdmin], Controller.getAll);
 router.get("/:userId", [auth], Controller.getUser);
-router.put("/:id", [auth], Controller.update);
+router.put("/:userId", [auth], Controller.update);
 
 module.exports = router;

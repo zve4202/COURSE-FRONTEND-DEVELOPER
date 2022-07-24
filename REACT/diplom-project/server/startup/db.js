@@ -11,7 +11,7 @@ module.exports = function () {
         `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
     );
 
-    var db = mongoose.connection;
+    const db = mongoose.connection;
 
     db.on(
         "error",

@@ -55,7 +55,7 @@ async function generateASIS(data, model) {
 }
 
 async function InitEntities(name, data, model, ASIS = false) {
-    var result = ASIS
+    const result = ASIS
         ? await generateASIS(data, model)
         : await generate(data, model);
 

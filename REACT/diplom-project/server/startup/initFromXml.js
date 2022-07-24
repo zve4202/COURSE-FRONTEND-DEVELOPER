@@ -72,9 +72,9 @@ async function importEntity(item, model_name, counter, model) {
 }
 
 async function importFrom(name, model) {
-    var file = `xml/${name}.xml`;
-    var stream = fs.createReadStream(file);
-    var xml = new XmlStream(stream);
+    const file = `xml/${name}.xml`;
+    const stream = fs.createReadStream(file);
+    const xml = new XmlStream(stream);
     const counter = new Counter(xml);
     xml.collect("expdata");
     xml.on("endElement: expdata", function (item) {

@@ -1,4 +1,4 @@
-var Model = require("../models/User");
+const Model = require("../models/User");
 const { getSort, getMatching } = require("../utils/db_utils");
 
 const sortMap = {
@@ -39,7 +39,7 @@ exports.getAll = async function (query, page, limit) {
 
 exports.getUser = async function (id) {
     try {
-        var data = await Model.findById(id);
+        const data = await Model.findById(id);
         return data;
     } catch (error) {
         throw Error(error.message);
@@ -48,7 +48,7 @@ exports.getUser = async function (id) {
 
 exports.addUser = async function (query, page, limit) {
     try {
-        var data = await Model.find(query);
+        const data = await Model.find(query);
         return data;
     } catch (error) {
         throw Error(error.message);

@@ -1,18 +1,20 @@
+const Order = require("../models/Order");
+
 const {
     DATA_RECEIVED,
     DATA_UPDATED,
     DATA_CREATED,
     DATA_DELETED
 } = require("../config/config");
-const Service = require("../services/order.service");
 
-exports.getList = async function (req, res, next) {
+exports.getAll = async function (req, res, next) {
     // Validate request parameters, queries using express-validator
     const { userId } = req.params;
+
     const page = req.params.page ? req.params.page : 1;
     const limit = req.params.limit ? req.params.limit : 10;
     try {
-        const data = await Service.getList({ userId: userId }, page, limit);
+        const data = await Order.find({ userId });
         return res.status(200).json({
             status: 200,
             content: data,
@@ -26,7 +28,7 @@ exports.getList = async function (req, res, next) {
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.get(id);
+        const data = await Order.findById(id);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -40,7 +42,9 @@ exports.get = async function (req, res, next) {
 exports.update = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.update(id, req.body);
+        const data = await Order.findByIdAndUpdate(id, req.body, {
+            new: true
+        });
         return res.status(200).json({
             status: 200,
             content: data,
@@ -53,7 +57,7 @@ exports.update = async function (req, res, next) {
 
 exports.add = async function (req, res, next) {
     try {
-        const data = await Service.add(req.body);
+        const data = await Order.create(req.body);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -67,7 +71,11 @@ exports.add = async function (req, res, next) {
 exports.delete = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.delete(id);
+        const data = await Order.findByIdAndDelete(id);
+        if (data === null) {
+            throw Error(`id: ${id} not found`);
+        }
+
         return res.status(200).json({
             status: 200,
             content: data,

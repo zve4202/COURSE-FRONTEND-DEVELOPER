@@ -1,9 +1,10 @@
-const Service = require("../services/basket.service");
+const Model = require("../models/Basket");
+const { Types } = require("mongoose");
 
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.get(id);
+        const data = await Model.findById(id);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -14,10 +15,27 @@ exports.get = async function (req, res, next) {
     }
 };
 
+const agg = (id) => [
+    {
+        $match: {
+            _id: new Types.ObjectId(id)
+        }
+    },
+    {
+        $lookup: {
+            from: "products_ms",
+            localField: "docs.id",
+            foreignField: "_id",
+            as: "products"
+        }
+    }
+];
+
 exports.getEx = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.getEx(id);
+        const match = agg(id);
+        const data = await Model.aggregate(match);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -31,7 +49,19 @@ exports.getEx = async function (req, res, next) {
 exports.update = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.update(id, req.body);
+        const { docs } = req.body;
+        const totals = { totalQty: 0, totalPrice: 0 };
+        docs.forEach((item) => {
+            const { qty, price } = item;
+            totals.totalQty += qty;
+            totals.totalPrice += qty * price;
+        });
+        const data = await Model.findByIdAndUpdate(
+            id,
+            { ...req.body, ...totals },
+            { new: true }
+        );
+
         return res.status(200).json({
             status: 200,
             content: data,
@@ -44,7 +74,7 @@ exports.update = async function (req, res, next) {
 
 exports.add = async function (req, res, next) {
     try {
-        const data = await Service.add(req.body);
+        const data = await Model.create(req.body);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -58,7 +88,10 @@ exports.add = async function (req, res, next) {
 exports.delete = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.delete(id);
+        const data = await Model.findByIdAndDelete(id);
+        if (data === null) {
+            throw Error(`${Model.name} id: ${id} not found`);
+        }
         return res.status(200).json({
             status: 200,
             content: data,
@@ -72,7 +105,19 @@ exports.delete = async function (req, res, next) {
 exports.apply = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Service.update(id, req.body);
+        // TODO
+        const { docs } = req.body;
+        const totals = { totalQty: 0, totalPrice: 0 };
+        docs.forEach((item) => {
+            const { qty, price } = item;
+            totals.totalQty += qty;
+            totals.totalPrice += qty * price;
+        });
+        const data = await Model.findByIdAndUpdate(
+            id,
+            { ...req.body, ...totals },
+            { new: true }
+        );
         return res.status(200).json({
             status: 200,
             content: data,

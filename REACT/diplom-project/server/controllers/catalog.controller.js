@@ -4,73 +4,75 @@ const {
     DATA_CREATED,
     DATA_DELETED
 } = require("../config/config");
-const Service = require("../services/catalog.service");
+const Catalog = require("../models/Catalog");
 
-exports.getList = async function (req, res, next) {
+exports.getAll = async function (req, res, next) {
     // Validate request parameters, queries using express-validator
 
     const page = req.params.page ? req.params.page : 1;
-    const limit = req.params.limit ? req.params.limit : 100;
+    const limit = req.params.limit ? req.params.limit : 10;
     try {
-        const roles = await Service.getList({}, page, limit);
+        const data = await Catalog.find();
         return res.status(200).json({
             status: 200,
-            content: roles,
+            content: data,
             message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
     }
 };
-
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const role = await Service.get(id);
+        const data = await Catalog.findById(id);
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
     }
 };
-
 exports.update = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const role = await Service.update(id, req.body);
+        const data = await Catalog.findByIdAndUpdate(id, req.body, {
+            new: true
+        });
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_UPDATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
     }
 };
-
 exports.add = async function (req, res, next) {
     try {
-        const role = await Service.add(req.body);
+        const data = await Catalog.create(req.body);
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_CREATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
     }
 };
-
 exports.delete = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const role = await Service.delete(id);
+        const data = await Catalog.findByIdAndDelete(id);
+        if (data === null) {
+            throw Error(`id: ${id} not found`);
+        }
+
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_DELETED
         });
     } catch (e) {

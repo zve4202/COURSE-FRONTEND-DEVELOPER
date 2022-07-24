@@ -6,7 +6,7 @@ const admin = require("../middleware/admin.middleware");
 
 const Controller = require("../controllers/catalog.controller");
 
-router.get("/", Controller.getList);
+router.get("/", Controller.getAll);
 router.get("/:id", Controller.get);
 router.post("/", [auth, admin], Controller.add);
 router.put("/:id", [auth, admin], Controller.update);

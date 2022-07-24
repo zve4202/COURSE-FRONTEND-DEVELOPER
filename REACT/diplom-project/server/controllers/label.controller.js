@@ -4,18 +4,18 @@ const {
     DATA_CREATED,
     DATA_DELETED
 } = require("../config/config");
-const Service = require("../services/label.service");
+const Label = require("../models/Label");
 
-exports.getList = async function (req, res, next) {
+exports.getAll = async function (req, res, next) {
     // Validate request parameters, queries using express-validator
 
     const page = req.params.page ? req.params.page : 1;
     const limit = req.params.limit ? req.params.limit : 10;
     try {
-        const roles = await Service.getList({}, page, limit);
+        const data = await Label.find();
         return res.status(200).json({
             status: 200,
-            content: roles,
+            content: data,
             message: DATA_RECEIVED
         });
     } catch (e) {
@@ -25,10 +25,10 @@ exports.getList = async function (req, res, next) {
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const role = await Service.get(id);
+        const data = await Label.findById(id);
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_RECEIVED
         });
     } catch (e) {
@@ -38,10 +38,12 @@ exports.get = async function (req, res, next) {
 exports.update = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const role = await Service.update(id, req.body);
+        const data = await Label.findByIdAndUpdate(id, req.body, {
+            new: true
+        });
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_UPDATED
         });
     } catch (e) {
@@ -50,10 +52,10 @@ exports.update = async function (req, res, next) {
 };
 exports.add = async function (req, res, next) {
     try {
-        const role = await Service.add(req.body);
+        const data = await Label.create(req.body);
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_CREATED
         });
     } catch (e) {
@@ -63,10 +65,14 @@ exports.add = async function (req, res, next) {
 exports.delete = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const role = await Service.delete(id);
+        const data = await Label.findByIdAndDelete(id);
+        if (data === null) {
+            throw Error(`id: ${id} not found`);
+        }
+
         return res.status(200).json({
             status: 200,
-            content: role,
+            content: data,
             message: DATA_DELETED
         });
     } catch (e) {

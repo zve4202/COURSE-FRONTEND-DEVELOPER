@@ -4,7 +4,7 @@ const router = express.Router();
 const Controller = require("../controllers/order_details.controller");
 const auth = require("../middleware/auth.middleware");
 
-router.get("/", [auth], Controller.getList);
+router.get("/", [auth], Controller.getAll);
 router.get("/:orderId", [auth], Controller.get);
 router.put("/:id", [auth], Controller.update);
 router.post("/:id", [auth], Controller.add);

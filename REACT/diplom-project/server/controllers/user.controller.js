@@ -1,50 +1,73 @@
-const { DATA_UPDATED, DATA_RECEIVED } = require("../config/config");
-const UserService = require("../services/user.service");
+const { DATA_UPDATED, DATA_RECEIVED, salt } = require("../config/config");
+const Model = require("../models/User");
+const { getSort, getMatching } = require("../utils/db_utils");
+
+const sortMap = {
+    name: ["name"],
+    email: ["email"]
+};
+
+const searchMap = {
+    category: "role",
+    search: ["name"]
+};
 
 exports.getAll = async function (req, res, next) {
-    // Validate request parameters, queries using express-validator
-
     const { query } = req;
-    const page = query.page ? query.page : 1;
-    const limit = query.limit ? query.limit : 100;
-
+    const options = {
+        page: query.page ? query.page : 1,
+        limit: query.limit ? query.limit : 100
+    };
     delete query.page;
     delete query.limit;
 
+    const sort = getSort(query, sortMap);
+    if (sort) {
+        options.sort = sort;
+    }
+
+    const match = getMatching(query, searchMap);
+    console.log("match", match);
     try {
-        const users = await UserService.getAll(query, page, limit);
+        const aggregate = match ? await Model.aggregate(match) : {};
+        const data = await Model.aggregatePaginate(aggregate, options);
         return res.status(200).json({
             status: 200,
-            content: users,
+            content: data,
             message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
     }
 };
-exports.getUser = async function (req, res, next) {
-    // Validate request parameters, queries using express-validator
-
+exports.get = async function (req, res, next) {
     try {
-        const user = await UserService.getUser(req.userId || req.params.userId);
-        // console.log(user);
+        const data = await Model.findById(req.userId || req.params.userId);
         return res.status(200).json({
             status: 200,
-            content: user,
+            content: data,
             message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
     }
 };
-
 exports.update = async function (req, res, next) {
     const { userId } = req.params;
+    const user = { ...req.body };
     try {
-        const user = await UserService.update(userId, req.body);
+        if (user.new_password) {
+            delete user.new_password;
+            user.password = await bcrypt.hash(user.password, salt);
+        }
+
+        const data = await Model.findByIdAndUpdate(userId, user, {
+            new: true
+        });
+
         return res.status(200).json({
             status: 200,
-            content: user,
+            content: data,
             message: DATA_UPDATED
         });
     } catch (e) {

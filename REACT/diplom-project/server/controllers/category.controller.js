@@ -1,3 +1,4 @@
+const { DATA_RECEIVED } = require("../config/config");
 const Service = require("../services/category.service");
 
 exports.getList = async function (req, res, next) {
@@ -9,7 +10,7 @@ exports.getList = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: content,
-            message: "Succesfully retrieved"
+            message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });

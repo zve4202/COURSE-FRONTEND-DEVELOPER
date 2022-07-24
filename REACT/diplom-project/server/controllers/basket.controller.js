@@ -35,7 +35,7 @@ exports.update = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: data,
-            message: "Succesfully updated"
+            message: DATA_UPDATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -48,7 +48,7 @@ exports.add = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: data,
-            message: "Succesfully created"
+            message: DATA_CREATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -62,7 +62,7 @@ exports.delete = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: data,
-            message: "Succesfully deleted"
+            message: DATA_DELETED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -76,7 +76,7 @@ exports.apply = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: data,
-            message: "Succesfully updated"
+            message: DATA_UPDATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });

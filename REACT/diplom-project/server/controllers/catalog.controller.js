@@ -1,3 +1,9 @@
+const {
+    DATA_RECEIVED,
+    DATA_UPDATED,
+    DATA_CREATED,
+    DATA_DELETED
+} = require("../config/config");
 const Service = require("../services/catalog.service");
 
 exports.getList = async function (req, res, next) {
@@ -10,7 +16,7 @@ exports.getList = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: roles,
-            message: "Succesfully retrieved"
+            message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -24,7 +30,7 @@ exports.get = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: role,
-            message: "Succesfully retrieved"
+            message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -38,7 +44,7 @@ exports.update = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: role,
-            message: "Succesfully updated"
+            message: DATA_UPDATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -51,7 +57,7 @@ exports.add = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: role,
-            message: "Succesfully created"
+            message: DATA_CREATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -65,7 +71,7 @@ exports.delete = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: role,
-            message: "Succesfully deleted"
+            message: DATA_DELETED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });

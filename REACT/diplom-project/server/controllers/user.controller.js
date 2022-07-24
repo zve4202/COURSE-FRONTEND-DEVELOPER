@@ -1,3 +1,4 @@
+const { DATA_UPDATED, DATA_RECEIVED } = require("../config/config");
 const UserService = require("../services/user.service");
 
 exports.getAll = async function (req, res, next) {
@@ -15,7 +16,7 @@ exports.getAll = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: users,
-            message: "Succesfully retrieved"
+            message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -30,7 +31,7 @@ exports.getUser = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: user,
-            message: "Succesfully retrieved"
+            message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });
@@ -38,13 +39,13 @@ exports.getUser = async function (req, res, next) {
 };
 
 exports.update = async function (req, res, next) {
-    const { id } = req.params;
+    const { userId } = req.params;
     try {
-        const user = await UserService.update(id, req.body);
+        const user = await UserService.update(userId, req.body);
         return res.status(200).json({
             status: 200,
             content: user,
-            message: "Succesfully updated"
+            message: DATA_UPDATED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });

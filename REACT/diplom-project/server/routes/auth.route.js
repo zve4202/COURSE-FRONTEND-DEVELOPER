@@ -123,6 +123,7 @@ router.post("/token", async (req, res) => {
     try {
         const { refreshToken } = req.body;
         const data = tokenService.validateRefresh(refreshToken);
+        console.log(data);
         const dbToken = await tokenService.findToken(refreshToken);
 
         if (isTokenInvalid(data, dbToken)) {
@@ -131,7 +132,11 @@ router.post("/token", async (req, res) => {
             });
         }
 
-        const tokens = tokenService.generate({ _id: data._id });
+        const user = await User.findById(data._id);
+        const tokens = tokenService.generate({
+            _id: user._id,
+            role: user.role
+        });
         await tokenService.save(data._id, tokens.refreshToken);
 
         res.status(200).send({ ...tokens });

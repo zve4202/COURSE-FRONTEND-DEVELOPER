@@ -1,6 +1,6 @@
 import httpService from "./http.service";
 
-const authService = {
+const AuthService = {
     signUp: async (content) => {
         const { data } = await httpService.post("auth/signUp/", content);
         return data;
@@ -16,8 +16,8 @@ const authService = {
         return data;
     },
     getAuthUser: async () => {
-        const { data } = await httpService.get("user/me/");
+        const { data } = await httpService.get("user/auth/");
         return data;
     }
 };
-export default authService;
+export default AuthService;

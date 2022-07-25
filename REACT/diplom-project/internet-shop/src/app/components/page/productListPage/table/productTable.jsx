@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Table from "../../common/table";
+
+import Table from "../../../common/table";
 import ProductName from "./productName";
 import ProductPicture from "./productPicture";
 // import AddButton from "./addButton";
@@ -13,7 +14,6 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
     const columns = {
         image: {
             class: "cover-small",
-            name: "Имидж",
             component: (product) => (
                 <ProductPicture size="small" picture={product.title.image} />
             )

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import authService from "../services/auth.service";
+import Service from "../services/auth.service";
 import {
     getAccessToken,
     removeAuthData,
@@ -44,7 +44,7 @@ export const loadAuthUser = () => async (dispatch) => {
     const token = getAccessToken();
     if (token) {
         try {
-            const { content } = await authService.getAuthUser();
+            const { content } = await Service.getAuthUser();
             dispatch(resived(content));
         } catch (error) {
             dispatch(requestFailed(error.message));
@@ -59,7 +59,7 @@ export const signIn =
     async (dispatch, getState) => {
         dispatch(requested());
         try {
-            const data = await authService.signIn({
+            const data = await Service.signIn({
                 email,
                 password
             });
@@ -94,7 +94,7 @@ export const signUp =
     async (dispatch, getState) => {
         dispatch(requested());
         try {
-            const data = await authService.signUp({
+            const data = await Service.signUp({
                 email,
                 password,
                 ...rest

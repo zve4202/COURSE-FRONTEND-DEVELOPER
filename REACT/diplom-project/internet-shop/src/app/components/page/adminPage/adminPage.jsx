@@ -16,7 +16,6 @@ const AdminPage = () => {
     );
     const dispatch = useDispatch();
 
-    
     const onItemSelect = (item) => {
         dispatch(
             updateSetting(menu.name, {

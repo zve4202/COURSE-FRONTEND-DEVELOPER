@@ -41,7 +41,7 @@ exports.getAll = async function (req, res, next) {
 };
 exports.get = async function (req, res, next) {
     try {
-        const data = await Model.findById(req.userId || req.params.userId);
+        const data = await Model.findById(req.user._id || req.params.userId);
         return res.status(200).json({
             status: 200,
             content: data,

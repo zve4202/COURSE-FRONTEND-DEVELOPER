@@ -2,12 +2,11 @@ const debug = require("debug")("server:db");
 const chalk = require("chalk");
 const bcrypt = require("bcryptjs");
 
-const config = require("../config");
-
 const models = require("../models");
 const rolesMock = require("../mockData/roles.json");
 const usersMock = require("../mockData/users.json");
 const { generateUserData } = require("../utils");
+const { salt } = require("../config/config");
 
 async function generate(data, model) {
     return Promise.all(
@@ -48,6 +47,7 @@ async function generateASIS(data, model) {
                 await newItem.save();
                 return newItem;
             } catch (error) {
+                // console.log(error);
                 return error;
             }
         })
@@ -77,17 +77,14 @@ module.exports = async () => {
         const users = await Promise.all(
             usersMock.map(async (user) => {
                 try {
-                    user.password = await bcrypt.hash(
-                        user.password,
-                        config.salt
-                    );
+                    user.password = await bcrypt.hash(user.password, salt);
                     delete user._id;
                     return await models.user.create({
                         ...user,
                         ...generateUserData()
                     });
                 } catch (error) {
-                    // console.log(error.message);
+                    console.log(error);
                     return error;
                 }
             })

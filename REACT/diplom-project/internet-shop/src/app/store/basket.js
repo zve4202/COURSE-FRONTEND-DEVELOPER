@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import basketService from "../services/basket.service";
+import Service from "../services/basket.service";
 import { getValue, setValue } from "../services/localStorage.service";
 
 const BASKET_KEY = "basket-id";
@@ -75,10 +75,10 @@ export const loadBasket = () => async (dispatch) => {
     try {
         const basketId = getValue(BASKET_KEY);
         if (basketId) {
-            const { content } = await basketService.get(basketId);
+            const { content } = await Service.get(basketId);
             dispatch(resived(content));
         } else {
-            const { content } = await basketService.create({
+            const { content } = await Service.create({
                 ...initialState.basket
             });
             setValue(BASKET_KEY, content._id);
@@ -94,10 +94,10 @@ export const loadBasketEx = () => async (dispatch) => {
     try {
         const basketId = getValue(BASKET_KEY);
         if (basketId) {
-            const { content } = await basketService.getEx(basketId);
+            const { content } = await Service.getEx(basketId);
             dispatch(resived(content));
         } else {
-            const { content } = await basketService.create({
+            const { content } = await Service.create({
                 ...initialState.basket
             });
             setValue(BASKET_KEY, content._id);
@@ -114,7 +114,7 @@ export const addBasket = (payload) => async (dispatch, getState) => {
         dispatch(apdate(payload));
         const { basket } = getState().basket;
         dispatch(requested());
-        const { content } = await basketService.update(basket._id, basket);
+        const { content } = await Service.update(basket._id, basket);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
@@ -125,7 +125,7 @@ export const basketUpdateBasket = (payload) => async (dispatch, getState) => {
     try {
         dispatch(apdate(payload));
         const { basket } = getState().basket;
-        await basketService.update(basket._id, basket);
+        await Service.update(basket._id, basket);
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
@@ -136,7 +136,7 @@ export const removeBasket = (id) => async (dispatch, getState) => {
         dispatch(remove(id));
         const { basket } = getState().basket;
         dispatch(requested());
-        const { content } = await basketService.update(basket._id, basket);
+        const { content } = await Service.update(basket._id, basket);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
@@ -147,7 +147,7 @@ export const basketRemoveBasket = (id) => async (dispatch, getState) => {
     try {
         dispatch(remove(id));
         const { basket } = getState().basket;
-        await basketService.update(basket._id, basket);
+        await Service.update(basket._id, basket);
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
@@ -159,7 +159,7 @@ export const clearBasket = () => async (dispatch, getState) => {
         dispatch(clear());
         const { basket } = getState().basket;
         dispatch(requested());
-        const { content } = await basketService.update(basket._id, basket);
+        const { content } = await Service.update(basket._id, basket);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));

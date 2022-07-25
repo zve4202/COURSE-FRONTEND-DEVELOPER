@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { curs } from "../../../config.json";
+import { curs } from "../../../../config.json";
 
 const ProductPrice = ({ price }) => {
     const nf = Intl.NumberFormat();

@@ -24,24 +24,25 @@ const sortMap = {
 };
 
 exports.getAll = async function (req, res, next) {
-    const { query } = req;
-
-    const options = {
-        page: query.page || 1,
-        limit: query.limit || 100
-    };
-    delete query.page;
-    delete query.limit;
-    const sort = getSort(query);
-    if (sort) {
-        delete query.sort;
-        delete query.order;
-        options.sort = sort;
-    }
-    const match = getMatching(query);
-
     try {
-        const aggregate = match ? await product_m.aggregate(match) : {};
+        const { query } = req;
+        const options = {
+            page: query.page || 1,
+            limit: query.limit || 100
+        };
+        delete query.page;
+        delete query.limit;
+        const sort = getSort(query, sortMap);
+        if (sort) {
+            delete query.sort;
+            delete query.order;
+            options.sort = sort;
+        }
+
+        const match = getMatching(query, searchMap);
+        // console.log("match", match);
+
+        const aggregate = match ? product_m.aggregate(match) : {};
         const data = await product_m.aggregatePaginate(aggregate, options);
         return res.status(200).json({
             status: 200,

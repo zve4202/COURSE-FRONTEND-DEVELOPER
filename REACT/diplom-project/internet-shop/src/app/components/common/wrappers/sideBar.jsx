@@ -8,7 +8,7 @@ const defaultItem = {
     icon: "bi-gear"
 };
 const defaultMenu = {
-    name: "products",
+    name: "product",
     caption: { name: "Покупки", icon: "bi-cart" },
     items: [defaultItem]
 };
@@ -23,8 +23,8 @@ const SideBarWrapper = ({
     menu = menu || { ...defaultMenu, items: undefined };
     return (
         <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100">
-            {backBtn && <div className="mb-3">{backBtn}</div>}
-            <div className="card-header list-group-item-success mb-3">
+            <div className="card-header bg-success bg-opacity-25 bg-gradient mb-3">
+                {backBtn && <div className="mb-3">{backBtn}</div>}{" "}
                 <i className={`bi ${menu.caption.icon} me-2`} />
                 {menu.caption.name}
             </div>
@@ -55,7 +55,7 @@ SideBarWrapper.propTypes = {
     backBtn: PropTypes.node,
     menu: PropTypes.object,
     selected: PropTypes.object,
-    onItemSelect: PropTypes.func.isRequired,
+    onItemSelect: PropTypes.func,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node

@@ -6,9 +6,9 @@ import {
     addBasket,
     getBasketCountById,
     removeBasket
-} from "../../../store/basket";
+} from "../../../../store/basket";
 
-import { curs } from "../../../config.json";
+import { curs } from "../../../../config.json";
 import { Link } from "react-router-dom";
 
 const ProductQty = ({ productId, max, price }) => {

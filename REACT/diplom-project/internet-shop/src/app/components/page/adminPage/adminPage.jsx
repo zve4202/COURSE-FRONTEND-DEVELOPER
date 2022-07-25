@@ -16,8 +16,7 @@ const AdminPage = () => {
     );
     const dispatch = useDispatch();
 
-    console.log("AdminPage selectedMenu", selectedMenu);
-
+    
     const onItemSelect = (item) => {
         dispatch(
             updateSetting(menu.name, {

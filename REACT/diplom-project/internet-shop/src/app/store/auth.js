@@ -23,7 +23,7 @@ const authSlice = createSlice({
         },
         resived(state, action) {
             state.currentUser = action.payload;
-            state.isAdmin = state.currentUser.role === "admin";
+            state.isAdmin = state.currentUser?.role === "admin";
             state.isLoading = false;
         },
         requestFailed(state, action) {
@@ -50,7 +50,7 @@ export const loadAuthUser = () => async (dispatch) => {
             dispatch(requestFailed(error.message));
         }
     } else {
-        dispatch(requestFailed("Нет пользователя в системе"));
+        dispatch(resived(null));
     }
 };
 

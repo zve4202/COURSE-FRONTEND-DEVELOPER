@@ -27,7 +27,6 @@ exports.getAll = async function (req, res, next) {
     }
 
     const match = getMatching(query, searchMap);
-    console.log("match", match);
     try {
         const aggregate = match ? await Model.aggregate(match) : {};
         const data = await Model.aggregatePaginate(aggregate, options);

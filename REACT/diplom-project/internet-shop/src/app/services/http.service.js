@@ -14,19 +14,21 @@ const http = axios.create({ baseURL: configFile.apiEndpoint });
 
 http.interceptors.request.use(
     async function (config) {
-        const expiresDate = getTokenExpiresDate();
-        const refreshToken = getRefreshToken();
-        if (refreshToken && expiresDate < Date.now()) {
-            const data = await authService.refresh(refreshToken);
-            if (data) {
-                setTokens(data);
-            }
-        }
-
         const token = getAccessToken();
-
         if (token) {
-            config.headers = { ...config.headers, authorization: token };
+            const expiresDate = getTokenExpiresDate();
+            const refreshToken = getRefreshToken();
+            if (expiresDate < Date.now()) {
+                const data = await authService.refresh(refreshToken);
+                if (data) {
+                    setTokens(data);
+                }
+            }
+
+            config.headers = {
+                ...config.headers,
+                authorization: "Bearer " + token
+            };
         }
         return config;
     },
@@ -46,7 +48,6 @@ http.interceptors.response.use(
             error.response.status < 500;
 
         if (!expectedErrors) {
-            console.log(error);
             toast.error(error.message);
         }
         return Promise.reject(error);
@@ -56,6 +57,7 @@ const httpService = {
     get: http.get,
     post: http.post,
     put: http.put,
+    patch: http.patch,
     delete: http.delete
 };
 export default httpService;

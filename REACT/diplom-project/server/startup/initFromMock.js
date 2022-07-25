@@ -87,7 +87,7 @@ module.exports = async () => {
                         ...generateUserData()
                     });
                 } catch (error) {
-                    console.log(error.message);
+                    // console.log(error.message);
                     return error;
                 }
             })

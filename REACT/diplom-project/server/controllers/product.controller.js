@@ -24,7 +24,6 @@ const sortMap = {
 };
 
 exports.getAll = async function (req, res, next) {
-    // Validate request parameters, queries using express-validator
     const { query } = req;
 
     const options = {
@@ -34,7 +33,6 @@ exports.getAll = async function (req, res, next) {
     delete query.page;
     delete query.limit;
     const sort = getSort(query);
-    // console.log("sort", sort, query);
     if (sort) {
         delete query.sort;
         delete query.order;

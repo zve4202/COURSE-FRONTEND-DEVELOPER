@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import productService from "../services/product.service";
+import Service from "../services/product.service";
 
 // const initialSearch = {
 //     category: null,
@@ -57,10 +57,7 @@ export const loadProducts = () => async (dispatch, getState) => {
             ...sort
         };
 
-        console.log(params);
-
-        const { content } = await productService.fetchAllEx(params);
-        console.log("loadProducts content", content);
+        const { content } = await Service.fetchAll(params);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));

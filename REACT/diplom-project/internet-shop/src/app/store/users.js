@@ -46,7 +46,6 @@ export const loadUsers = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
         const { pagination, query, sort } = getState().setting.config[name];
-        console.log({ pagination, query, sort });
         let params = {};
         Object.keys(query).forEach((key) => {
             const value = query[key];

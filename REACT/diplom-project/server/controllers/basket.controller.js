@@ -1,5 +1,11 @@
 const Model = require("../models/Basket");
 const { Types } = require("mongoose");
+const {
+    DATA_CREATED,
+    DATA_UPDATED,
+    DATA_DELETED,
+    DATA_RECEIVED
+} = require("../config/config");
 
 exports.get = async function (req, res, next) {
     const { id } = req.params;
@@ -39,7 +45,7 @@ exports.getEx = async function (req, res, next) {
         return res.status(200).json({
             status: 200,
             content: data,
-            message: "Succesfully data Retrieved"
+            message: DATA_RECEIVED
         });
     } catch (e) {
         return res.status(500).json({ status: 500, message: e.message });

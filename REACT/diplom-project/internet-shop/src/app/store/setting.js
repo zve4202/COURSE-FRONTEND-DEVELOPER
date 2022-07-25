@@ -66,7 +66,7 @@ const settingSlice = createSlice({
         update(state, action) {
             const { name, data } = action.payload;
             const config = { ...state.config[name], ...data };
-            console.log("config", config);
+
             state.config[name] = config;
             const key = String().concat(settingSlice.name, "-", name);
 
@@ -101,7 +101,6 @@ export const loadSetting = () => async (dispatch) => {
 };
 
 export const updateSetting = (name, data) => async (dispatch) => {
-    console.log("updateSetting", { name, data });
     dispatch(update({ name, data }));
 };
 

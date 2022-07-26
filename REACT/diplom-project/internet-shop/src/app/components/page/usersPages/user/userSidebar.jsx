@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 import SideBarWrapper from "../../../common/wrappers/sideBar";
-import BackButton from "../../adminPage/backButton";
+import BackButton from "../../../common/backButton";
 
 const UserSideBar = ({ user, menu, selected, onItemSelect, children }) => {
     const { roles } = useSelector((state) => state);

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
 
-import ProductTable from "../../ui/products";
+import ProductTable from "./table/productTable";
 import { loadCategories } from "../../../store/categories";
 import { loadProducts } from "../../../store/products";
 import ProductSearch from "./productSearch";

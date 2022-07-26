@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
-import { basketUpdateBasket, basketRemoveBasket } from "../../../store/basket";
+import {
+    basketUpdateBasket,
+    basketRemoveBasket
+} from "../../../../store/basket";
 
 const ProductQty = ({ productId, max, qty, price, onUpdate }) => {
     const [count, setCount] = useState(String(qty || ""));

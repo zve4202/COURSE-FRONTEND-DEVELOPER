@@ -22,11 +22,14 @@ const SideBarWrapper = ({
 }) => {
     menu = menu || { ...defaultMenu, items: undefined };
     return (
-        <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100">
-            <div className="card-header bg-success bg-opacity-25 bg-gradient mb-3">
-                {backBtn && <div className="mb-3">{backBtn}</div>}{" "}
-                <i className={`bi ${menu.caption.icon} me-2`} />
-                {menu.caption.name}
+        <div className="sidebar_wrapper p-2 card bg-light me-2">
+            {/* <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100"> */}
+            <div className="card-header d-flex px-3 py-2 align-items-center justify-content-between mb-3">
+                <span>
+                    <i className={`bi ${menu.caption.icon} me-2`} />
+                    {menu.caption.name}{" "}
+                </span>
+                {backBtn}
             </div>
             {menu.afterChildren && children}
             <div className="list-group">

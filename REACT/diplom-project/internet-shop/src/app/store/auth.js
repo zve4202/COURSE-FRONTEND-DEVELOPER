@@ -23,7 +23,8 @@ const authSlice = createSlice({
         },
         resived(state, action) {
             state.currentUser = action.payload;
-            state.isAdmin = state.currentUser?.role === "admin";
+            state.isAdmin =
+                state.currentUser && state.currentUser.role === "admin";
             state.isLoading = false;
         },
         requestFailed(state, action) {

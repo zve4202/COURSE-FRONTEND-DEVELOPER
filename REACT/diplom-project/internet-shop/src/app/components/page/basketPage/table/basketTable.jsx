@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import ProductName from "./productName";
 import ProductQty from "./productQty";
 import ProductPrice from "./productPrice";
-import Table from "../../common/table";
-import Barcode from "../../ui/products/barcode";
-import ProductPicture from "../../ui/products/productPicture";
+import Table from "../../../common/table";
+import Barcode from "../../../ui/barcode";
+import ProductPicture from "../../../ui/productPicture";
 
 const BasketTable = ({ name, products, onSort, onUpdate, ...rest }) => {
     const columns = {

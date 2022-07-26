@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import BackButton from "./backButton";
 import SideBarWrapper from "../../common/wrappers/sideBar";
+import BackButton from "../../common/backButton";
 
 const AdminSideBar = ({ menu, selected, onItemSelect, children }) => {
     return (

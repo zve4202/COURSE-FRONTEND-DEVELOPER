@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import defPicture from "../../../assets/defaults/audio-cd.jpg";
+import defPicture from "../../assets/defaults/audio-cd.jpg";
 
 const ProductPicture = ({ size, picture }) => {
     const pictureSrc = picture

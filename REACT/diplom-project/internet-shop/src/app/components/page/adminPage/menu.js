@@ -4,7 +4,7 @@ export const pathes = {
 };
 export const menu = {
     name: "admin",
-    caption: { name: "Меню администратора", icon: "bi-award" },
+    caption: { name: "Admin", icon: "bi-award" },
     items: [
         {
             path: pathes.userPath,

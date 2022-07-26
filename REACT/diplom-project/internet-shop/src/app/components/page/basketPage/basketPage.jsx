@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import BasketLoader from "./basketLoader";
 import BasketSidebar from "./basketSidebar";
-import BasketTable from "./basketTable";
+import BasketTable from "./table/basketTable";
 import { loadBasketEx } from "../../../store/basket";
 import WorkScreen from "../../common/wrappers/workScreen";
 

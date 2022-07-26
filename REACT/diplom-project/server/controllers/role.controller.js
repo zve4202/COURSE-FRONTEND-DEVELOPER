@@ -8,7 +8,6 @@ const {
 exports.getAll = async function (req, res, next) {
     try {
         const data = await Role.find();
-        console.log(data);
         return res.status(200).json({
             status: 200,
             content: data,

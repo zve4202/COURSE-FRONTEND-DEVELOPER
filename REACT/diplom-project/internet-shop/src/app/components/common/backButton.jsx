@@ -2,16 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-const BackButton = ({ caption, tooltip }) => {
+const BackButton = ({ tooltip }) => {
     const history = useHistory();
     return (
         <button
-            className="btn btn-outline-secondary w-100"
+            className="btn btn-sm btn-outline-secondary"
             onClick={() => history.goBack()}
-            title={tooltip || "Вернуться к предыдущей форме"}
+            title={tooltip || "Вернуться к предыдущей странице"}
         >
             <i className="bi bi-caret-left"></i>
-            {caption || "Назад"}
         </button>
     );
 };

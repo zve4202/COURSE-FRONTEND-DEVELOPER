@@ -20,6 +20,7 @@ module.exports = (req, res, next) => {
             });
         }
         const data = tokenService.validateAccess(token);
+        console.log(data);
         if (!data) {
             return res.status(401).json({
                 message: "Unauthorized"

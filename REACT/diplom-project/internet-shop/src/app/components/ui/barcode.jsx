@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import imgBarcode from "../../../assets/defaults/barcode.png";
+import imgBarcode from "../../assets/defaults/barcode.png";
 
 const Barcode = ({ barcode }) => {
     return (

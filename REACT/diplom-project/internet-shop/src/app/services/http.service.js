@@ -14,22 +14,24 @@ const http = axios.create({ baseURL: configFile.apiEndpoint });
 
 http.interceptors.request.use(
     async function (config) {
-        const token = getAccessToken();
-        if (token) {
+        const refreshToken = getRefreshToken();
+        if (refreshToken) {
             const expiresDate = getTokenExpiresDate();
-            const refreshToken = getRefreshToken();
             if (expiresDate < Date.now()) {
                 const data = await authService.refresh(refreshToken);
                 if (data) {
                     setTokens(data);
                 }
             }
-
+        }
+        const token = getAccessToken();
+        if (token) {
             config.headers = {
                 ...config.headers,
                 authorization: "Bearer " + token
             };
         }
+        console.log(token);
         return config;
     },
     function (error) {

@@ -29,6 +29,5 @@ module.exports = function (app) {
         );
         next();
     });
-
     app.use("/api/v1", router);
 };

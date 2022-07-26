@@ -4,6 +4,14 @@ import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
+import configureStore from "./store";
+import { getAuthLoading, loadAuthUser } from "./store/auth";
+
+import { loadSetting } from "./store/setting";
+// import { loadBasket } from "./store/basket";
+// import { loadRoles } from "./store/roles";
+// import { loadCategories } from "./store/categories";
+
 import NavBar from "./components/ui/navbar";
 import Basket from "./layouts/basket";
 import Login from "./layouts/login";
@@ -12,13 +20,6 @@ import Admin from "./layouts/admin";
 import Users from "./layouts/users";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
-import { getAuthLoading, loadAuthUser } from "./store/auth";
-
-import configureStore from "./store";
-import { loadSetting } from "./store/setting";
-import { loadBasket } from "./store/basket";
-import { loadRoles } from "./store/roles";
-import { loadCategories } from "./store/categories";
 
 export const store = configureStore();
 
@@ -29,9 +30,9 @@ function App() {
     useEffect(() => {
         dispatch(loadSetting());
         dispatch(loadAuthUser());
-        dispatch(loadRoles());
-        dispatch(loadCategories());
-        dispatch(loadBasket());
+        // dispatch(loadRoles());
+        // dispatch(loadCategories());
+        // dispatch(loadBasket());
     }, []);
 
     return (

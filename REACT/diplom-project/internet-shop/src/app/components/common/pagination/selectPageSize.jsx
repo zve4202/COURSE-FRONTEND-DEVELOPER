@@ -10,6 +10,9 @@ const sizeItems = [
 ];
 
 const SelectPageSize = ({ value, onChangePageSize, name }) => {
+    const handleChange = ({ target }) => {
+        onChangePageSize(Number(target.value));
+    };
     return (
         <div className="page-item ms-3">
             <select
@@ -17,7 +20,7 @@ const SelectPageSize = ({ value, onChangePageSize, name }) => {
                 id={name}
                 name={name}
                 value={value}
-                onChange={onChangePageSize}
+                onChange={handleChange}
             >
                 {sizeItems.map((option) => (
                     <option value={option.value} key={option.value}>

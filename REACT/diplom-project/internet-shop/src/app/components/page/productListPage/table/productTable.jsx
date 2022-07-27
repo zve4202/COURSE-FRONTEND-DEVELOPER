@@ -51,7 +51,7 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
             )
         },
         barcode: {
-            name: "Баркоде",
+            name: "Штрихкод",
             component: (product) => <Barcode barcode={product.title.barcode} />
         },
         label: {

@@ -8,9 +8,9 @@ import configureStore from "./store";
 import { getAuthLoading, loadAuthUser } from "./store/auth";
 
 import { loadSetting } from "./store/setting";
-// import { loadBasket } from "./store/basket";
-// import { loadRoles } from "./store/roles";
-// import { loadCategories } from "./store/categories";
+import { loadBasket } from "./store/basket";
+import { loadRoles } from "./store/roles";
+import { loadCategories } from "./store/categories";
 
 import NavBar from "./components/ui/navbar";
 import Basket from "./layouts/basket";
@@ -30,9 +30,9 @@ function App() {
     useEffect(() => {
         dispatch(loadSetting());
         dispatch(loadAuthUser());
-        // dispatch(loadRoles());
-        // dispatch(loadCategories());
-        // dispatch(loadBasket());
+        dispatch(loadRoles());
+        dispatch(loadCategories());
+        dispatch(loadBasket());
     }, []);
 
     return (

@@ -1,2 +1,2 @@
-import PaginationWrapper from "./paginationSet";
+import PaginationWrapper from "./paginationWrapper";
 export default PaginationWrapper;

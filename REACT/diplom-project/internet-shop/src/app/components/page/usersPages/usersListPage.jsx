@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
 
-import Pagination from "../../common/pagination/pagination";
+import PaginationWrapper from "../../common/pagination";
 import UserTable from "./usersTable";
 import UsersLoader from "./usersLoader";
 import UsersSearch from "./usersSearch";
@@ -68,23 +68,19 @@ const UsersListPage = () => {
             </div>
 
             <div className="h-100">
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        totalDocs={totalDocs}
-                        onPageChange={onPageChange}
-                        name={name}
-                    />
-                </div>
-                <UsersLoader>
-                    <UserTable name={name} users={docs} onSort={handleSort} />
-                </UsersLoader>
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        totalDocs={totalDocs}
-                        onPageChange={onPageChange}
-                        name={name}
-                    />
-                </div>
+                <PaginationWrapper
+                    totalDocs={totalDocs}
+                    onPageChange={onPageChange}
+                    name={name}
+                >
+                    <UsersLoader>
+                        <UserTable
+                            name={name}
+                            users={docs}
+                            onSort={handleSort}
+                        />
+                    </UsersLoader>
+                </PaginationWrapper>
             </div>
         </div>
     );

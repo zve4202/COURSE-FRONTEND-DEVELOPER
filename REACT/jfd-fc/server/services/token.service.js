@@ -15,7 +15,7 @@ class TokenService {
         return {
             accessToken,
             refreshToken,
-            exporesIn: 3600
+            expiresIn: 3600
         };
     }
 

@@ -89,26 +89,6 @@ export const loadBasket = () => async (dispatch) => {
     }
 };
 
-export const loadBasketEx = () => async (dispatch) => {
-    dispatch(requested());
-    try {
-        const basketId = getValue(BASKET_KEY);
-        if (basketId) {
-            const { content } = await Service.getEx(basketId);
-            dispatch(resived(content));
-        } else {
-            const { content } = await Service.create({
-                ...initialState.basket
-            });
-            setValue(BASKET_KEY, content._id);
-            content.products = [];
-            dispatch(resived(content));
-        }
-    } catch (error) {
-        dispatch(requestFailed(error.message));
-    }
-};
-
 export const addBasket = (payload) => async (dispatch, getState) => {
     try {
         dispatch(apdate(payload));
@@ -169,10 +149,11 @@ export const clearBasket = () => async (dispatch, getState) => {
 export const getBasket = () => (state) => state.basket.basket;
 export const getBasketCountById = (id) => (state) => {
     const { basket } = state.basket;
-    const doc = basket.docs.find((item) => item.id === id);
-    if (!doc) return null;
-
-    return doc.qty;
+    if (basket && basket.docs) {
+        const doc = basket.docs.find((item) => item.id === id);
+        if (doc) return doc.qty;
+    }
+    return null;
 };
 
 export const getBasketLoading = () => (state) => state.basket.isLoading;

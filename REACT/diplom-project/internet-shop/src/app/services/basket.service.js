@@ -10,10 +10,6 @@ const basketService = {
         const { data } = await httpService.get(endpoint + id);
         return data;
     },
-    getEx: async (id) => {
-        const { data } = await httpService.get(endpoint + "ex/" + id);
-        return data;
-    },
     create: async (content) => {
         const { data } = await httpService.post(endpoint, content);
         return data;

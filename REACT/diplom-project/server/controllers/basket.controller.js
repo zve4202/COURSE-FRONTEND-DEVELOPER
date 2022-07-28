@@ -7,20 +7,6 @@ const {
     DATA_RECEIVED
 } = require("../config/config");
 
-exports.get = async function (req, res, next) {
-    const { id } = req.params;
-    try {
-        const data = await Model.findById(id);
-        return res.status(200).json({
-            status: 200,
-            content: data,
-            message: "Succesfully data Retrieved"
-        });
-    } catch (e) {
-        return res.status(500).json({ status: 500, message: e.message });
-    }
-};
-
 const agg = (id) => [
     {
         $match: {

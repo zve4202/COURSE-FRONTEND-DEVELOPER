@@ -27,7 +27,11 @@ router
                 ...req.body,
                 userId: req.user._id
             });
-            res.status(201).send(newComment);
+            res.status(201).send({
+                content: newComment,
+                status: 200,
+                message: "Данные успешно добавлены"
+            });
         } catch (e) {
             res.status(500).json({
                 message: e.message

@@ -52,7 +52,7 @@ const LoginForm = () => {
         if (!isValid) return;
         const redirect = history.location.state
             ? history.location.state.from.pathname
-            : "/";
+            : "/users";
 
         dispath(login({ payload: data, redirect }));
     };

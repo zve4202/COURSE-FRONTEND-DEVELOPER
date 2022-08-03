@@ -1,7 +1,7 @@
 module.exports = {
     accessSecret: "My Super Access Secret",
     refreshSecret: "My Super Refresh Key",
-    port: 4001,
+    port: 8080,
     salt: 12,
     DATA_RECEIVED: "Данные получены",
     DATA_UPDATED: "Данные обновлены",

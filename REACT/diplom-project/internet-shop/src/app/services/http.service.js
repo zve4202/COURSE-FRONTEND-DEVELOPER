@@ -28,10 +28,9 @@ http.interceptors.request.use(
         if (token) {
             config.headers = {
                 ...config.headers,
-                authorization: "Bearer " + token
+                authorization: `Bearer ${token}`
             };
         }
-        console.log(token);
         return config;
     },
     function (error) {

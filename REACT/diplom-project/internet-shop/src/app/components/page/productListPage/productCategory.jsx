@@ -9,10 +9,8 @@ import SideBarWrapper from "../../common/wrappers/sideBar";
 
 const CategoryList = ({ name, onItemSelect }) => {
     const categories = useSelector(getCategories());
-    if (!categories) return null;
-
-    const dispatch = useDispatch();
     const query = useSelector((state) => state.setting.config[name].query);
+    const dispatch = useDispatch();
 
     const handleSelectQuery = (id) => {
         dispatch(
@@ -26,6 +24,7 @@ const CategoryList = ({ name, onItemSelect }) => {
         onItemSelect();
     };
 
+    if (!categories) return null;
     return (
         <SideBarWrapper>
             <div className="list-group">

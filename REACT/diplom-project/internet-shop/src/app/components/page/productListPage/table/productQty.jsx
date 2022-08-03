@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -12,15 +12,18 @@ import { curs } from "../../../../config.json";
 import { Link } from "react-router-dom";
 
 const ProductQty = ({ productId, max, price }) => {
+    const inputEl = useRef(null);
     const qty = useSelector(getBasketCountById(productId));
     const [count, setCount] = useState(String(qty || ""));
     const dispatch = useDispatch();
     const handleChange = ({ target }) => {
-        setCount(target.value);
-        if (target.value === "") {
+        const value = target.value.replace(/[^\d]/, "");
+
+        setCount(value);
+        if (value === "") {
             dispatch(removeBasket(productId));
         } else {
-            const numCount = Math.max(0, Number(target.value));
+            const numCount = Math.max(0, Number(value));
             if (numCount === 0) {
                 dispatch(removeBasket(productId));
             } else {
@@ -34,6 +37,19 @@ const ProductQty = ({ productId, max, price }) => {
             }
         }
         // setCount(target.value);
+    };
+
+    const addOne = () => {
+        inputEl.current.focus();
+        const numCount = Number(count) + 1;
+        setCount(numCount);
+        dispatch(
+            addBasket({
+                id: productId,
+                qty: numCount,
+                price: price * curs
+            })
+        );
     };
 
     const handleBlur = () => {
@@ -53,7 +69,8 @@ const ProductQty = ({ productId, max, price }) => {
     };
 
     const handleKeyDown = (event) => {
-        if ([9, 13].includes(event.keyCode)) {
+        console.log(event.keyCode);
+        if ([9, 13, 40].includes(event.keyCode)) {
             event.preventDefault();
             const inputs = Array.prototype.slice.call(
                 document.querySelectorAll("input.table-input")
@@ -65,12 +82,35 @@ const ProductQty = ({ productId, max, price }) => {
             input.focus();
             input.select();
         }
+        if ([38].includes(event.keyCode)) {
+            event.preventDefault();
+            const inputs = Array.prototype.slice.call(
+                document.querySelectorAll("input.table-input")
+            );
+
+            const index =
+                (inputs.indexOf(document.activeElement) - 1) % inputs.length;
+            console.log(index);
+            const input = inputs[index >= 0 ? index : inputs.length - 1];
+            input.focus();
+            input.select();
+        }
     };
 
     return (
         <div className="input-group">
+            <span
+                className="input-group-text"
+                title="Перейти в корзину"
+                role="button"
+            >
+                <Link aria-current="page" to="/basket">
+                    <i className="bi bi-cart" />
+                </Link>
+            </span>
             <input
-                type="number"
+                ref={inputEl}
+                type="text"
                 className="form-control table-input"
                 placeholder="нет"
                 min={0}
@@ -83,12 +123,11 @@ const ProductQty = ({ productId, max, price }) => {
             />
             <span
                 className="input-group-text"
-                title="Перейти в корзину"
+                title="Добавить 1"
                 role="button"
+                onClick={addOne}
             >
-                <Link aria-current="page" to="/basket">
-                    <i className="bi bi-cart" />
-                </Link>
+                <i className="bi bi-plus-circle"></i>
             </span>
         </div>
     );

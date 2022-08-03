@@ -23,14 +23,15 @@ const agg = (id) => [
     }
 ];
 
-exports.getEx = async function (req, res, next) {
+exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
         const match = agg(id);
         const data = await Model.aggregate(match);
+        console.log("data", data);
         return res.status(200).json({
             status: 200,
-            content: data,
+            content: data[0],
             message: DATA_RECEIVED
         });
     } catch (e) {

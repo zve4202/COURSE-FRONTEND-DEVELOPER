@@ -3,8 +3,8 @@ const chalk = require("chalk");
 const bcrypt = require("bcryptjs");
 
 const models = require("../models");
-const rolesMock = require("../mockData/roles.json");
-const usersMock = require("../mockData/users.json");
+const rolesMock = require("./mockData/roles.json");
+const usersMock = require("./mockData/users.json");
 const { generateUserData } = require("../utils");
 const { salt } = require("../config/config");
 

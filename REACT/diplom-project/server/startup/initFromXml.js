@@ -72,7 +72,9 @@ async function importEntity(item, model_name, counter, model) {
 }
 
 async function importFrom(name, model) {
-    const file = `xml/${name}.xml`;
+    const file = `startup/xml/${name}.xml`;
+    debug(file);
+
     const stream = fs.createReadStream(file);
     const xml = new XmlStream(stream);
     const counter = new Counter(xml);

@@ -16,14 +16,14 @@ class Counter {
     pause = () => {
         this.x++;
         if (this.x % this.step === 0) {
-            log("pause");
+            debug("pause");
             this.xml.pause();
         }
     };
     resume = () => {
         this.y++;
         if (this.x === this.y) {
-            log("resume", this.x);
+            debug("resume", this.x);
 
             try {
                 this.xml.resume();
@@ -37,7 +37,7 @@ async function foundModel(_id, model) {
         const result = await model.findOne({ _id });
         return result !== null;
     } catch (error) {
-        console.log(error);
+        debug(error);
     }
     return false;
 }
@@ -62,11 +62,11 @@ async function importEntity(item, model_name, counter, model) {
                 const forsave = new model(newitem);
                 const saved = await forsave.save();
 
-                log(saved);
+                debug(saved);
             }
         }
     } catch (error) {
-        log(error);
+        debug(error);
     }
     counter.resume();
 }

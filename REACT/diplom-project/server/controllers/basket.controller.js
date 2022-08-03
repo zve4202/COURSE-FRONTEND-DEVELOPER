@@ -15,7 +15,7 @@ const agg = (id) => [
     },
     {
         $lookup: {
-            from: "products_ms",
+            from: "v_products",
             localField: "docs.id",
             foreignField: "_id",
             as: "products"

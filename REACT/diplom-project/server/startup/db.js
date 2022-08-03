@@ -8,7 +8,8 @@ const initFromXml = require("./initFromXml");
 
 module.exports = function () {
     mongoose.connect(
-        `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
+        dbConfig.connection_string
+        // `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.db}`
     );
 
     const db = mongoose.connection;

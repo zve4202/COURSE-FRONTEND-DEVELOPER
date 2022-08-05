@@ -29,13 +29,23 @@ const TableHeader = ({ name, onSort, columns }) => {
     };
 
     const rendeSortArrow = (sort) => {
-        if (selectedSort.sort === sort) {
-            if (selectedSort.order === 1) {
-                return <i className="bi bi-caret-up"></i>;
+        if (sort) {
+            if (selectedSort.sort === sort) {
+                if (selectedSort.order === 1) {
+                    return <i className="bi bi-caret-up-fill"></i>;
+                } else {
+                    return <i className="bi bi-caret-down-fill"></i>;
+                }
             } else {
-                return <i className="bi bi-caret-down"></i>;
+                return (
+                    <span>
+                        <i className="bi bi-caret-up"></i>
+                        <i className="bi bi-caret-down"></i>
+                    </span>
+                );
             }
         }
+
         return null;
     };
 
@@ -44,7 +54,11 @@ const TableHeader = ({ name, onSort, columns }) => {
             <tr>
                 {Object.keys(columns).map((column) => {
                     const colClass =
-                        "text-muted " + columns[column].class || "";
+                        "text-muted" +
+                        (columns[column].class
+                            ? ` ${columns[column].class}`
+                            : "");
+
                     return (
                         <th
                             className={colClass}

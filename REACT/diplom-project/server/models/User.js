@@ -1,10 +1,15 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
+const slug = require("mongoose-slug-generator");
+const { createId } = require("../utils/db_utils");
 
+mongoose.plugin(slug);
 const sexes = ["male", "female"];
 
-const schema = new Schema(
+const schema = new mongoose.Schema(
     {
+        _id: { type: Number },
+        alias: { type: String, slug: "name" },
         name: { type: String, required: true },
         email: { type: String, required: true },
         password: { type: String, required: true },
@@ -15,6 +20,13 @@ const schema = new Schema(
     { timestamps: true }
 );
 
+schema.pre("save", async function (next) {
+    if (!this._id) {
+        this._id = await createId("user");
+    }
+    next();
+});
+
 schema.plugin(aggregatePaginate);
 
-module.exports = model("User", schema);
+module.exports = mongoose.model("User", schema);

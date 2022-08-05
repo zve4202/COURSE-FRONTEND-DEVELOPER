@@ -14,7 +14,7 @@ const SelectPageSize = ({ value, onChangePageSize, name }) => {
         onChangePageSize(Number(target.value));
     };
     return (
-        <div className="page-item ms-3">
+        <div className="page-item">
             <select
                 className="form-select"
                 id={name}

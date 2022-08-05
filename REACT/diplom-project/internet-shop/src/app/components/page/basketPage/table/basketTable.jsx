@@ -67,7 +67,9 @@ const BasketTable = ({ name, products, onSort, onUpdate, ...rest }) => {
         }
     };
 
-    return <Table name={name} columns={columns} data={products} />;
+    return (
+        <Table name={name} columns={columns} data={products} onSort={onSort} />
+    );
 };
 
 BasketTable.propTypes = {

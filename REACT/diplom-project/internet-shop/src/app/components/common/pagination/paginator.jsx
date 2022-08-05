@@ -5,6 +5,7 @@ import SelectPageSize from "./selectPageSize";
 
 const Paginator = ({ name, pager, setPage, setPageSize }) => {
     if (!pager) return null;
+    console.log("pager.totalItems", pager.totalItems);
     return (
         <div className="d-flex justify-content-center">
             <ul className="pagination">
@@ -85,11 +86,18 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                         </li>
                     </>
                 )}
-                <div className="page-item disabled ms-2">
-                    <span className="page-link">
-                        {pager.endIndex + 1}/{pager.totalItems}
-                    </span>
-                </div>
+                {pager.totalItems > 0 && (
+                    <div
+                        className={classNames({
+                            "page-item disabled me-2": true,
+                            "ms-2": pager.totalPages > 1
+                        })}
+                    >
+                        <span className="page-link">
+                            {pager.endIndex + 1}/{pager.totalItems}
+                        </span>
+                    </div>
+                )}
                 <SelectPageSize
                     value={pager.pageSize}
                     onChangePageSize={setPageSize}

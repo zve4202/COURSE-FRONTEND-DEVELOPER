@@ -5,6 +5,8 @@ const db = {};
 
 db.mongoose = mongoose;
 
+db.sequence = require("./Sequence");
+
 db.role = require("./Role");
 db.user = require("./User");
 

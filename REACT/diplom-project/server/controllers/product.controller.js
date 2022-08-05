@@ -1,7 +1,5 @@
-const { getSort, getMatching } = require("../utils/db_utils");
-const { slugify } = require("../utils");
-const { product_m } = require("../models");
-const Product = require("../models/Product");
+const { getSort, getMatching, createId } = require("../utils/db_utils");
+const { product_m, product } = require("../models");
 
 const {
     DATA_CREATED,
@@ -11,8 +9,8 @@ const {
 } = require("../config/config");
 
 const searchMap = {
-    category: "title.format.category",
-    search: ["title.artist.alias", "title.alias"]
+    category: { field: "title.format.category", number: true },
+    search: { field: ["title.artist.alias", "title.alias"] }
 };
 
 const sortMap = {
@@ -57,7 +55,7 @@ exports.getAll = async function (req, res, next) {
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Product.findById(id);
+        const data = await product.findById(id);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -71,7 +69,7 @@ exports.get = async function (req, res, next) {
 exports.update = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Product.findByIdAndUpdate(id, dataUpdate, {
+        const data = await product.findByIdAndUpdate(id, req.body, {
             new: true
         });
         return res.status(200).json({
@@ -86,7 +84,10 @@ exports.update = async function (req, res, next) {
 
 exports.add = async function (req, res, next) {
     try {
-        const data = await Product.create(req.body);
+        const data = await product.create({
+            ...req.body,
+            _id: createId(product.name)
+        });
         return res.status(200).json({
             status: 200,
             content: data,
@@ -100,7 +101,7 @@ exports.add = async function (req, res, next) {
 exports.delete = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Product.findByIdAndDelete(id);
+        const data = await product.findByIdAndDelete(id);
         if (data === null) {
             throw Error(`id: ${id} not found`);
         }

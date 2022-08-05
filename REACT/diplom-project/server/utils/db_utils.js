@@ -1,3 +1,34 @@
+// const conf = require("../config/config.db");
+// const gen = require("mongo-incremental-id-generator")(conf.connection_string);
+
+const sequences = require("../models/Sequence");
+/*
+function getNextSequence(name) {
+   var ret = db.counters.findAndModify(
+          {
+            query: { _id: name },
+            update: { $inc: { seq: 1 } },
+            new: true,
+            upsert : true // Creates a new document if no documents match the query
+          }
+   );
+
+   return ret.seq;
+}
+*/
+
+const createId = async (name) => {
+    const ret = await sequences.findOneAndUpdate(
+        { _id: name },
+        { $inc: { seq: 1 } },
+        {
+            new: true,
+            upsert: true // Creates a new document if no documents match the query
+        }
+    );
+    return ret.seq;
+};
+
 const { slugify } = require("./index");
 
 const getSort = (query, sortMap) => {
@@ -19,6 +50,7 @@ const getSort = (query, sortMap) => {
     return null;
 };
 
+// /abba/gi;
 const getMatching = (query, searchMap) => {
     if (Object.keys(query).length === 0) return null;
 
@@ -29,33 +61,55 @@ const getMatching = (query, searchMap) => {
     Object.keys(query).forEach((key) => {
         const map = searchMap[key];
         if (map) {
-            let value = query[key];
+            let queryValue = query[key];
 
-            const numvalue = Number(value);
-            if (numvalue && numvalue == value) {
-                value = numvalue;
-            }
+            // console.log("queryValue", queryValue, "map", map.field);
 
-            if (Array.isArray(map)) {
-                const alias = slugify(value);
-                map.forEach((field) => {
-                    if (field.includes("alias")) {
-                        value = {
-                            $regex: `${alias}`
-                        };
-                    } else {
-                        value = {
-                            $regex: `${value}`,
-                            $options: "i"
-                        };
-                    }
-
-                    $or.push({
-                        [field]: value
-                    });
-                });
+            if (map.number) {
+                const numvalue = Number(queryValue);
+                if (numvalue && numvalue == queryValue) {
+                    $match[map.field] = numvalue;
+                }
             } else {
-                $match[map] = value;
+                let newValue;
+                const words = queryValue.split(" ");
+                for (const word of words) {
+                    // console.log(word);
+                    if (!word) {
+                        continue;
+                    }
+                    if (newValue) {
+                        newValue += "|" + word;
+                    } else {
+                        newValue = word;
+                    }
+                }
+                const alias = slugify(newValue);
+                if (Array.isArray(map.field)) {
+                    map.field.forEach((field) => {
+                        // console.log(field);
+                        let value = {};
+                        if (field.includes("alias")) {
+                            value = {
+                                $regex: `${alias}`
+                            };
+                        } else {
+                            value = {
+                                $regex: `^${newValue}`,
+                                $options: "i"
+                            };
+                        }
+                        // console.log(value);
+
+                        $or.push({
+                            [field]: value
+                        });
+                    });
+                } else {
+                    $or.push({
+                        [map.field]: newValue
+                    });
+                }
             }
         }
     });
@@ -64,6 +118,7 @@ const getMatching = (query, searchMap) => {
         $match.$or = $or;
     }
 
+    console.log("$match", $match, "$or", $or);
     if (Object.keys($match).length === 0) return null;
 
     result.push({ $match });
@@ -73,5 +128,6 @@ const getMatching = (query, searchMap) => {
 
 module.exports = {
     getSort,
-    getMatching
+    getMatching,
+    createId
 };

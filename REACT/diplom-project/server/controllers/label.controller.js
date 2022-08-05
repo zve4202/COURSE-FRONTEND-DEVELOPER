@@ -4,7 +4,8 @@ const {
     DATA_CREATED,
     DATA_DELETED
 } = require("../config/config");
-const Label = require("../models/Label");
+const { label } = require("../models");
+const { createId } = require("../utils/db_utils");
 
 exports.getAll = async function (req, res, next) {
     // Validate request parameters, queries using express-validator
@@ -12,7 +13,7 @@ exports.getAll = async function (req, res, next) {
     const page = req.params.page ? req.params.page : 1;
     const limit = req.params.limit ? req.params.limit : 10;
     try {
-        const data = await Label.find();
+        const data = await label.find();
         return res.status(200).json({
             status: 200,
             content: data,
@@ -25,7 +26,7 @@ exports.getAll = async function (req, res, next) {
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Label.findById(id);
+        const data = await label.findById(id);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -38,7 +39,7 @@ exports.get = async function (req, res, next) {
 exports.update = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Label.findByIdAndUpdate(id, req.body, {
+        const data = await label.findByIdAndUpdate(id, req.body, {
             new: true
         });
         return res.status(200).json({
@@ -52,7 +53,11 @@ exports.update = async function (req, res, next) {
 };
 exports.add = async function (req, res, next) {
     try {
-        const data = await Label.create(req.body);
+        const data = await label.create({
+            ...req.body,
+            _id: createId(label.name)
+        });
+
         return res.status(200).json({
             status: 200,
             content: data,
@@ -65,7 +70,7 @@ exports.add = async function (req, res, next) {
 exports.delete = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await Label.findByIdAndDelete(id);
+        const data = await label.findByIdAndDelete(id);
         if (data === null) {
             throw Error(`id: ${id} not found`);
         }

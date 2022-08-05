@@ -11,7 +11,12 @@ class PaginationWrapper extends React.Component {
         this.name = this.props.name;
         this.config = this.props.config[this.name];
         this.pagination = this.config.pagination;
-        this.state = {};
+        this.state = {
+            endIndex: 0,
+            totalItems: this.props.totalDocs,
+            pageSize: this.pagination.pageSize,
+            pages: []
+        };
         this.saveSetting = this.saveSetting.bind(this);
         this.setPage = this.setPage.bind(this);
         this.getPager = this.getPager.bind(this);
@@ -27,6 +32,13 @@ class PaginationWrapper extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.totalDocs !== prevProps.totalDocs) {
+            // console.log(
+            //     "componentDidUpdate",
+            //     "curr",
+            //     this.props.totalDocs,
+            //     "prev",
+            //     prevProps.totalDocs
+            // );
             this.setPage(1);
         }
     }
@@ -41,14 +53,23 @@ class PaginationWrapper extends React.Component {
 
     setPage(page) {
         const { totalDocs } = this.props;
-        let pager = this.state;
+        // console.log("setPage(1)", totalDocs);
+        // let pager = this.state;
+        // console.log(
+        //     "setPage(1) page, pager.totalPages",
+        //     page,
+        //     pager.totalPages
+        // );
 
-        if (page < 1 || page > pager.totalPages) {
+        // if (page < 1 || page > pager.totalPages) {
+        //     return;
+        // }
+        if (page < 1) {
             return;
         }
 
-        pager = this.getPager(totalDocs, page, this.pagination.pageSize);
-
+        const pager = this.getPager(totalDocs, page, this.pagination.pageSize);
+        // console.log("setPage(1) pager", pager);
         this.pagination = {
             ...this.pagination,
             currentPage: page
@@ -120,9 +141,9 @@ class PaginationWrapper extends React.Component {
 
     render() {
         const pager = this.state;
-        if (!pager.pages) {
-            return null;
-        }
+        // if (!pager.pages) {
+        //     return null;
+        // }
 
         return (
             <div>

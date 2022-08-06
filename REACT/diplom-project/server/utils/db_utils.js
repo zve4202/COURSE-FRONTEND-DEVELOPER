@@ -54,10 +54,17 @@ const getSort = (query, sortMap) => {
 const getSlug = require("speakingurl");
 
 const getValue = (field, text, count) => {
-    text = field.includes("alias") ? getSlug(text) : text;
-    if (count === 0) {
-        text = "^" + text;
+    if (field.includes("barcode")) {
+        return text;
     }
+
+    if (field.includes("alias")) {
+        text = getSlug(text);
+    }
+    // if (count === 0) {
+    //     text = "^" + text;
+    // }
+
     return {
         $regex: `${text}`,
         $options: "i"
@@ -70,60 +77,24 @@ const getMatching = (query, searchMap) => {
     const result = [];
     const $match = {};
     const $or = [];
-
     Object.keys(query).forEach((key) => {
         const map = searchMap[key];
         if (map) {
             const queryValue = query[key];
-
-            // console.log("queryValue", queryValue, "map", map.field);
-
             if (map.number) {
                 const numvalue = Number(queryValue);
                 if (numvalue && numvalue == queryValue) {
                     $match[map.field] = numvalue;
                 }
             } else {
-                // let phrase = queryValue;
-                // const slag = getSlug(queryValue);
-                // const words = queryValue.split(" ");
-                // for (const word of words) {
-                //     // console.log(word);
-                //     if (!word) {
-                //         continue;
-                //     }
-                //     if (phrase) {
-                //         phrase += "|" + word;
-                //         slag += "|" + getSlug(word);
-                //     } else {
-                //         phrase = word;
-                //         slag = getSlug(word);
-                //     }
-                // }
                 if (Array.isArray(map.field)) {
                     map.field.forEach((field, index) => {
-                        // // console.log(field);
-                        // let value = {};
-                        // if (field.includes("alias")) {
-                        //     value = {
-                        //         $regex: `${slag}`
-                        //     };
-                        // } else {
-                        //     value = {
-                        //         $regex: `${phrase}`,
-                        //         $options: "i"
-                        //     };
-                        // }
-                        // // console.log(value);
-
                         $or.push({
                             [field]: getValue(field, queryValue, index)
                         });
                     });
                 } else {
-                    $or.push({
-                        [map.field]: phrase
-                    });
+                    $match[map.field] = getValue(map.field, queryValue, 1);
                 }
             }
         }

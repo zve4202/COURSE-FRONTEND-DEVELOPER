@@ -10,7 +10,13 @@ const {
 
 const searchMap = {
     category: { field: "title.format.category", number: true },
-    search: { field: ["title.artist.alias", "title.alias"] }
+    search: { field: ["title.artist.alias", "title.alias"] },
+    artist: { field: "title.artist._id", number: true },
+    format: { field: "title.format._id", number: true },
+    label: { field: "title.label._id", number: true },
+    barcode: { field: "title.barcode" },
+    origin: { field: "title.origin" },
+    style: { field: "title.style" }
 };
 
 const sortMap = {

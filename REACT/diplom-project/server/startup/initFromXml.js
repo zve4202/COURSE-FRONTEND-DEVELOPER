@@ -88,17 +88,18 @@ async function importFrom(name, model) {
 }
 
 async function setSequence(model) {
+    let seq = 0;
     const name = model.modelName.toLowerCase();
     const data = await model.find().sort({ _id: -1 }).limit(1);
     if (data.length > 0) {
-        const seq = data[0]._id;
-        const sequence = await models.sequence.findOneAndUpdate(
-            { _id: name },
-            { _id: name, seq },
-            { new: true, upsert: true }
-        );
-        debug(sequence);
+        seq = data[0]._id;
     }
+    const sequence = await models.sequence.findOneAndUpdate(
+        { _id: name },
+        { _id: name, seq },
+        { new: true, upsert: true }
+    );
+    debug(sequence);
 }
 
 module.exports = async () => {

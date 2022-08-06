@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const ProductName = ({ data }) => {
-    const { article, artist, title } = data.title;
+    const { article, artist, name } = data.title;
     return (
         <div className="small">
             <div className="text-muted">art: {article}</div>
             <div>{artist.name}</div>
-            <div>{title}</div>
+            <div>{name}</div>
         </div>
     );
 };

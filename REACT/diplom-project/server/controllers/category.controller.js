@@ -37,11 +37,13 @@ const agg = [
         $project: {
             _id: "$category._id",
             name: "$category.name",
+            sort: "$category.sort",
             count: "$count"
         }
     },
     {
         $sort: {
+            sort: 1,
             count: -1
         }
     }

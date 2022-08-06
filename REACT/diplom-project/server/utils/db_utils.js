@@ -29,7 +29,7 @@ const createId = async (name) => {
     return ret.seq;
 };
 
-const { slugify } = require("./index");
+// const { slugify } = require("./index");
 
 const getSort = (query, sortMap) => {
     const { sort, order } = query;
@@ -51,6 +51,19 @@ const getSort = (query, sortMap) => {
 };
 
 // /abba/gi;
+const getSlug = require("speakingurl");
+
+const getValue = (field, text, count) => {
+    text = field.includes("alias") ? getSlug(text) : text;
+    if (count === 0) {
+        text = "^" + text;
+    }
+    return {
+        $regex: `${text}`,
+        $options: "i"
+    };
+};
+
 const getMatching = (query, searchMap) => {
     if (Object.keys(query).length === 0) return null;
 
@@ -61,7 +74,7 @@ const getMatching = (query, searchMap) => {
     Object.keys(query).forEach((key) => {
         const map = searchMap[key];
         if (map) {
-            let queryValue = query[key];
+            const queryValue = query[key];
 
             // console.log("queryValue", queryValue, "map", map.field);
 
@@ -71,43 +84,45 @@ const getMatching = (query, searchMap) => {
                     $match[map.field] = numvalue;
                 }
             } else {
-                let newValue;
-                const words = queryValue.split(" ");
-                for (const word of words) {
-                    // console.log(word);
-                    if (!word) {
-                        continue;
-                    }
-                    if (newValue) {
-                        newValue += "|" + word;
-                    } else {
-                        newValue = word;
-                    }
-                }
-                const alias = slugify(newValue);
+                // let phrase = queryValue;
+                // const slag = getSlug(queryValue);
+                // const words = queryValue.split(" ");
+                // for (const word of words) {
+                //     // console.log(word);
+                //     if (!word) {
+                //         continue;
+                //     }
+                //     if (phrase) {
+                //         phrase += "|" + word;
+                //         slag += "|" + getSlug(word);
+                //     } else {
+                //         phrase = word;
+                //         slag = getSlug(word);
+                //     }
+                // }
                 if (Array.isArray(map.field)) {
-                    map.field.forEach((field) => {
-                        // console.log(field);
-                        let value = {};
-                        if (field.includes("alias")) {
-                            value = {
-                                $regex: `${alias}`
-                            };
-                        } else {
-                            value = {
-                                $regex: `^${newValue}`,
-                                $options: "i"
-                            };
-                        }
-                        // console.log(value);
+                    map.field.forEach((field, index) => {
+                        // // console.log(field);
+                        // let value = {};
+                        // if (field.includes("alias")) {
+                        //     value = {
+                        //         $regex: `${slag}`
+                        //     };
+                        // } else {
+                        //     value = {
+                        //         $regex: `${phrase}`,
+                        //         $options: "i"
+                        //     };
+                        // }
+                        // // console.log(value);
 
                         $or.push({
-                            [field]: value
+                            [field]: getValue(field, queryValue, index)
                         });
                     });
                 } else {
                     $or.push({
-                        [map.field]: newValue
+                        [map.field]: phrase
                     });
                 }
             }

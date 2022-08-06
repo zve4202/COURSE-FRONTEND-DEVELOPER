@@ -67,6 +67,13 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
             component: (product) => (
                 <div className="small">{product.title.origin}</div>
             )
+        },
+        style: {
+            path: "style",
+            name: "Жанр",
+            component: (product) => (
+                <div className="small">{product.title.style}</div>
+            )
         }
     };
 

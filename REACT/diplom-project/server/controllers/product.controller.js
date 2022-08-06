@@ -14,15 +14,17 @@ const searchMap = {
 };
 
 const sortMap = {
-    name: ["title.artist.name", "title.title"],
+    name: ["title.artist.name", "title.name"],
     format: ["title.format.name"],
     label: ["title.label.name"],
     origin: ["title.origin"],
+    style: ["title.style"],
     price: ["price"]
 };
 
 exports.getAll = async function (req, res, next) {
     try {
+        console.log("req.params, req.query", req.params, req.query);
         const { query } = req;
         const options = {
             page: query.page || 1,
@@ -38,9 +40,11 @@ exports.getAll = async function (req, res, next) {
         }
 
         const match = getMatching(query, searchMap);
-        // console.log("match", match);
+        console.log("match", match);
 
-        const aggregate = match ? product_m.aggregate(match) : {};
+        const aggregate = match
+            ? product_m.aggregate(match, { allowDiskUse: true })
+            : {};
         const data = await product_m.aggregatePaginate(aggregate, options);
         return res.status(200).json({
             status: 200,
@@ -48,6 +52,7 @@ exports.getAll = async function (req, res, next) {
             message: DATA_RECEIVED
         });
     } catch (e) {
+        console.log("Product error:", e);
         return res.status(500).json({ status: 500, message: e.message });
     }
 };

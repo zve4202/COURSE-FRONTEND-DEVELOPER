@@ -68,12 +68,28 @@ async function InitEntities(name, data, model, ASIS = false) {
     return result;
 }
 
+async function setSequence(model) {
+    let seq = 0;
+    const name = model.modelName.toLowerCase();
+    const data = await model.find().sort({ _id: -1 }).limit(1);
+    if (data.length > 0) {
+        seq = data[0]._id;
+    }
+    const sequence = await models.sequence.findOneAndUpdate(
+        { _id: name },
+        { _id: name, seq },
+        { new: true, upsert: true }
+    );
+    debug(sequence);
+}
+
 module.exports = async () => {
     const usersExists = await models.user.find();
     if (usersExists.length !== usersMock.length) {
         const roles = await InitEntities("roles", rolesMock, models.role, true);
 
         models.user.collection.drop();
+        setSequence(models.user);
         const users = await Promise.all(
             usersMock.map(async (user) => {
                 try {

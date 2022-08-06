@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 const ProductName = ({ data }) => {
-    const { _id: productId, article } = data;
-    const { artist, title } = data.title;
+    const { _id, article } = data;
+    const { artist, name } = data.title;
     return (
         <div className="small">
             <div className="text-muted text-decoration-none">
@@ -19,11 +19,8 @@ const ProductName = ({ data }) => {
                 </Link>
             </div>
             <div>
-                <Link
-                    className="text-decoration-none"
-                    to={`product/${productId}`}
-                >
-                    {title}
+                <Link className="text-decoration-none" to={`product/${_id}`}>
+                    {name}
                 </Link>
             </div>
         </div>

@@ -23,5 +23,6 @@ module.exports = function () {
         debug(`MongoDB status: Connected ${chalk.green("✓")}`);
         await initFromMock();
         await initFromXml();
+        debug(`Data loaded ${chalk.green("✓")}`);
     });
 };

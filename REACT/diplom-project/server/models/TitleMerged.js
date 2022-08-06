@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
 
 const schema = new Schema({
-    _id: { type: Number, required: true },
-    alias: { type: String, required: true },
-    barcode: { type: String, required: true },
+    _id: { type: Number },
+    alias: { type: String },
+    barcode: { type: String },
     artist: { type: Object },
-    name: { type: String, required: true },
+    name: { type: String },
     format: { type: Object },
     year: { type: String },
     label: { type: Object },

@@ -1,12 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import formatService from "../services/format.service";
+import labelService from "../services/label.service";
 import isOutdated from "../utils/isOutdated";
 
-const initialState = { entities: [], isLoading: true, error: null };
+const initialState = {
+    entities: [],
+    isLoading: true,
+    error: null
+};
 
-const formatsSlice = createSlice({
-    name: "formats",
+const labelSlice = createSlice({
+    name: "labels",
     initialState,
     reducers: {
         requested(state) {
@@ -24,15 +28,15 @@ const formatsSlice = createSlice({
     }
 });
 
-const { actions, reducer: formatsReducer } = formatsSlice;
+const { actions, reducer: labelsReducer } = labelSlice;
 const { resived, requested, requestFailed } = actions;
 
-export const loadFormats = () => async (dispatch, getState) => {
-    const { lastFetch } = getState().formats;
+export const loadLabels = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().labels;
     if (isOutdated(lastFetch)) {
         dispatch(requested());
         try {
-            const { content } = await formatService.fetchAll();
+            const { content } = await labelService.fetchAll();
             dispatch(resived(content));
         } catch (error) {
             dispatch(requestFailed(error.message));
@@ -40,10 +44,10 @@ export const loadFormats = () => async (dispatch, getState) => {
     }
 };
 
-export const getFormats = () => (state) => state.formats.entities;
-export const getFormat = (id) => (state) =>
-    state.formats.entities.find((item) => item._id === id);
-export const getFormatsLoading = () => (state) => state.formats.isLoading;
-export const getFormatsError = () => (state) => state.formats.error;
+export const getLabels = () => (state) => state.labels.entities;
+export const getLabel = (id) => (state) =>
+    state.labels.entities.find((item) => item._id === id);
+export const getLabelLoading = () => (state) => state.labels.isLoading;
+export const getLabelError = () => (state) => state.labels.error;
 
-export default formatsReducer;
+export default labelsReducer;

@@ -5,7 +5,7 @@ import TableHeader from "./tableHeader";
 
 const Table = ({ name, onSort, columns, data, children }) => {
     const tableEl = useRef();
-    console.log(name, data);
+    // console.log(name, data);
 
     const handleKeyDown = (event) => {
         console.log(event.keyCode);

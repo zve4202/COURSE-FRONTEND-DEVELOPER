@@ -79,7 +79,8 @@ const settingSlice = createSlice({
     }
 });
 
-const { resived, requested, update, requestFailed } = settingSlice.actions;
+const { actions, reducer: settingReducer } = settingSlice;
+const { resived, requested, update, requestFailed } = actions;
 
 export const loadSetting = () => async (dispatch) => {
     dispatch(requested());
@@ -109,4 +110,4 @@ export const getConfigByName = (name) => (state) => state.setting.config[name];
 export const getRolesLoading = () => (state) => state.setting.isLoading;
 export const getRolesError = () => (state) => state.setting.error;
 
-export default settingSlice;
+export default settingReducer;

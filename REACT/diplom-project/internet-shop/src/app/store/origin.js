@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import formatService from "../services/format.service";
+import originService from "../services/origin.service";
 import isOutdated from "../utils/isOutdated";
 
 const initialState = { entities: [], isLoading: true, error: null };
 
-const formatsSlice = createSlice({
-    name: "formats",
+const originSlice = createSlice({
+    name: "origins",
     initialState,
     reducers: {
         requested(state) {
@@ -24,15 +24,15 @@ const formatsSlice = createSlice({
     }
 });
 
-const { actions, reducer: formatsReducer } = formatsSlice;
+const { actions, reducer: originsReducer } = originSlice;
 const { resived, requested, requestFailed } = actions;
 
-export const loadFormats = () => async (dispatch, getState) => {
-    const { lastFetch } = getState().formats;
+export const loadOrigins = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().origins;
     if (isOutdated(lastFetch)) {
         dispatch(requested());
         try {
-            const { content } = await formatService.fetchAll();
+            const { content } = await originService.fetchAll();
             dispatch(resived(content));
         } catch (error) {
             dispatch(requestFailed(error.message));
@@ -40,10 +40,10 @@ export const loadFormats = () => async (dispatch, getState) => {
     }
 };
 
-export const getFormats = () => (state) => state.formats.entities;
-export const getFormat = (id) => (state) =>
-    state.formats.entities.find((item) => item._id === id);
-export const getFormatsLoading = () => (state) => state.formats.isLoading;
-export const getFormatsError = () => (state) => state.formats.error;
+export const getOrigins = () => (state) => state.origins.entities;
+export const getOrigin = (id) => (state) =>
+    state.origins.entities.find((item) => item._id === id);
+export const getOriginLoading = () => (state) => state.origins.isLoading;
+export const getOriginError = () => (state) => state.origins.error;
 
-export default formatsReducer;
+export default originsReducer;

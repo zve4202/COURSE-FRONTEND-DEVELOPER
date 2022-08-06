@@ -11,6 +11,10 @@ import CategoryList from "./productCategory";
 import { updateSetting } from "../../../store/setting";
 import WorkScreen from "../../common/wrappers/workScreen";
 import PaginationWrapper from "../../common/pagination";
+import { loadFormats } from "../../../store/formats";
+import { loadLabels } from "../../../store/labels";
+import { loadOrigins } from "../../../store/origin";
+import { loadStyles } from "../../../store/style";
 
 const ProductListPage = () => {
     const name = "product";
@@ -19,8 +23,12 @@ const ProductListPage = () => {
     const { docs, totalDocs } = useSelector((state) => state.products);
 
     useEffect(() => {
-        dispatch(loadCategories());
+        dispatch(loadLabels());
         dispatch(loadProducts());
+        dispatch(loadCategories());
+        dispatch(loadFormats());
+        dispatch(loadOrigins());
+        dispatch(loadStyles());
     }, []);
 
     const addToBasket = (id) => {

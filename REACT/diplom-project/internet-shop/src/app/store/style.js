@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import formatService from "../services/format.service";
+import styleService from "../services/style.service";
 import isOutdated from "../utils/isOutdated";
 
 const initialState = { entities: [], isLoading: true, error: null };
 
-const formatsSlice = createSlice({
-    name: "formats",
+const styleSlice = createSlice({
+    name: "styles",
     initialState,
     reducers: {
         requested(state) {
@@ -24,15 +24,15 @@ const formatsSlice = createSlice({
     }
 });
 
-const { actions, reducer: formatsReducer } = formatsSlice;
+const { actions, reducer: stylesReducer } = styleSlice;
 const { resived, requested, requestFailed } = actions;
 
-export const loadFormats = () => async (dispatch, getState) => {
-    const { lastFetch } = getState().formats;
+export const loadStyles = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().styles;
     if (isOutdated(lastFetch)) {
         dispatch(requested());
         try {
-            const { content } = await formatService.fetchAll();
+            const { content } = await styleService.fetchAll();
             dispatch(resived(content));
         } catch (error) {
             dispatch(requestFailed(error.message));
@@ -40,10 +40,10 @@ export const loadFormats = () => async (dispatch, getState) => {
     }
 };
 
-export const getFormats = () => (state) => state.formats.entities;
-export const getFormat = (id) => (state) =>
-    state.formats.entities.find((item) => item._id === id);
-export const getFormatsLoading = () => (state) => state.formats.isLoading;
-export const getFormatsError = () => (state) => state.formats.error;
+export const getStyles = () => (state) => state.styles.entities;
+export const getStyle = (id) => (state) =>
+    state.styles.entities.find((item) => item._id === id);
+export const getStyleLoading = () => (state) => state.styles.isLoading;
+export const getStyleError = () => (state) => state.styles.error;
 
-export default formatsReducer;
+export default stylesReducer;

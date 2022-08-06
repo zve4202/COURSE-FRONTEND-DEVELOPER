@@ -5,6 +5,9 @@ const roleRoute = require("./role.route");
 const categoryRoute = require("./category.route");
 const productRoute = require("./product.route");
 const formatRoute = require("./format.route");
+const labelRoute = require("./label.route");
+const originRoute = require("./origin.route");
+const styleRoute = require("./style.route");
 const orderRoute = require("./order.route");
 const orderDetailsRoute = require("./order_details.route");
 const basketRoute = require("./basket.route");
@@ -12,11 +15,17 @@ const basketRoute = require("./basket.route");
 const router = express.Router({ mergeParams: true });
 
 router.use("/auth", authRoute);
+
 router.use("/user", userRoute);
 router.use("/role", roleRoute);
-router.use("/category", categoryRoute);
+
 router.use("/product", productRoute);
+router.use("/category", categoryRoute);
 router.use("/format", formatRoute);
+router.use("/label", labelRoute);
+router.use("/origin", originRoute);
+router.use("/style", styleRoute);
+
 router.use("/order", orderRoute);
 router.use("/order/details", orderDetailsRoute);
 router.use("/basket", basketRoute);

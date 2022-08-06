@@ -6,9 +6,12 @@ import formatsReducer from "./formats";
 import logger from "./middleware/logger";
 import productsReducer from "./products";
 import rolesReducer from "./roles";
-import settingSlice from "./setting";
-import basketSlice from "./basket";
+import settingReducer from "./setting";
+import basketReducer from "./basket";
 import usersReducer from "./users";
+import labelsReducer from "./labels";
+import originsReducer from "./origin";
+import stylesReducer from "./style";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -16,9 +19,12 @@ const rootReducer = combineReducers({
     users: usersReducer,
     categories: categoriesReducer,
     formats: formatsReducer,
+    labels: labelsReducer,
+    origins: originsReducer,
+    styles: stylesReducer,
     products: productsReducer,
-    setting: settingSlice.reducer,
-    basket: basketSlice.reducer
+    setting: settingReducer,
+    basket: basketReducer
 });
 
 function createStore() {

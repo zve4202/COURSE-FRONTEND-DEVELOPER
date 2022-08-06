@@ -67,8 +67,8 @@ const basketSlice = createSlice({
     }
 });
 
-const { apdate, remove, clear, resived, requested, requestFailed } =
-    basketSlice.actions;
+const { actions, reducer: basketReducer } = basketSlice;
+const { apdate, remove, clear, resived, requested, requestFailed } = actions;
 
 export const loadBasket = () => async (dispatch) => {
     dispatch(requested());
@@ -164,4 +164,4 @@ export const getBasketCountById = (id) => (state) => {
 export const getBasketLoading = () => (state) => state.basket.isLoading;
 export const getBasketError = () => (state) => state.basket.error;
 
-export default basketSlice;
+export default basketReducer;

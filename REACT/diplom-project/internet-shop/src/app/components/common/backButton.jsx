@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-const BackButton = ({ tooltip }) => {
+const BackButton = ({ tooltip, ...rest }) => {
     const history = useHistory();
     return (
         <button

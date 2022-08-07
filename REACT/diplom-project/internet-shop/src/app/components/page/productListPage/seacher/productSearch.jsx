@@ -41,7 +41,14 @@ const ProductSearch = ({ name, onSearch }) => {
     };
     const handleCollapse = () => {
         const queryShow = !query.show;
+        const needReload = Object.keys(query).reduce(
+            (prev, curr) =>
+                ["format", "label", "origin", "style"].includes(curr) || prev,
+            false
+        );
         const newQuery = { ...query, show: queryShow };
+        window.scrollTo(0, 0);
+
         if (!queryShow) {
             delete newQuery.show;
             delete newQuery.format;
@@ -56,7 +63,7 @@ const ProductSearch = ({ name, onSearch }) => {
                 }
             })
         );
-        if (!queryShow) {
+        if (!queryShow && needReload) {
             onSearch();
         }
     };
@@ -87,6 +94,34 @@ const ProductSearch = ({ name, onSearch }) => {
                     onChange={handleSearchQuery}
                     value={query.search || ""}
                 />
+                <div
+                    className={`input-group-text btn btn-outline-${
+                        query.inStock ? "success" : "secondary"
+                    }`}
+                    title={`${
+                        query.inStock
+                            ? "Выбрать всё, что есть"
+                            : "Выбрать только то, что в наличии"
+                    }`}
+                    type="button"
+                    onClick={() =>
+                        handleSearchQuery({
+                            target: {
+                                name: "inStock",
+                                value: !query.inStock
+                            }
+                        })
+                    }
+                >
+                    <i
+                        className={`bi bi-check-circle${
+                            query.inStock ? "-fill" : ""
+                        }`}
+                    ></i>
+                    <span className="ms-2">
+                        {query.inStock ? "Из наличия" : "Всё"}
+                    </span>
+                </div>
                 <div
                     className="nput-group-text btn btn-outline-secondary"
                     title="Дополнительная фильтрация"

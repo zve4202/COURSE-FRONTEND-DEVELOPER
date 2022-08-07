@@ -45,23 +45,9 @@ const { update, resived, requested, requestFailed } = actions;
 export const loadUsers = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        const { pagination, query, sort } = getState().setting.config[name];
-        let params = {};
-        Object.keys(query).forEach((key) => {
-            const value = query[key];
-            if (value) {
-                params[key] = value;
-            }
+        const { content } = await userService.fetchAll({
+            paramsName: name
         });
-
-        params = {
-            ...params,
-            page: pagination.currentPage,
-            limit: pagination.pageSize,
-            ...sort
-        };
-
-        const { content } = await userService.fetchAll(params);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));

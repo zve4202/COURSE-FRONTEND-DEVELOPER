@@ -35,17 +35,18 @@ const SelectField = ({ name, placeholder, data, value, onChange }) => {
                             }
                         })}
                 </select>
-                <div
-                    className="input-group-text"
+                <button
+                    className="input-group-text btn btn-secondary"
                     title="Очистить"
                     role="button"
+                    disabled={!value}
                     onClick={() => {
                         selectRef.current.value = "";
                         onChange({ target: selectRef.current });
                     }}
                 >
                     <i className="bi bi-x-circle" />
-                </div>
+                </button>
             </div>
         </div>
     );

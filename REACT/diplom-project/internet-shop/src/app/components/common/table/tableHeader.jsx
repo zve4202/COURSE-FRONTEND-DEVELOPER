@@ -37,12 +37,7 @@ const TableHeader = ({ name, onSort, columns }) => {
                     return <i className="bi bi-caret-down-fill"></i>;
                 }
             } else {
-                return (
-                    <span>
-                        <i className="bi bi-caret-up"></i>
-                        <i className="bi bi-caret-down"></i>
-                    </span>
-                );
+                return <i className="bi bi-caret-left"></i>;
             }
         }
 

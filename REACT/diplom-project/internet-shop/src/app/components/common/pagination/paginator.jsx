@@ -8,10 +8,10 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
     // console.log("pager.totalItems", pager.totalItems);
     return (
         <div className="d-flex justify-content-center">
-            <ul className="pagination">
+            <div className="pagination">
                 {pager.pages && pager.pages.length > 1 && (
                     <>
-                        <li
+                        <div
                             className={classNames({
                                 "page-item": true,
                                 disabled: pager.currentPage === 1
@@ -24,8 +24,8 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                             >
                                 В начало
                             </a>
-                        </li>
-                        <li
+                        </div>
+                        <div
                             className={classNames({
                                 "page-item me-2": true,
                                 disabled: pager.currentPage === 1
@@ -38,9 +38,9 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                             >
                                 &laquo;
                             </a>
-                        </li>
+                        </div>
                         {pager.pages.map((page, index) => (
-                            <li
+                            <div
                                 key={index + 1}
                                 className={classNames({
                                     "page-item": true,
@@ -54,9 +54,9 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                                 >
                                     {page}
                                 </a>
-                            </li>
+                            </div>
                         ))}
-                        <li
+                        <div
                             className={classNames({
                                 "page-item ms-2": true,
                                 disabled: pager.currentPage === pager.totalPages
@@ -69,8 +69,8 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                             >
                                 &raquo;
                             </a>
-                        </li>
-                        <li
+                        </div>
+                        <div
                             className={classNames({
                                 "page-item": true,
                                 disabled: pager.currentPage === pager.totalPages
@@ -83,7 +83,7 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                             >
                                 В конец
                             </a>
-                        </li>
+                        </div>
                     </>
                 )}
                 {pager.totalItems > 0 && (
@@ -103,7 +103,7 @@ const Paginator = ({ name, pager, setPage, setPageSize }) => {
                     onChangePageSize={setPageSize}
                     name={name}
                 />
-            </ul>
+            </div>
         </div>
     );
 };

@@ -68,24 +68,9 @@ const { resived, requested, requestFailed } = actions;
 export const loadProducts = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
-        const { pagination, query, sort } = getState().setting.config[name];
-
-        let params = {};
-        Object.keys(query).forEach((key) => {
-            const value = query[key];
-            if (value) {
-                params[key] = value;
-            }
+        const { content } = await Service.fetchAll({
+            paramsName: name
         });
-
-        params = {
-            ...params,
-            page: pagination.currentPage,
-            limit: pagination.pageSize,
-            ...sort
-        };
-
-        const { content } = await Service.fetchAll(params);
         dispatch(resived(content));
     } catch (error) {
         dispatch(requestFailed(error.message));
@@ -94,7 +79,7 @@ export const loadProducts = () => async (dispatch, getState) => {
 
 // export const getProducts = () => (state) => state.products.docs;
 export const getProduct = (id) => (state) =>
-    state.products.entities.find((item) => item._id === id);
+    state.products.docs.find((item) => item._id === id);
 export const getProductLoading = () => (state) => state.products.isLoading;
 export const getProductError = () => (state) => state.products.error;
 

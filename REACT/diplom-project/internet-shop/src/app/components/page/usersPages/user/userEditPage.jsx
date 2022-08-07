@@ -63,7 +63,7 @@ const UserEditPage = () => {
     const { userId } = useParams();
     const auth = useSelector(getAuth());
     const user = useSelector(getUser(userId));
-    const sameUser = auth && user && auth._id === user._id;
+    const sameUser = auth && user && auth.currentUser._id === user._id;
 
     const roles = useSelector(getRoles());
     const [data, setData] = useState(defaultData);

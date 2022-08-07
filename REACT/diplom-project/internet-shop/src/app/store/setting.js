@@ -7,9 +7,7 @@ const pagination = {
     currentPage: 1
 };
 
-const query = {
-    search: ""
-};
+const query = {};
 
 const sort = {
     sort: "name",

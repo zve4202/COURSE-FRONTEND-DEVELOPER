@@ -8,8 +8,8 @@ const sortMap = {
 };
 
 const searchMap = {
-    category: "role",
-    search: ["name"]
+    category: { field: "role" },
+    search: { field: "alias" }
 };
 
 exports.getAll = async function (req, res, next) {
@@ -27,8 +27,9 @@ exports.getAll = async function (req, res, next) {
     }
 
     const match = getMatching(query, searchMap);
+    console.log("users match", match);
     try {
-        const aggregate = match ? await Model.aggregate(match) : {};
+        const aggregate = match ? Model.aggregate(match) : {};
         const data = await Model.aggregatePaginate(aggregate, options);
         return res.status(200).json({
             status: 200,

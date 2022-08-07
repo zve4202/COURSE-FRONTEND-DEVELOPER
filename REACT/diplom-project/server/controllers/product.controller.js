@@ -66,7 +66,7 @@ exports.getAll = async function (req, res, next) {
 exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
-        const data = await product.findById(id);
+        const data = await product_m.findById(id);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -95,10 +95,7 @@ exports.update = async function (req, res, next) {
 
 exports.add = async function (req, res, next) {
     try {
-        const data = await product.create({
-            ...req.body,
-            _id: createId(product.name)
-        });
+        const data = await product_m.findById((await product.create(body))._id);
         return res.status(200).json({
             status: 200,
             content: data,

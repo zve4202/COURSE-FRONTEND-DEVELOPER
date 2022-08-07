@@ -41,13 +41,14 @@ function App() {
             {!isLoading && (
                 <Switch>
                     <Route path="/" exact component={Main} />
+                    <Route path="/product/:productId" component={Main} />
                     <ProtectedRoute path="/admin" exact component={Admin} />
                     <ProtectedRoute
                         path="/users/:userId/:edit?"
                         component={Users}
                     />
-                    <Route path="/login/:type?" component={Login} />
                     <Route path="/basket" component={Basket} />
+                    <Route path="/login/:type?" component={Login} />
                     <Route path="/logout" component={LogOut} />
                     <Redirect to="/" />
                 </Switch>

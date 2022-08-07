@@ -76,7 +76,6 @@ export const loadBasket = () => async (dispatch) => {
         const basketId = getValue(BASKET_KEY);
         if (basketId) {
             const data = await Service.get(basketId);
-            console.log(data);
             const { content } = data;
 
             dispatch(resived(content));
@@ -94,10 +93,8 @@ export const loadBasket = () => async (dispatch) => {
 
 export const addBasket = (payload) => async (dispatch, getState) => {
     try {
-        console.log("addBasket payload", payload);
         dispatch(apdate(payload));
         const { basket } = getState().basket;
-        console.log("addBasket basket", basket);
         dispatch(requested());
         const { content } = await Service.update(basket._id, basket);
         dispatch(resived(content));

@@ -70,7 +70,7 @@ const UsersListPage = () => {
             <div className="h-100">
                 <PaginationWrapper
                     totalDocs={totalDocs}
-                    onPageChange={onPageChange}
+                    onChange={onPageChange}
                     name={name}
                 >
                     <UsersLoader>

@@ -13,11 +13,16 @@ const CategoryList = ({ name, onItemSelect }) => {
     const dispatch = useDispatch();
 
     const handleSelectQuery = (id) => {
+        const newQuery = { ...query };
+        if (!id) {
+            delete newQuery.category;
+        } else {
+            newQuery.category = id;
+        }
         dispatch(
             updateSetting(name, {
                 query: {
-                    ...query,
-                    category: id
+                    ...newQuery
                 }
             })
         );

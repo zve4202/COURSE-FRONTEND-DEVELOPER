@@ -5,10 +5,10 @@ import { debounce } from "lodash";
 import ProductTable from "./table/productTable";
 import { loadCategories } from "../../../store/categories";
 import { loadProducts } from "../../../store/products";
-import ProductSearch from "./productSearch";
+import ProductSearch from "./seacher/productSearch";
 import ProductLoader from "./productLoader";
 import CategoryList from "./productCategory";
-import { updateSetting } from "../../../store/setting";
+// import { updateSetting } from "../../../store/setting";
 import WorkScreen from "../../common/wrappers/workScreen";
 import PaginationWrapper from "../../common/pagination";
 import { loadFormats } from "../../../store/formats";
@@ -35,17 +35,6 @@ const ProductListPage = () => {
         console.log(id);
     };
 
-    const clearFilter = () => {
-        dispatch(
-            updateSetting(name, {
-                query: {
-                    search: ""
-                }
-            })
-        );
-
-        dispatch(loadProducts());
-    };
     const handleSort = () => {
         dispatch(loadProducts());
     };
@@ -68,19 +57,7 @@ const ProductListPage = () => {
         <WorkScreen>
             <CategoryList name={name} onItemSelect={onFilter} />
             <div className="content_wrapper card bg-light p-2">
-                <div className="d-flex mb-3 align-text-bottom">
-                    <div
-                        className="btn btn-secondary me-2 text-nowrap"
-                        onClick={clearFilter}
-                    >
-                        Очистить фильтр
-                    </div>
-                    <ProductSearch onSearch={onSearch} name={name} />
-                </div>
-
-                <div className="card-body d-flex align-content-center justify-content-between mb-3">
-                    <span>Функции сортировки по стоимости</span>
-                </div>
+                <ProductSearch onSearch={onSearch} name={name} />
                 <div className="h-100">
                     <PaginationWrapper
                         name={name}

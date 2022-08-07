@@ -13,7 +13,7 @@ exports.getAll = async function (req, res, next) {
     const page = req.params.page ? req.params.page : 1;
     const limit = req.params.limit ? req.params.limit : 10;
     try {
-        const data = await label.find();
+        const data = await label.find().sort({ name: 1 });
         return res.status(200).json({
             status: 200,
             content: data,

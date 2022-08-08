@@ -6,11 +6,11 @@ import ProductTable from "./table/productTable";
 import { loadCategories } from "../../../store/categories";
 import { loadProducts } from "../../../store/products";
 import ProductSearch from "./seacher/productSearch";
-import ProductLoader from "./productLoader";
+// import ProductLoader from "./productLoader";
 import CategoryList from "./productCategory";
 import { updateSetting } from "../../../store/setting";
 import WorkScreen from "../../common/wrappers/workScreen";
-import PaginationWrapper from "../../common/pagination";
+// import PaginationWrapper from "../../common/pagination";
 import { loadFormats } from "../../../store/formats";
 import { loadLabels } from "../../../store/labels";
 import { loadOrigins } from "../../../store/origin";
@@ -41,7 +41,8 @@ const ProductListPage = () => {
                 dispatch(loadProducts());
             }
         } else {
-            if (!product) {
+            if (!product || product._id !== Number(productId)) {
+                if (product) window.scrollTo(0, 0);
                 getProduct(productId);
             } else if (
                 !query.artist ||
@@ -65,7 +66,7 @@ const ProductListPage = () => {
         setProduct(content);
     }
 
-    const { docs, totalDocs } = useSelector((state) => state.products);
+    const { docs, isLoading } = useSelector((state) => state.products);
 
     useEffect(() => {
         dispatch(loadLabels());
@@ -80,50 +81,32 @@ const ProductListPage = () => {
         window.scrollTo(0, 0);
     }, [docs]);
 
-    const addToBasket = (id) => {
-        console.log(id);
-    };
-
-    const handleSort = () => {
+    const onReload = () => {
         dispatch(loadProducts());
     };
 
-    const onFilter = () => {
-        dispatch(loadProducts());
-    };
-
-    const onFilterDebounced = debounce(onFilter, 500);
+    const onFilterDebounced = debounce(onReload, 500);
     const onSearch = () => {
         onFilterDebounced();
     };
 
-    const onPageChangeDebounced = debounce(onFilter, 250);
-    const onPageChange = () => {
-        onPageChangeDebounced();
-    };
+    // const onPageChangeDebounced = debounce(onReload, 250);
+    // const onPageChange = () => {
+    //     onPageChangeDebounced();
+    // };
 
     return (
         <WorkScreen>
-            <CategoryList name={name} onItemSelect={onFilter} />
+            <CategoryList name={name} onItemSelect={onReload} />
             <div className="content_wrapper card bg-light p-2">
                 <ProductSearch onSearch={onSearch} name={name} />
                 <ProductCard product={product} />
-                <div className="h-100">
-                    <PaginationWrapper
-                        name={name}
-                        totalDocs={totalDocs}
-                        onChange={onPageChange}
-                    >
-                        <ProductLoader>
-                            <ProductTable
-                                name={name}
-                                products={docs}
-                                onSort={handleSort}
-                                onAdd={addToBasket}
-                            />
-                        </ProductLoader>
-                    </PaginationWrapper>
-                </div>
+                <ProductTable
+                    name={name}
+                    data={docs}
+                    loading={isLoading}
+                    onReload={onReload}
+                />
             </div>
         </WorkScreen>
     );

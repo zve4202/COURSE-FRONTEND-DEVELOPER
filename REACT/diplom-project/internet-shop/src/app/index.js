@@ -40,16 +40,16 @@ function App() {
             <NavBar />
             {!isLoading && (
                 <Switch>
-                    <Route path="/" exact component={Main} />
-                    <Route path="/product/:productId" component={Main} />
+                    <Route path="/basket" component={Basket} />
                     <ProtectedRoute path="/admin" exact component={Admin} />
                     <ProtectedRoute
                         path="/users/:userId/:edit?"
                         component={Users}
                     />
-                    <Route path="/basket" component={Basket} />
                     <Route path="/login/:type?" component={Login} />
                     <Route path="/logout" component={LogOut} />
+                    <Route path="/" exact component={Main} />
+                    <Route path="/:productId" component={Main} />
                     <Redirect to="/" />
                 </Switch>
             )}

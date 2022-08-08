@@ -32,13 +32,6 @@ class PaginationWrapper extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.totalDocs !== prevProps.totalDocs) {
-            // console.log(
-            //     "componentDidUpdate",
-            //     "curr",
-            //     this.props.totalDocs,
-            //     "prev",
-            //     prevProps.totalDocs
-            // );
             this.setPage(1);
         }
     }
@@ -53,23 +46,10 @@ class PaginationWrapper extends React.Component {
 
     setPage(page) {
         const { totalDocs } = this.props;
-        // console.log("setPage(1)", totalDocs);
-        // let pager = this.state;
-        // console.log(
-        //     "setPage(1) page, pager.totalPages",
-        //     page,
-        //     pager.totalPages
-        // );
-
-        // if (page < 1 || page > pager.totalPages) {
-        //     return;
-        // }
         if (page < 1) {
             return;
         }
-
         const pager = this.getPager(totalDocs, page, this.pagination.pageSize);
-        // console.log("setPage(1) pager", pager);
         this.pagination = {
             ...this.pagination,
             currentPage: page
@@ -141,10 +121,6 @@ class PaginationWrapper extends React.Component {
 
     render() {
         const pager = this.state;
-        // if (!pager.pages) {
-        //     return null;
-        // }
-
         return (
             <div>
                 <Paginator

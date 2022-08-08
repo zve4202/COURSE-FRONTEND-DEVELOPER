@@ -23,7 +23,6 @@ const SideBarWrapper = ({
     menu = menu || { ...defaultMenu, items: undefined };
     return (
         <div className="sidebar_wrapper p-2 card bg-light me-2">
-            {/* <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100"> */}
             <div className="card-header d-flex px-3 py-2 align-items-center justify-content-between mb-3">
                 <span>
                     <i className={`bi ${menu.caption.icon} me-2`} />
@@ -32,9 +31,9 @@ const SideBarWrapper = ({
                 {backBtn}
             </div>
             {menu.afterChildren && children}
-            <div className="list-group">
-                {menu.items &&
-                    menu.items.map((item) => (
+            {menu.items && (
+                <div className="list-group">
+                    {menu.items.map((item) => (
                         <div
                             key={item.path}
                             className={classNames({
@@ -48,7 +47,8 @@ const SideBarWrapper = ({
                             {item.name}
                         </div>
                     ))}
-            </div>
+                </div>
+            )}
             {!menu.afterChildren && children}
         </div>
     );

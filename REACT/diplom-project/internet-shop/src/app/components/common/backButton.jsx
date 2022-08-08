@@ -3,10 +3,13 @@ import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
 const BackButton = ({ tooltip, ...rest }) => {
+    console.log(rest);
     const history = useHistory();
     return (
         <button
-            className="btn btn-sm btn-outline-secondary"
+            className={`btn btn-sm btn-outline-secondary${
+                rest.className ? " " + rest.className : ""
+            }`}
             onClick={() => history.goBack()}
             title={tooltip || "Вернуться к предыдущей странице"}
         >

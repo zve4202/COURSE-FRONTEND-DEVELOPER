@@ -1,25 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Table from "../../../common/table";
+import Table from "../../../common/table-new";
 import ProductName from "./productName";
-import ProductPicture from "../../../ui/productPicture";
+import ProductPicture from "./productPicture";
 // import AddButton from "./addButton";
 import Barcode from "../../../ui/barcode";
 import ProductPrice from "./productPrice";
 import ProductQty from "./productQty";
 // import ProductFormat from "./productFormat";
 
-const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
-    const columns = {
-        image: {
-            class: "cover-small",
-            component: (product) => (
-                <ProductPicture size="small" picture={product.title.image} />
-            )
+const ProductTable = ({ name, data, loading, onReload, ...rest }) => {
+    const columns = [
+        {
+            name: "image",
+            width: 80,
+            component: (product) => <ProductPicture data={product} />
         },
-        add: {
-            name: "Корзина",
+        {
+            caption: "Корзина",
+            name: "add",
+            width: 130,
             component: (product) => (
                 <ProductQty
                     productId={product._id}
@@ -28,64 +29,74 @@ const ProductTable = ({ name, products, onSort, onAdd, ...rest }) => {
                 />
             )
         },
-        // add: {
-        //     component: (product) => (
-        //         <AddButton productId={product._id} onAdd={onAdd} />
-        //     )
-        // },
-        price: {
-            path: "price",
-            name: "Цена",
+        {
+            caption: "Цена",
+            name: "price",
+            sortable: true,
             component: (product) => <ProductPrice price={product.price} />
         },
-        name: {
-            path: "name",
-            name: "Наименоване",
+        {
+            caption: "Наименоване",
+            name: "name",
+            sortable: true,
             component: (product) => <ProductName data={product} />
         },
-        format: {
-            path: "format",
-            name: "Формат",
+        {
+            caption: "Формат",
+            name: "format",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.format.name}</div>
             )
         },
-        barcode: {
-            name: "Штрихкод",
+        {
+            caption: "Штрихкод",
+            name: "barcode",
             component: (product) => <Barcode barcode={product.title.barcode} />
         },
-        label: {
-            path: "label",
-            name: "Лейбл",
+        {
+            caption: "Лейбл",
+            name: "label",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.label.name}</div>
             )
         },
-        origin: {
-            path: "origin",
-            name: "Страна",
+        {
+            caption: "Страна",
+            name: "origin",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.origin}</div>
             )
         },
-        style: {
-            path: "style",
-            name: "Жанр",
+        {
+            caption: "Жанр",
+            name: "style",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.style}</div>
             )
         }
-    };
+    ];
 
     return (
-        <Table name={name} onSort={onSort} columns={columns} data={products} />
+        <Table
+            {...{
+                name,
+                columns,
+                data,
+                loading,
+                onReload
+            }}
+        />
     );
 };
 
 ProductTable.propTypes = {
     name: PropTypes.string.isRequired,
-    products: PropTypes.array.isRequired,
-    onSort: PropTypes.func.isRequired,
-    onAdd: PropTypes.func.isRequired
+    data: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
+    onReload: PropTypes.func.isRequired
 };
 export default ProductTable;

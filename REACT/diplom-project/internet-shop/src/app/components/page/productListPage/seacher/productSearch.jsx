@@ -16,9 +16,10 @@ const ProductSearch = ({ name, onSearch }) => {
     const origins = useSelector(getOrigins());
     const styles = useSelector(getStyles());
     const clearFilter = () => {
+        const queryArtist = query.artist ? { artist: query.artist } : {};
         dispatch(
             updateSetting(name, {
-                query: {}
+                query: queryArtist
             })
         );
         onSearch();
@@ -71,7 +72,7 @@ const ProductSearch = ({ name, onSearch }) => {
     const isDisabled = () => {
         return Object.keys(query).reduce(
             (previousValue, currentValue) =>
-                previousValue && currentValue === "show",
+                previousValue && ["artist", "show"].includes(currentValue),
             true
         );
     };

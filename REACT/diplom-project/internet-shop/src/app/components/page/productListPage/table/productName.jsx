@@ -7,7 +7,7 @@ const ProductName = ({ data }) => {
     const { artist, name } = data.title;
     return (
         <div className="small" title="Показать полную информацию">
-            <Link className="text-decoration-none" to={`/product/${_id}`}>
+            <Link className="text-decoration-none" to={`/${_id}`}>
                 <div className="text-muted text-decoration-none">
                     art: {article}
                 </div>

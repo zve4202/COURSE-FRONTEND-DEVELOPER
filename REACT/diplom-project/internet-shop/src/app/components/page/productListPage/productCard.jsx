@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => {
     if (!product) {
         return null;
     }
-    console.log(product);
+
     const productScheme = {
         article: { cation: "Артикул", field: "article" },
         quality: { cation: "Качество", field: "quality" },

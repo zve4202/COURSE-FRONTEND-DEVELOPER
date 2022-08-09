@@ -9,7 +9,6 @@ import {
 } from "../../../../store/basket";
 
 import { curs } from "../../../../config.json";
-import { Link } from "react-router-dom";
 
 const ProductQty = ({ productId, max, price }) => {
     const inputEl = useRef(null);
@@ -86,46 +85,8 @@ const ProductQty = ({ productId, max, price }) => {
         }
     };
 
-    // const handleKeyDown = (event) => {
-    //     console.log(event.keyCode);
-    //     if ([9, 13, 40].includes(event.keyCode)) {
-    //         event.preventDefault();
-    //         const inputs = Array.prototype.slice.call(
-    //             document.querySelectorAll("input.table-input")
-    //         );
-
-    //         const index =
-    //             (inputs.indexOf(document.activeElement) + 1) % inputs.length;
-    //         const input = inputs[index];
-    //         input.focus();
-    //         input.select();
-    //     }
-    //     if ([38].includes(event.keyCode)) {
-    //         event.preventDefault();
-    //         const inputs = Array.prototype.slice.call(
-    //             document.querySelectorAll("input.table-input")
-    //         );
-
-    //         const index =
-    //             (inputs.indexOf(document.activeElement) - 1) % inputs.length;
-    //         console.log(index);
-    //         const input = inputs[index >= 0 ? index : inputs.length - 1];
-    //         input.focus();
-    //         input.select();
-    //     }
-    // };
-
     return (
         <div className="input-group flex-nowrap">
-            <span
-                className="input-group-text"
-                title="Перейти в корзину"
-                role="button"
-            >
-                <Link aria-current="page" to="/basket">
-                    <i className="bi bi-cart" />
-                </Link>
-            </span>
             <span
                 className="input-group-text"
                 title="Удалить 1"
@@ -137,7 +98,7 @@ const ProductQty = ({ productId, max, price }) => {
             <input
                 ref={inputEl}
                 type="text"
-                className="form-control table-input"
+                className="form-control table-input text-center"
                 style={{ width: "45px" }}
                 placeholder="нет"
                 min={0}
@@ -145,7 +106,6 @@ const ProductQty = ({ productId, max, price }) => {
                 value={count}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                // onKeyDown={handleKeyDown}
                 title="Введите количество чтобы добавить товар в корзину"
             />
             <span

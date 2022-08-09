@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { updateSetting } from "../../../store/setting";
 
-const TableHeader = ({ name, onSort, columns, headered }) => {
+const TableHeader = ({ name, onReload, columns, headered }) => {
     const selectedSort = useSelector(
         (state) => state.setting.config[name].sort
     );
@@ -25,42 +25,42 @@ const TableHeader = ({ name, onSort, columns, headered }) => {
                 }
             })
         );
-        if (onSort) onSort();
+        if (onReload) onReload();
     };
 
     const renderSort = (column) => {
         if (column.sortable) {
-            if (selectedSort.name === column.name) {
+            if (selectedSort.sort === column.name) {
                 if (selectedSort.order === 1) {
                     return (
-                        <span className="g-1">
-                            <i className="bi bi-caret-up-fill" />
+                        <span className="text-nowrap g-1">
+                            <i className="small bi bi-caret-up-fill" />
                             {column.caption}
                         </span>
                     );
                 } else {
                     return (
-                        <span className="g-1">
-                            <i className="bi bi-caret-down-fill" />
+                        <span className="text-nowrap g-1">
+                            <i className="small bi bi-caret-down-fill" />
                             {column.caption}
                         </span>
                     );
                 }
             } else {
                 return (
-                    <span className="g-1">
-                        <i className="bi bi-caret-left" />
+                    <span className="text-nowrap g-1">
+                        <i className="bi bi-chevron-expand" />
                         {column.caption}
                     </span>
                 );
             }
         }
-        return <span>{column.caption}</span>;
+        return <span className="text-nowrap g-1">{column.caption}</span>;
     };
 
     return (
         <thead>
-            <tr className="small">
+            <tr>
                 {columns.map((column, index) => {
                     return (
                         <th
@@ -84,7 +84,7 @@ const TableHeader = ({ name, onSort, columns, headered }) => {
                         </th>
                     );
                 })}
-                <th className="flex-grow-1"></th>
+                <th style={{ width: "auto" }}></th>
             </tr>
         </thead>
     );
@@ -98,7 +98,7 @@ TableHeader.propTypes = {
     name: PropTypes.string.isRequired,
     columns: PropTypes.array.isRequired,
     headered: PropTypes.bool,
-    onSort: PropTypes.func
+    onReload: PropTypes.func
 };
 
 export default TableHeader;

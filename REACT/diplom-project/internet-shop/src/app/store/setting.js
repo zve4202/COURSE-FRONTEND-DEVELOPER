@@ -63,8 +63,22 @@ const settingSlice = createSlice({
         },
         update(state, action) {
             const { name, data } = action.payload;
-            const config = { ...state.config[name], ...data };
+            const oldConfig = { ...state.config[name] };
+            let config = { ...oldConfig, ...data };
+            console.log(oldConfig, config);
 
+            if (data.query) {
+                const { query } = data;
+                const { query: oldQuery, pagination } = oldConfig;
+                console.log(query, oldQuery);
+
+                if (JSON.stringify(query) !== JSON.stringify(oldQuery)) {
+                    config = {
+                        ...config,
+                        pagination: { ...pagination, currentPage: 1 }
+                    };
+                }
+            }
             state.config[name] = config;
             const key = String().concat(settingSlice.name, "-", name);
 

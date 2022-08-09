@@ -11,8 +11,8 @@ const ProductName = ({ data }) => {
                 <div className="text-muted text-decoration-none">
                     art: {article}
                 </div>
-                <div>{artist.name}</div>
-                <div>{name}</div>
+                <div className="text-truncate">{artist.name}</div>
+                <div className="text-truncate">{name}</div>
             </Link>
         </div>
     );

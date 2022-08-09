@@ -18,8 +18,21 @@ const TableBody = ({ data, columns, loading }) => {
             {loading || data.length === 0 ? (
                 <tr>
                     <td colSpan={columns.length + 1}>
-                        <div className="w-100 text-center">
-                            {loading ? "Загрузка данных..." : "Нет данных"}
+                        <div className="w-100 text-center text-primary">
+                            {loading ? (
+                                <>
+                                    <span
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                    <span className="ms-2">
+                                        Загрузка данных...
+                                    </span>
+                                </>
+                            ) : (
+                                <span className="text-danger">Нет данных</span>
+                            )}
                         </div>
                     </td>
                 </tr>
@@ -31,7 +44,7 @@ const TableBody = ({ data, columns, loading }) => {
                                 {renderContent(item, column, index)}
                             </td>
                         ))}
-                        <td className="flex-grow-1"></td>
+                        <td></td>
                     </tr>
                 ))
             )}

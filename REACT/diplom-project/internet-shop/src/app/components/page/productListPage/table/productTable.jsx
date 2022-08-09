@@ -10,17 +10,24 @@ import ProductPrice from "./productPrice";
 import ProductQty from "./productQty";
 // import ProductFormat from "./productFormat";
 
-const ProductTable = ({ name, data, loading, onReload, ...rest }) => {
+const ProductTable = ({
+    name,
+    data,
+    totalDocs,
+    loading,
+    onReload,
+    ...rest
+}) => {
     const columns = [
         {
             name: "image",
-            width: 80,
+            width: 79,
             component: (product) => <ProductPicture data={product} />
         },
         {
             caption: "Корзина",
             name: "add",
-            width: 130,
+            width: 190,
             component: (product) => (
                 <ProductQty
                     productId={product._id}
@@ -33,12 +40,14 @@ const ProductTable = ({ name, data, loading, onReload, ...rest }) => {
             caption: "Цена",
             name: "price",
             sortable: true,
+            width: 115,
             component: (product) => <ProductPrice price={product.price} />
         },
         {
             caption: "Наименоване",
             name: "name",
             sortable: true,
+            width: 300,
             component: (product) => <ProductName data={product} />
         },
         {
@@ -86,8 +95,10 @@ const ProductTable = ({ name, data, loading, onReload, ...rest }) => {
                 name,
                 columns,
                 data,
+                totalDocs,
                 loading,
-                onReload
+                onReload,
+                ...rest
             }}
         />
     );
@@ -96,6 +107,7 @@ const ProductTable = ({ name, data, loading, onReload, ...rest }) => {
 ProductTable.propTypes = {
     name: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
+    totalDocs: PropTypes.number,
     loading: PropTypes.bool.isRequired,
     onReload: PropTypes.func.isRequired
 };

@@ -6,6 +6,7 @@ import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 import PaginationWrapper from "../pagination/paginationWrapper";
 import { updateSetting } from "../../../store/setting";
+import { debounce } from "lodash";
 
 class Table extends Component {
     constructor(props) {
@@ -14,29 +15,37 @@ class Table extends Component {
         // this.state = { inputs: null };
         this.name = this.props.name;
         this.config = this.props.config[this.name];
-        this.handleKeyDown.bind(this);
-        this.setInputs.bind(this);
         this.inputs = null;
+        this.focused = null;
+
+        this.setInputs.bind(this);
+        this.handleKeyDown.bind(this);
+        this.handleFocus.bind(this);
     }
 
     setInputs() {
-        this.inputs = document.querySelectorAll("input.table-input");
-        console.log(this.inputs);
+        this.inputs = Array.prototype.slice.call(
+            document.querySelectorAll("input.table-input")
+        );
     }
 
     componentDidMount() {
-        if (this.props.data.length > 0) {
-            this.setInputs();
-        }
+        this.setInputs();
+        // const { inputs } = this;
+        // console.log("inputs", inputs);
+        // if (inputs && inputs.length > 0) {
+        //     inputs[0].focus();
+        //     inputs[0].select();
+        // }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.data.length !== prevProps.data.length) {
+        if (
+            this.props.data.length !== prevProps.data.length ||
+            this.props.loading !== prevProps.loading
+        ) {
             this.setInputs();
-        }
-
-        if (this.props.loading !== prevProps.loading) {
-            if (this.props.loading) {
+            if (!this.props.loading) {
                 const { inputs } = this;
                 if (inputs && inputs.length > 0) {
                     inputs[0].focus();
@@ -46,45 +55,63 @@ class Table extends Component {
         }
     }
 
-    handleKeyDown(event) {
-        const { inputs } = this;
+    handleKeyDown(event, self) {
+        const { inputs, focused } = self;
         if (!inputs || inputs.length === 0) return;
-        console.log(event.keyCode);
+        // console.log(event.keyCode);
         if ([9, 13, 40].includes(event.keyCode)) {
             event.preventDefault();
-            const index =
-                (inputs.indexOf(this.current.activeElement) + 1) %
-                inputs.length;
+            const index = (inputs.indexOf(focused) + 1) % inputs.length;
             const input = inputs[index];
             input.focus();
             input.select();
         }
         if ([38].includes(event.keyCode)) {
             event.preventDefault();
-            const index =
-                (inputs.indexOf(document.activeElement) - 1) % inputs.length;
-            console.log(index);
+            const index = (inputs.indexOf(focused) - 1) % inputs.length;
+            // console.log(index);
             const input = inputs[index >= 0 ? index : inputs.length - 1];
             input.focus();
             input.select();
         }
     }
 
+    handleFocus(event, self) {
+        self.focused = event.target;
+        // console.log("handleFocus", event, self);
+    }
+
     render() {
-        const { name, onReload, columns, data, headered, loading } = this.props;
+        const {
+            name,
+            onReload,
+            columns,
+            data,
+            totalDocs,
+            loading,
+            headered,
+            bordered,
+            striped
+        } = this.props;
+
+        const onPageChangeDebounced = debounce(onReload, 250);
+        const onPageChange = () => {
+            onPageChangeDebounced();
+        };
+
         return (
             <PaginationWrapper
-                name={name}
-                totalDocs={data.length}
-                onChange={onReload}
+                {...{ name, totalDocs, loading }}
+                onChange={onPageChange}
             >
                 <table
                     className={classNames({
                         "table table-hover": true,
-                        "table-bordered": this.props.bordered,
-                        "table-striped": this.props.striped
+                        "table-bordered": bordered,
+                        "table-striped": striped
                     })}
-                    onKeyDown={this.handleKeyDown}
+                    onKeyDown={(e) => this.handleKeyDown(e, this)}
+                    onFocus={(e) => this.handleFocus(e, this)}
                 >
                     <TableHeader {...{ headered, name, onReload, columns }} />
                     <TableBody {...{ columns, data, loading }} />
@@ -98,12 +125,14 @@ Table.defaultProps = {
     headered: true,
     bordered: false,
     striped: true,
-    loading: false
+    loading: false,
+    totalDocs: 0
 };
 
 Table.propTypes = {
     name: PropTypes.string.isRequired,
     data: PropTypes.array,
+    totalDocs: PropTypes.number,
     loading: PropTypes.bool,
     columns: PropTypes.array,
     headered: PropTypes.bool,

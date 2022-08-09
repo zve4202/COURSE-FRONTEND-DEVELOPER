@@ -66,7 +66,11 @@ const ProductListPage = () => {
         setProduct(content);
     }
 
-    const { docs, isLoading } = useSelector((state) => state.products);
+    const {
+        docs: data,
+        totalDocs,
+        isLoading: loading
+    } = useSelector((state) => state.products);
 
     useEffect(() => {
         dispatch(loadLabels());
@@ -77,9 +81,9 @@ const ProductListPage = () => {
         dispatch(loadStyles());
     }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [docs]);
+    // useEffect(() => {
+    //     window.scrollTo(0, 0);
+    // }, [docs]);
 
     const onReload = () => {
         dispatch(loadProducts());
@@ -90,11 +94,6 @@ const ProductListPage = () => {
         onFilterDebounced();
     };
 
-    // const onPageChangeDebounced = debounce(onReload, 250);
-    // const onPageChange = () => {
-    //     onPageChangeDebounced();
-    // };
-
     return (
         <WorkScreen>
             <CategoryList name={name} onItemSelect={onReload} />
@@ -102,10 +101,7 @@ const ProductListPage = () => {
                 <ProductSearch onSearch={onSearch} name={name} />
                 <ProductCard product={product} />
                 <ProductTable
-                    name={name}
-                    data={docs}
-                    loading={isLoading}
-                    onReload={onReload}
+                    {...{ name, data, totalDocs, loading, onReload }}
                 />
             </div>
         </WorkScreen>

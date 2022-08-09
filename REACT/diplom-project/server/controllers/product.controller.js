@@ -16,7 +16,9 @@ const searchMap = {
     label: { field: "title.label._id", number: true },
     barcode: { field: "title.barcode" },
     origin: { field: "title.origin" },
-    style: { field: "title.style" }
+    style: { field: "title.style" },
+    inStock: { field: "count" },
+    image: { field: "title.image" }
 };
 
 const sortMap = {
@@ -45,8 +47,10 @@ exports.getAll = async function (req, res, next) {
             options.sort = sort;
         }
 
-        const match = getMatching(query, searchMap);
-        console.log("match", match);
+        let match = getMatching(query, searchMap);
+        if (query.inStock) {
+        }
+        console.log("query, match", query, match);
 
         const aggregate = match
             ? product_m.aggregate(match, { allowDiskUse: true })

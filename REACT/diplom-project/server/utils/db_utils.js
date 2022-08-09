@@ -57,10 +57,17 @@ const getValue = (field, text, count) => {
     if (field.includes("barcode")) {
         return text;
     }
+    if (field.includes("image")) {
+        return { $ne: null };
+    }
+    if (field === "count") {
+        return { $gt: 0 };
+    }
 
     if (field.includes("alias")) {
         text = getSlug(text);
     }
+
     // if (count === 0) {
     //     text = "^" + text;
     // }

@@ -10,7 +10,8 @@ const initialState = {
         userId: null,
         docs: [],
         totalQty: 0,
-        totalPrice: 0
+        totalPrice: 0,
+        reminders: []
     },
     isLoading: true,
     error: null
@@ -28,7 +29,7 @@ const basketSlice = createSlice({
             state.basket = action.payload;
             state.isLoading = false;
         },
-        apdate(state, action) {
+        update(state, action) {
             const { docs } = state.basket;
             const index = docs.findIndex((doc) => doc.id === action.payload.id);
             if (index < 0) {
@@ -63,12 +64,31 @@ const basketSlice = createSlice({
         requestFailed(state, action) {
             state.isLoading = false;
             state.error = action.payload;
+        },
+        updateReminder(state, action) {
+            const { reminders } = state.basket;
+            const index = reminders.findIndex(
+                (doc) => doc.id === action.payload.id
+            );
+            if (index < 0) {
+                reminders.push(action.payload);
+            } else {
+                reminders[index] = action.payload;
+            }
+            state.basket = { ...state.basket, reminders };
+        },
+        removeReminder(state, action) {
+            const { reminders } = state.basket;
+            const newReminders = reminders.filter(
+                (item) => item.id !== action.payload
+            );
+            state.basket = { ...state.basket, reminders: newReminders };
         }
     }
 });
 
 const { actions, reducer: basketReducer } = basketSlice;
-const { apdate, remove, clear, resived, requested, requestFailed } = actions;
+const { update, remove, clear, resived, requested, requestFailed } = actions;
 
 export const loadBasket = () => async (dispatch) => {
     dispatch(requested());
@@ -93,7 +113,7 @@ export const loadBasket = () => async (dispatch) => {
 
 export const addBasket = (payload) => async (dispatch, getState) => {
     try {
-        dispatch(apdate(payload));
+        dispatch(update(payload));
         const { basket } = getState().basket;
         dispatch(requested());
         const { content } = await Service.update(basket._id, basket);
@@ -105,7 +125,7 @@ export const addBasket = (payload) => async (dispatch, getState) => {
 
 export const basketUpdateBasket = (payload) => async (dispatch, getState) => {
     try {
-        dispatch(apdate(payload));
+        dispatch(update(payload));
         const { basket } = getState().basket;
         await Service.update(basket._id, basket);
     } catch (error) {

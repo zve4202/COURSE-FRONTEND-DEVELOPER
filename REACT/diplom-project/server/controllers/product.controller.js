@@ -14,11 +14,10 @@ const searchMap = {
     artist: { field: "title.artist._id", number: true },
     format: { field: "title.format._id", number: true },
     label: { field: "title.label._id", number: true },
-    barcode: { field: "title.barcode" },
     origin: { field: "title.origin" },
     style: { field: "title.style" },
-    inStock: { field: "count" },
-    image: { field: "title.image" }
+    inStock: { field: "count", action: { $gt: 0 } },
+    image: { field: "title.image", action: { $ne: null } }
 };
 
 const sortMap = {
@@ -71,6 +70,20 @@ exports.get = async function (req, res, next) {
     const { id } = req.params;
     try {
         const data = await product_m.findById(id);
+        return res.status(200).json({
+            status: 200,
+            content: data,
+            message: DATA_RECEIVED
+        });
+    } catch (e) {
+        return res.status(500).json({ status: 500, message: e.message });
+    }
+};
+
+exports.getBarcode = async function (req, res, next) {
+    const { id } = req.params;
+    try {
+        const data = await product_m.find({ "title.barcode": id });
         return res.status(200).json({
             status: 200,
             content: data,

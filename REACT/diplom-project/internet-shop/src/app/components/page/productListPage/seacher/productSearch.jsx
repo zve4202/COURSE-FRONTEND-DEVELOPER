@@ -7,10 +7,12 @@ import { getLabels } from "../../../../store/labels";
 import { getFormats } from "../../../../store/formats";
 import { getOrigins } from "../../../../store/origin";
 import { getStyles } from "../../../../store/style";
+import { getCategory } from "../../../../store/categories";
 
 const ProductSearch = ({ name, onSearch }) => {
     const dispatch = useDispatch();
     const query = useSelector((state) => state.setting.config[name].query);
+    const category = useSelector(getCategory(query.category));
     const formats = useSelector(getFormats());
     const labels = useSelector(getLabels());
     const origins = useSelector(getOrigins());
@@ -24,6 +26,7 @@ const ProductSearch = ({ name, onSearch }) => {
         );
         onSearch();
     };
+
     const handleSearchQuery = ({ target }) => {
         const newQuery = { ...query };
         if (!target.value) {
@@ -40,6 +43,7 @@ const ProductSearch = ({ name, onSearch }) => {
         );
         onSearch();
     };
+
     const handleCollapse = () => {
         const queryShow = !query.show;
         const needReload = Object.keys(query).reduce(
@@ -76,6 +80,7 @@ const ProductSearch = ({ name, onSearch }) => {
             true
         );
     };
+
     return (
         <div className="mb-2">
             <div className="input-group d-flex flex-nowrap w-100">
@@ -95,9 +100,57 @@ const ProductSearch = ({ name, onSearch }) => {
                     onChange={handleSearchQuery}
                     value={query.search || ""}
                 />
+                {category && (
+                    <div
+                        className="input-group-text btn btn-outline-primary px-3"
+                        title={"Установлен фильтр\nКликни чтобы снять его"}
+                        type="button"
+                        onClick={() =>
+                            handleSearchQuery({
+                                target: {
+                                    name: "category",
+                                    value: null
+                                }
+                            })
+                        }
+                    >
+                        <span className="me-2">кат:</span>
+                        <span className="me-2 fw-bold">{category.name}</span>
+                        <i className="bi bi-x-circle" title="Снять фильтр" />
+                    </div>
+                )}
                 <div
                     className={`input-group-text btn btn-outline-${
-                        query.inStock ? "success" : "secondary"
+                        query.image ? "primary" : "secondary"
+                    }`}
+                    title={`${
+                        query.image
+                            ? "Выбрать всё, что есть"
+                            : "Выбрать только с картинками"
+                    }`}
+                    type="button"
+                    onClick={() =>
+                        handleSearchQuery({
+                            target: {
+                                name: "image",
+                                value: !query.image
+                            }
+                        })
+                    }
+                >
+                    <i
+                        className={`bi bi-check-circle${
+                            query.image ? "-fill" : ""
+                        }`}
+                    ></i>
+                    <span className="ms-2">
+                        {query.image ? "С картинками" : "Всё"}
+                    </span>
+                </div>
+
+                <div
+                    className={`input-group-text btn btn-outline-${
+                        query.inStock ? "primary" : "secondary"
                     }`}
                     title={`${
                         query.inStock

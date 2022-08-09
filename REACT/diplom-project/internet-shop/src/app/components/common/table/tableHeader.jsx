@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { updateSetting } from "../../../store/setting";
 
-const TableHeader = ({ name, onSort, columns }) => {
+const TableHeader = ({ name, onReload, columns, headered }) => {
     const selectedSort = useSelector(
         (state) => state.setting.config[name].sort
     );
@@ -25,60 +25,80 @@ const TableHeader = ({ name, onSort, columns }) => {
                 }
             })
         );
-        onSort();
+        if (onReload) onReload();
     };
 
-    const rendeSortArrow = (sort) => {
-        if (sort) {
-            if (selectedSort.sort === sort) {
+    const renderSort = (column) => {
+        if (column.sortable) {
+            if (selectedSort.sort === column.name) {
                 if (selectedSort.order === 1) {
-                    return <i className="bi bi-caret-up-fill"></i>;
+                    return (
+                        <span className="text-nowrap g-1">
+                            <i className="small bi bi-caret-up-fill" />
+                            {column.caption}
+                        </span>
+                    );
                 } else {
-                    return <i className="bi bi-caret-down-fill"></i>;
+                    return (
+                        <span className="text-nowrap g-1">
+                            <i className="small bi bi-caret-down-fill" />
+                            {column.caption}
+                        </span>
+                    );
                 }
             } else {
-                return <i className="bi bi-caret-left"></i>;
+                return (
+                    <span className="text-nowrap g-1">
+                        <i className="bi bi-chevron-expand" />
+                        {column.caption}
+                    </span>
+                );
             }
         }
-
-        return null;
+        return <span className="text-nowrap g-1">{column.caption}</span>;
     };
 
     return (
         <thead>
             <tr>
-                {Object.keys(columns).map((column) => {
-                    const colClass =
-                        "text-muted" +
-                        (columns[column].class
-                            ? ` ${columns[column].class}`
-                            : "");
-
+                {columns.map((column, index) => {
                     return (
                         <th
-                            className={colClass}
-                            key={column}
-                            onClick={
-                                columns[column].path
-                                    ? () => handleSort(columns[column].path)
-                                    : undefined
+                            key={index + 1}
+                            {...{
+                                name: headered && column.name,
+                                role: headered && column.sortable && "button",
+                                onClick:
+                                    headered &&
+                                    column.sortable &&
+                                    (() => handleSort(column.name)),
+                                scope: "col"
+                            }}
+                            style={
+                                column.width
+                                    ? { width: `${column.width}px` }
+                                    : { width: "auto" }
                             }
-                            {...{ role: columns[column].path && "button" }}
-                            scope="col"
                         >
-                            {columns[column].name}{" "}
-                            {rendeSortArrow(columns[column].path)}
+                            {headered && renderSort(column)}
                         </th>
                     );
                 })}
+                <th style={{ width: "auto" }}></th>
             </tr>
         </thead>
     );
 };
+
+TableHeader.defaultProps = {
+    headered: true
+};
+
 TableHeader.propTypes = {
     name: PropTypes.string.isRequired,
-    onSort: PropTypes.func.isRequired,
-    columns: PropTypes.object.isRequired
+    columns: PropTypes.array.isRequired,
+    headered: PropTypes.bool,
+    onReload: PropTypes.func
 };
 
 export default TableHeader;

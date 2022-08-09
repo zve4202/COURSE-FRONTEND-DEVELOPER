@@ -7,7 +7,7 @@ import logo from "../assets/brand/favicon.ico";
 const YesNoDialog = ({ dialogId, message, onAccept }) => {
     return (
         <div
-            className="modal fade"
+            className="modal fade bg-light"
             id={dialogId}
             tabIndex="-1"
             aria-labelledby="exampleModalLabel"

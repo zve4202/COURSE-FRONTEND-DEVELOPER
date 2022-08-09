@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import BackButton from "../../common/backButton";
-import ProductPicture from "../../ui/productPicture";
-import { curs } from "../../../config.json";
-
-// import classNames from "classnames";
+import ProductPicture from "../../../ui/productPicture";
+import { curs } from "../../../../config.json";
+import { useHistory } from "react-router-dom";
+import ProductQty from "../table/productQty";
+import ProductMenuBasket from "./productMenuBasket";
 
 const ProductCard = ({ product }) => {
     if (!product) {
         return null;
     }
+    const history = useHistory();
 
     const productScheme = {
         article: { cation: "Артикул", field: "article" },
@@ -41,11 +42,13 @@ const ProductCard = ({ product }) => {
         <>
             <div className="card mb-2">
                 <div className="card-header d-flex g-2 p-2 align-items-center">
-                    <BackButton
-                        className="me-2"
-                        tooltip="Вернуться к общему скиску покупок"
-                    />
-
+                    <button
+                        className="btn btn-outline-secondary me-2"
+                        onClick={() => history.push("/")}
+                        title="Вернуться к общему списку покупок"
+                    >
+                        <i className="bi bi-caret-left"></i>
+                    </button>
                     <span>
                         <i className="bi bi-hand-thumbs-up me-2"></i>
                         Информация по товару
@@ -80,7 +83,23 @@ const ProductCard = ({ product }) => {
                                 );
                             })}
                         </div>
-                        <div className="col-auto">sidebar_wrapper</div>
+                        <div
+                            className="card flex-grow-0"
+                            style={{
+                                width: "250px",
+                                padding: 0
+                            }}
+                        >
+                            <div className="card-header">Инструменты</div>
+                            <div className="card-body ">
+                                <ProductMenuBasket />
+                                <ProductQty
+                                    productId={product._id}
+                                    max={product.count}
+                                    price={product.price}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

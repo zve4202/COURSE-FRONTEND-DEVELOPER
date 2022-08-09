@@ -15,7 +15,7 @@ import { loadFormats } from "../../../store/formats";
 import { loadLabels } from "../../../store/labels";
 import { loadOrigins } from "../../../store/origin";
 import { loadStyles } from "../../../store/style";
-import ProductCard from "./productCard";
+import ProductCard from "./card/productCard";
 import { useParams } from "react-router-dom";
 import productService from "../../../services/product.service";
 

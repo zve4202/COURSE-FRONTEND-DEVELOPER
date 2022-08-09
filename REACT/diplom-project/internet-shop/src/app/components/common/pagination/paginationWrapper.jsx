@@ -31,7 +31,7 @@ class PaginationWrapper extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("componentDidUpdate", this.state, prevState);
+        // console.log("componentDidUpdate", this.state, prevState);
         // const { pagination } = this.props.config[this.name];
 
         if (this.props.totalDocs !== prevProps.totalDocs) {

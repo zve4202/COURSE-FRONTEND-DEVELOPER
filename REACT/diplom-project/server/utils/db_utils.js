@@ -88,7 +88,13 @@ const getMatching = (query, searchMap) => {
         const map = searchMap[key];
         if (map) {
             const queryValue = query[key];
-            if (map.number) {
+            if (map.action) {
+                if (map.action.$eq) {
+                    $match[map.field] = queryValue;
+                } else {
+                    $match[map.field] = map.action;
+                }
+            } else if (map.number) {
                 const numvalue = Number(queryValue);
                 if (numvalue && numvalue == queryValue) {
                     $match[map.field] = numvalue;

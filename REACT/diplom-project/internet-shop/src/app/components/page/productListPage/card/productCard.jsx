@@ -93,11 +93,7 @@ const ProductCard = ({ product }) => {
                             <div className="card-header">Инструменты</div>
                             <div className="card-body ">
                                 <ProductMenuBasket />
-                                <ProductQty
-                                    productId={product._id}
-                                    max={product.count}
-                                    price={product.price}
-                                />
+                                <ProductQty data={product} />
                             </div>
                         </div>
                     </div>

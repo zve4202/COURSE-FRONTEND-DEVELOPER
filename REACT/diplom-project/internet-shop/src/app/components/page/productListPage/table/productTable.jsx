@@ -28,13 +28,7 @@ const ProductTable = ({
             caption: "Корзина",
             name: "add",
             width: 190,
-            component: (product) => (
-                <ProductQty
-                    productId={product._id}
-                    max={product.count}
-                    price={product.price}
-                />
-            )
+            component: (product) => <ProductQty data={product} />
         },
         {
             caption: "Цена",

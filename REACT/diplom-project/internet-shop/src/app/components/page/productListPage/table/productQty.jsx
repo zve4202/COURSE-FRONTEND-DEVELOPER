@@ -1,22 +1,34 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
+import classNames from "classnames";
 
 import {
     addBasket,
     getBasketCountById,
     removeBasket
 } from "../../../../store/basket";
-
+import {
+    addReminder,
+    getReminder,
+    loadReminders,
+    removeReminder,
+    updateReminder
+} from "../../../../store/reminders";
 import { curs } from "../../../../config.json";
-import classNames from "classnames";
 
-const ProductQty = ({ productId, max, price }) => {
-    const [order, setOrder] = useState();
+const ProductQty = ({ data }) => {
+    const { title, price, count: max } = data;
     const inputEl = useRef(null);
-    const qty = useSelector(getBasketCountById(productId));
+    const qty = useSelector(getBasketCountById(data._id));
     const [count, setCount] = useState(String(qty || ""));
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(loadReminders());
+    }, []);
+
+    const reminder = useSelector(getReminder(title._id));
+
     const checkValue = (value) => {
         const result = Math.min(max, Math.max(0, Number(value || "0")));
         setCount(result || "");
@@ -26,11 +38,11 @@ const ProductQty = ({ productId, max, price }) => {
         const value = target.value.replace(/[^\d]/, "");
         const numCount = checkValue(value);
         if (numCount === 0) {
-            dispatch(removeBasket(productId));
+            dispatch(removeBasket(data._id));
         } else {
             dispatch(
                 addBasket({
-                    id: productId,
+                    id: data._id,
                     qty: numCount,
                     price: price * curs
                 })
@@ -43,11 +55,11 @@ const ProductQty = ({ productId, max, price }) => {
         const numCount = checkValue(Number(count || "0") - 1);
         if (numCount < 0) return;
         if (numCount === 0) {
-            dispatch(removeBasket(productId));
+            dispatch(removeBasket(data._id));
         } else {
             dispatch(
                 addBasket({
-                    id: productId,
+                    id: data._id,
                     qty: numCount,
                     price: price * curs
                 })
@@ -59,7 +71,7 @@ const ProductQty = ({ productId, max, price }) => {
         const numCount = checkValue(Number(count || "0") + 1);
         dispatch(
             addBasket({
-                id: productId,
+                id: data._id,
                 qty: numCount,
                 price: price * curs
             })
@@ -74,10 +86,14 @@ const ProductQty = ({ productId, max, price }) => {
 
         const numCount = Math.min(max, Math.max(0, Number(count)));
         if (numCount === 0) {
-            dispatch(removeBasket(productId));
+            dispatch(removeBasket(data._id));
         } else {
             dispatch(
-                addBasket({ id: productId, qty: numCount, price: price * curs })
+                addBasket({
+                    id: data._id,
+                    qty: numCount,
+                    price: price * curs
+                })
             );
         }
     };
@@ -88,7 +104,23 @@ const ProductQty = ({ productId, max, price }) => {
         }
 
         if (target.nodeName === "SPAN") {
-            setOrder(target.id === "nothing" ? undefined : target.id);
+            if (target.id === "nothing" && !reminder) return;
+            if (reminder === target.id) return;
+
+            if (target.id === "nothing") {
+                dispatch(removeReminder(title._id));
+            } else if (!reminder) {
+                dispatch(
+                    addReminder({ titleId: title._id, reminder: target.id })
+                );
+            } else {
+                dispatch(
+                    updateReminder({
+                        titleId: title._id,
+                        reminder: target.id
+                    })
+                );
+            }
         }
     };
 
@@ -137,7 +169,7 @@ const ProductQty = ({ productId, max, price }) => {
                     id="notify-me"
                     className={classNames({
                         "btn btn-outline-info": true,
-                        active: order === "notify-me"
+                        active: reminder === "notify-me"
                     })}
                     title="Оповестить меня, в случае постуаления"
                 >
@@ -148,14 +180,14 @@ const ProductQty = ({ productId, max, price }) => {
                     id="to-order"
                     className={classNames({
                         "btn btn-outline-danger": true,
-                        active: order === "to-order"
+                        active: reminder === "to-order"
                     })}
                     title="При поступлении добавить в заказ, и оповестить меня"
                 >
                     <i className="bi bi-bag" />
                 </span>
 
-                {order && (
+                {reminder && (
                     <span
                         id="nothing"
                         className="btn btn-outline-secondary"
@@ -170,8 +202,6 @@ const ProductQty = ({ productId, max, price }) => {
 };
 
 ProductQty.propTypes = {
-    productId: PropTypes.number.isRequired,
-    max: PropTypes.number,
-    price: PropTypes.number
+    data: PropTypes.object.isRequired
 };
 export default ProductQty;

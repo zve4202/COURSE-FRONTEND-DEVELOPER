@@ -12,6 +12,7 @@ import usersReducer from "./users";
 import labelsReducer from "./labels";
 import originsReducer from "./origin";
 import stylesReducer from "./style";
+import remindersReducer from "./reminders";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
     styles: stylesReducer,
     products: productsReducer,
     setting: settingReducer,
-    basket: basketReducer
+    basket: basketReducer,
+    reminder: remindersReducer
 });
 
 function createStore() {

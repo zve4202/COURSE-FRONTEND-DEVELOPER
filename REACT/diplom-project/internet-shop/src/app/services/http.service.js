@@ -62,6 +62,7 @@ http.interceptors.request.use(
             const expiresDate = getTokenExpiresDate();
             if (expiresDate < Date.now()) {
                 const data = await authService.refresh(refreshToken);
+
                 if (data) {
                     setTokens(data);
                 }
@@ -86,13 +87,13 @@ http.interceptors.response.use(
         return res;
     },
     function (error) {
+        const { response } = error;
         const expectedErrors =
-            error.response &&
-            error.response.status >= 400 &&
-            error.response.status < 500;
-
-        if (!expectedErrors) {
-            toast.error(error.message);
+            response && response.status >= 400 && response.status < 500;
+        if (response.status === 401) {
+            toast.info("Войдите в систему!!!");
+        } else if (!expectedErrors) {
+            toast.error(response.message);
         }
         return Promise.reject(error);
     }

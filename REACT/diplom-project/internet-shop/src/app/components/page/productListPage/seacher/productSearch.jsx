@@ -103,20 +103,24 @@ const ProductSearch = ({ name, onSearch }) => {
                 {category && (
                     <div
                         className="input-group-text btn btn-outline-primary px-3"
-                        title={"Установлен фильтр\nКликни чтобы снять его"}
-                        type="button"
-                        onClick={() =>
-                            handleSearchQuery({
-                                target: {
-                                    name: "category",
-                                    value: null
-                                }
-                            })
+                        title={
+                            "Установлен фильтр\nКликни в крестик чтобы снять его"
                         }
+                        type="button"
                     >
-                        <span className="me-2">кат:</span>
-                        <span className="me-2 fw-bold">{category.name}</span>
-                        <i className="bi bi-x-circle" title="Снять фильтр" />
+                        <span className="me-2">{category.name}</span>
+                        <i
+                            className="bi bi-x-circle"
+                            title="Снять фильтр"
+                            onClick={() =>
+                                handleSearchQuery({
+                                    target: {
+                                        name: "category",
+                                        value: null
+                                    }
+                                })
+                            }
+                        />
                     </div>
                 )}
                 <div

@@ -119,7 +119,5 @@ export const updateSetting = (name, data) => async (dispatch) => {
 
 export const getConfig = () => (state) => state.setting.config;
 export const getConfigByName = (name) => (state) => state.setting.config[name];
-export const getRolesLoading = () => (state) => state.setting.isLoading;
-export const getRolesError = () => (state) => state.setting.error;
 
 export default settingReducer;

@@ -9,6 +9,7 @@ db.sequence = require("./Sequence");
 
 db.role = require("./Role");
 db.user = require("./User");
+db.reminder = require("./Reminder");
 
 db.category = require("./Category");
 db.format = require("./Format");

@@ -29,7 +29,7 @@ module.exports = (req, res, next) => {
         req.user = data;
         next();
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: e.message
         });
     }

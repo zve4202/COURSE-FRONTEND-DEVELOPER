@@ -11,6 +11,7 @@ const styleRoute = require("./style.route");
 const orderRoute = require("./order.route");
 const orderDetailsRoute = require("./order_details.route");
 const basketRoute = require("./basket.route");
+const reminderRoute = require("./reminder.route");
 
 const router = express.Router({ mergeParams: true });
 
@@ -18,6 +19,7 @@ router.use("/auth", authRoute);
 
 router.use("/user", userRoute);
 router.use("/role", roleRoute);
+router.use("/reminder", reminderRoute);
 
 router.use("/product", productRoute);
 router.use("/category", categoryRoute);

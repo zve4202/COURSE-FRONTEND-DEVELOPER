@@ -14,16 +14,12 @@ import authService from "./auth.service";
 const http = axios.create({ baseURL: configFile.apiEndpoint });
 
 const checkParams = ({ params }) => {
-    // console.log("params", params);
-
     if (params && params.paramsName) {
         try {
             const { paramsName } = params;
             delete params.paramsName;
             const key = String.prototype.concat("setting-", paramsName);
-            // console.log("key", key);
             const { pagination, query, sort } = JSON.parse(getValue(key));
-            // console.log({ pagination, query, sort });
             const newParams = {
                 page: pagination.currentPage,
                 limit: pagination.pageSize,
@@ -39,7 +35,6 @@ const checkParams = ({ params }) => {
                     }
                 }
             });
-            // console.log({ newParams });
             return newParams;
         } catch (error) {
             console.log({ error: error.message });

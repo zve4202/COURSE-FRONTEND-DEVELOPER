@@ -9,7 +9,9 @@ const reminder = require("../models/Reminder");
 
 exports.getAll = async function (req, res, next) {
     try {
+        // console.log("getAll", req.user);
         const data = await reminder.find({ userId: ObjectId(req.user._id) });
+        // console.log("getAll data", data);
         return res.status(200).json({
             status: 200,
             content: data,
@@ -44,7 +46,7 @@ exports.create = async function (req, res, next) {
             userId: ObjectId(req.user._id)
         });
 
-        console.log(data);
+        // console.log(data);
         return res.status(200).json({
             status: 200,
             content: data,

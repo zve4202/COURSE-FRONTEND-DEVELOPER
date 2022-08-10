@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import classNames from "classnames";
@@ -11,7 +11,6 @@ import {
 import {
     addReminder,
     getReminder,
-    loadReminders,
     removeReminder,
     updateReminder
 } from "../../../../store/reminders";
@@ -23,9 +22,6 @@ const ProductQty = ({ data }) => {
     const qty = useSelector(getBasketCountById(data._id));
     const [count, setCount] = useState(String(qty || ""));
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(loadReminders());
-    }, []);
 
     const reminder = useSelector(getReminder(title._id));
 

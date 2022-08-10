@@ -32,7 +32,7 @@ class Table extends Component {
     componentDidMount() {
         this.setInputs();
         // const { inputs } = this;
-        // console.log("inputs", inputs);
+
         // if (inputs && inputs.length > 0) {
         //     inputs[0].focus();
         //     inputs[0].select();

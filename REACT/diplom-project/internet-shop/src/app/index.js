@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
 import configureStore from "./store";
-import { getAuthLoading, loadAuthUser } from "./store/auth";
 
+import { getAuthLoading, loadAuthUser } from "./store/auth";
 import { loadSetting } from "./store/setting";
 import { loadBasket } from "./store/basket";
 import { loadRoles } from "./store/roles";
 import { loadCategories } from "./store/categories";
+import { loadReminders } from "./store/reminders";
 
 import NavBar from "./components/ui/navbar";
 import Basket from "./layouts/basket";
@@ -34,6 +35,9 @@ function App() {
         dispatch(loadCategories());
         dispatch(loadBasket());
     }, []);
+    useEffect(() => {
+        dispatch(loadReminders());
+    }, [isLoading]);
 
     return (
         <div>

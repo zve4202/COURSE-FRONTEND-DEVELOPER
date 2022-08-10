@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import Service from "../services/reminder.service";
-import { getAuth } from "./auth";
+import isOutdated from "../utils/isOutdated";
 
 // docs = ["1","2" ...]
 const initialState = {
@@ -19,28 +19,28 @@ const basketSlice = createSlice({
             state.error = null;
         },
         resived(state, action) {
-            const { docs } = action.payload;
-            state = { ...state, docs };
+            state.docs = action.payload;
+            state.lastFetch = Date.now();
             state.isLoading = false;
         },
         update(state, action) {
             const { titleId } = action.payload;
-            const { docs } = state;
-            const index = docs.findIndex((doc) => doc.titleId === titleId);
+            const index = state.docs.findIndex(
+                (doc) => doc.titleId === titleId
+            );
             if (index < 0) {
-                docs.push(action.payload);
+                state.docs.push(action.payload);
             } else {
-                docs[index] = action.payload;
+                state.docs[index] = action.payload;
             }
-            state = { ...state, docs, isLoading: false };
+            state.isLoading = false;
         },
         remove(state, action) {
-            console.log("remove action.payload ", action.payload);
             const docs = state.docs.filter(
                 (item) => item.titleId !== action.payload
             );
-            console.log("remove docs ", docs);
-            state = { ...state, docs };
+            state.docs = docs;
+            console.log("remove state.docs ", state.docs);
             state.isLoading = false;
         },
         requestFailed(state, action) {
@@ -53,18 +53,19 @@ const basketSlice = createSlice({
 const { actions, reducer: remindersReducer } = basketSlice;
 const { update, remove, resived, requested, requestFailed } = actions;
 
-export const loadReminders = () => async (dispatch) => {
-    dispatch(requested());
-    try {
-        const { currentUser } = getAuth();
-        if (currentUser) {
+export const loadReminders = () => async (dispatch, getState) => {
+    const { lastFetch, docs } = getState().reminder;
+    const { currentUser } = getState().auth;
+    const needRefresh = isOutdated(lastFetch) || docs.length === 0;
+
+    if (currentUser && needRefresh) {
+        dispatch(requested());
+        try {
             const { content } = await Service.fetchAll();
             dispatch(resived(content));
-        } else {
-            dispatch(resived({ docs: [] }));
+        } catch (error) {
+            dispatch(requestFailed(error.message));
         }
-    } catch (error) {
-        dispatch(requestFailed(error.message));
     }
 };
 
@@ -102,7 +103,7 @@ export const clearReminders = () => async (dispatch, getState) => {
     dispatch(requested());
     try {
         await Service.deleteAll();
-        dispatch(resived({ docs: [] }));
+        dispatch(resived([]));
     } catch (error) {
         dispatch(requestFailed(error.message));
     }
@@ -111,6 +112,7 @@ export const clearReminders = () => async (dispatch, getState) => {
 export const getReminders = () => (state) => state.reminder.docs;
 export const getReminder = (id) => (state) => {
     const doc = state.reminder.docs.find((item) => item.titleId === id);
+    console.log(id, doc);
     if (doc) {
         return doc.reminder;
     }

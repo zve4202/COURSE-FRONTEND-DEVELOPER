@@ -5,7 +5,6 @@ import SelectPageSize from "./selectPageSize";
 
 const Paginator = ({ name, pager, setPage, setPageSize }) => {
     if (!pager) return null;
-    // console.log("pager.totalItems", pager.totalItems);
     return (
         <div className="d-flex justify-content-center">
             <div className="pagination">

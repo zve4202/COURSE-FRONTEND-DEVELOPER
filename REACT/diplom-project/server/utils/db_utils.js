@@ -117,7 +117,7 @@ const getMatching = (query, searchMap) => {
         $match.$or = $or;
     }
 
-    console.log("$match", $match, "$or", $or);
+    // console.log("$match", $match, "$or", $or);
     if (Object.keys($match).length === 0) return null;
 
     result.push({ $match });

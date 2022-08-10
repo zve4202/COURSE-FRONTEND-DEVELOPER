@@ -1,8 +1,10 @@
 import axios from "axios";
 import httpService from "./http.service";
 
+import configFile from "../config.json";
+
 const httpAuth = axios.create({
-    baseURL: config.apiEndpoint + "auth/"
+    baseURL: configFile.apiEndpoint + "auth/"
 });
 
 const AuthService = {
@@ -21,7 +23,7 @@ const AuthService = {
         return data;
     },
     getAuthUser: async () => {
-        const { data } = await httpServiceervice.get("user/auth");
+        const { data } = await httpService.get("user/auth");
         return data;
     }
 };

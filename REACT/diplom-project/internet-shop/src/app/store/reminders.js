@@ -111,12 +111,7 @@ export const clearReminders = () => async (dispatch, getState) => {
 
 export const getReminders = () => (state) => state.reminder.docs;
 export const getReminder = (id) => (state) => {
-    const doc = state.reminder.docs.find((item) => item.titleId === id);
-    console.log(id, doc);
-    if (doc) {
-        return doc.reminder;
-    }
-    return null;
+    return state.reminder.docs.find((item) => item.titleId === id);
 };
 
 export const getReminderLoading = () => (state) => state.reminder.isLoading;

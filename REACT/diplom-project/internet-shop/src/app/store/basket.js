@@ -169,7 +169,7 @@ export const clearBasket = () => async (dispatch, getState) => {
 };
 
 export const getBasket = () => (state) => state.basket.basket;
-export const getBasketCountById = (id) => (state) => {
+export const getBasketQty = (id) => (state) => {
     const { basket } = state.basket;
     if (basket && basket.docs) {
         const doc = basket.docs.find((item) => item.id === id);

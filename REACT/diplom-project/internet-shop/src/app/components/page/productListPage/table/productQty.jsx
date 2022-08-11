@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import classNames from "classnames";
 
 import {
     addBasket,
-    getBasketCountById,
+    getBasketQty,
     removeBasket
 } from "../../../../store/basket";
 import {
@@ -17,29 +17,39 @@ import {
 import { curs } from "../../../../config.json";
 
 const ProductQty = ({ data }) => {
-    const { title, price, count: max } = data;
-    const inputEl = useRef(null);
-    const qty = useSelector(getBasketCountById(data._id));
-    const [count, setCount] = useState(String(qty || ""));
-    const dispatch = useDispatch();
-
+    const { title, price, count } = data;
+    const inputB = useRef(null);
+    const inputR = useRef(null);
+    let qty = String(useSelector(getBasketQty(data._id)) || "");
     const reminder = useSelector(getReminder(title._id));
 
+    const [reminderNeedFocus, setReminderNeedFocus] = useState(false);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (reminderNeedFocus) {
+            setReminderNeedFocus(false);
+            inputR.current.focus();
+            inputR.current.select();
+        }
+    }, [reminder]);
+
     const checkValue = (value) => {
-        const result = Math.min(max, Math.max(0, Number(value || "0")));
-        setCount(result || "");
+        const result = Math.min(count, Math.max(0, Number(value || "0")));
+        qty = result || "";
         return result;
     };
     const handleChange = ({ target }) => {
         const value = target.value.replace(/[^\d]/, "");
-        const numCount = checkValue(value);
-        if (numCount === 0) {
+        const numQty = checkValue(value);
+        if (numQty === 0) {
             dispatch(removeBasket(data._id));
         } else {
             dispatch(
                 addBasket({
                     id: data._id,
-                    qty: numCount,
+                    qty: numQty,
                     price: price * curs
                 })
             );
@@ -47,47 +57,47 @@ const ProductQty = ({ data }) => {
     };
 
     const removeOne = () => {
-        inputEl.current.focus();
-        const numCount = checkValue(Number(count || "0") - 1);
-        if (numCount < 0) return;
-        if (numCount === 0) {
+        inputB.current.focus();
+        const numQty = checkValue(Number(qty || "0") - 1);
+        if (numQty < 0) return;
+        if (numQty === 0) {
             dispatch(removeBasket(data._id));
         } else {
             dispatch(
                 addBasket({
                     id: data._id,
-                    qty: numCount,
+                    qty: numQty,
                     price: price * curs
                 })
             );
         }
     };
     const addOne = () => {
-        inputEl.current.focus();
-        const numCount = checkValue(Number(count || "0") + 1);
+        inputB.current.focus();
+        const numQty = checkValue(Number(qty || "0") + 1);
         dispatch(
             addBasket({
                 id: data._id,
-                qty: numCount,
+                qty: numQty,
                 price: price * curs
             })
         );
     };
 
     const handleBlur = () => {
-        if (count === "0") {
-            setCount("");
+        if (qty === "0") {
+            qty = "";
             return;
-        } else if (!count) return;
+        } else if (!qty) return;
 
-        const numCount = Math.min(max, Math.max(0, Number(count)));
-        if (numCount === 0) {
+        const numQty = Math.min(count, Math.max(0, Number(qty)));
+        if (numQty === 0) {
             dispatch(removeBasket(data._id));
         } else {
             dispatch(
                 addBasket({
                     id: data._id,
-                    qty: numCount,
+                    qty: numQty,
                     price: price * curs
                 })
             );
@@ -99,28 +109,66 @@ const ProductQty = ({ data }) => {
             target = target.parentNode;
         }
 
+        const { action } = reminder || { action: "nothing" };
         if (target.nodeName === "SPAN") {
             if (target.id === "nothing" && !reminder) return;
-            if (reminder === target.id) return;
+            if (action === target.id) return;
 
             if (target.id === "nothing") {
                 dispatch(removeReminder(title._id));
-            } else if (!reminder) {
-                dispatch(
-                    addReminder({ titleId: title._id, reminder: target.id })
-                );
+                return;
+            }
+
+            let data = {
+                ...reminder,
+                titleId: title._id,
+                action: target.id
+            };
+            switch (target.id) {
+                case "to-order":
+                    data = { ...data, need: 1, price };
+                    setReminderNeedFocus(true);
+                    break;
+                case "notify-me":
+                    data = { ...data, need: 0, price: 0 };
+                    break;
+                default:
+                    break;
+            }
+
+            if (!reminder) {
+                dispatch(addReminder(data));
             } else {
-                dispatch(
-                    updateReminder({
-                        titleId: title._id,
-                        reminder: target.id
-                    })
-                );
+                dispatch(updateReminder(data));
             }
         }
     };
 
-    if (max > 0) {
+    const needBlur = () => {
+        let { need, action } = reminder;
+        if (isNaN(need)) {
+            need = 1;
+        }
+
+        need = Math.max(1, Number(need));
+        const data = { titleId: title._id, action, need, price };
+        dispatch(updateReminder(data));
+    };
+
+    const needChange = ({ target }) => {
+        let { need, action } = reminder;
+        let text = target.value.replace(/[^\d]/, "");
+        if (isNaN(text)) {
+            text = 1;
+        }
+
+        if (need === text) return;
+        need = Math.max(1, Number(text));
+        const data = { titleId: title._id, action, need, price };
+        dispatch(updateReminder(data));
+    };
+
+    if (count > 0) {
         return (
             <div className="input-group flex-nowrap">
                 <span
@@ -132,14 +180,13 @@ const ProductQty = ({ data }) => {
                     <i className="bi bi-dash-circle"></i>
                 </span>
                 <input
-                    ref={inputEl}
+                    ref={inputB}
                     type="text"
                     className="form-control table-input text-center"
-                    style={{ width: "45px" }}
                     placeholder="нет"
                     min={0}
-                    max={max}
-                    value={count}
+                    max={count}
+                    value={qty}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     title="Введите количество чтобы добавить товар в корзину"
@@ -164,8 +211,8 @@ const ProductQty = ({ data }) => {
                 <span
                     id="notify-me"
                     className={classNames({
-                        "btn btn-outline-info": true,
-                        active: reminder === "notify-me"
+                        "btn btn-outline-primary": true,
+                        active: reminder && reminder.action === "notify-me"
                     })}
                     title="Оповестить меня, в случае постуаления"
                 >
@@ -176,12 +223,23 @@ const ProductQty = ({ data }) => {
                     id="to-order"
                     className={classNames({
                         "btn btn-outline-danger": true,
-                        active: reminder === "to-order"
+                        active: reminder && reminder.action === "to-order"
                     })}
                     title="При поступлении добавить в заказ, и оповестить меня"
                 >
                     <i className="bi bi-bag" />
                 </span>
+                {reminder && reminder.action === "to-order" && (
+                    <input
+                        ref={inputR}
+                        type="text"
+                        className="form-control text-center"
+                        value={reminder.need}
+                        onChange={needChange}
+                        onBlur={needBlur}
+                        title="Введите количество чтобы добавить товар в заказ"
+                    />
+                )}
 
                 {reminder && (
                     <span

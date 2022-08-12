@@ -126,17 +126,21 @@ class PaginationWrapper extends React.Component {
     }
 
     render() {
+        const { paginator, loading, children } = this.props;
+        const { name, selectPage, setPageSize } = this;
         const pager = this.state;
         return (
             <div>
-                <Paginator
-                    name={this.name}
-                    pager={pager}
-                    setPage={this.selectPage}
-                    setPageSize={this.setPageSize}
-                />
-                {this.props.children}
-                {!this.props.loading && pager.pages.length > 1 && (
+                {paginator && (
+                    <Paginator
+                        name={name}
+                        pager={pager}
+                        setPage={selectPage}
+                        setPageSize={setPageSize}
+                    />
+                )}
+                {children}
+                {paginator && !loading && pager.pages.length > 1 && (
                     <Paginator
                         name={this.name}
                         pager={pager}
@@ -156,6 +160,7 @@ PaginationWrapper.propTypes = {
     onChange: PropTypes.func.isRequired,
     config: PropTypes.object,
     updateSetting: PropTypes.func,
+    paginator: PropTypes.bool,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
@@ -165,7 +170,8 @@ PaginationWrapper.propTypes = {
 PaginationWrapper.defaultProps = {
     initialPage: 1,
     pageSize: 10,
-    loading: false
+    loading: false,
+    paginator: true
 };
 
 const mapStateToProps = (state) => ({

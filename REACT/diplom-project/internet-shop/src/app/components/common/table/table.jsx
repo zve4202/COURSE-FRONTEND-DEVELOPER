@@ -91,17 +91,15 @@ class Table extends Component {
             loading,
             headered,
             bordered,
-            striped
+            striped,
+            paginator
         } = this.props;
 
-        const onPageChangeDebounced = debounce(onReload, 250);
-        const onPageChange = () => {
-            onPageChangeDebounced();
-        };
+        const onPageChange = debounce(onReload, 250);
 
         return (
             <PaginationWrapper
-                {...{ name, totalDocs, loading }}
+                {...{ name, totalDocs, loading, paginator }}
                 onChange={onPageChange}
             >
                 <table
@@ -125,6 +123,7 @@ Table.defaultProps = {
     headered: true,
     bordered: false,
     striped: true,
+    paginator: true,
     loading: false,
     totalDocs: 0
 };
@@ -138,6 +137,7 @@ Table.propTypes = {
     headered: PropTypes.bool,
     bordered: PropTypes.bool,
     striped: PropTypes.bool,
+    paginator: PropTypes.bool,
     onReload: PropTypes.func,
     config: PropTypes.object,
     updateSetting: PropTypes.func

@@ -8,6 +8,16 @@ import { getFormats } from "../../../../store/formats";
 import { getOrigins } from "../../../../store/origin";
 import { getStyles } from "../../../../store/style";
 import { getCategory } from "../../../../store/categories";
+import debounce from "../../../../utils/debounce";
+
+// let timeout;
+// const debounce = (fn, ms) => {
+//     return function () {
+//         const fnCall = () => fn.apply(this, arguments);
+//         clearTimeout(timeout);
+//         timeout = setTimeout(fnCall, ms);
+//     };
+// };
 
 const ProductSearch = ({ name, onSearch }) => {
     const dispatch = useDispatch();
@@ -17,6 +27,13 @@ const ProductSearch = ({ name, onSearch }) => {
     const labels = useSelector(getLabels());
     const origins = useSelector(getOrigins());
     const styles = useSelector(getStyles());
+    const selects = {
+        origin: { placeholder: "Поиск по стране", data: origins },
+        format: { placeholder: "Поиск по формату", data: formats },
+        label: { placeholder: "Поиск по лейблу", data: labels },
+        style: { placeholder: "Поиск по стилю", data: styles }
+    };
+
     const clearFilter = () => {
         const queryArtist = query.artist ? { artist: query.artist } : {};
         dispatch(
@@ -26,6 +43,8 @@ const ProductSearch = ({ name, onSearch }) => {
         );
         onSearch();
     };
+
+    const debouncedSearch = debounce(onSearch, 1000);
 
     const handleSearchQuery = ({ target }) => {
         const newQuery = { ...query };
@@ -41,14 +60,13 @@ const ProductSearch = ({ name, onSearch }) => {
                 }
             })
         );
-        onSearch();
+        debouncedSearch();
     };
 
     const handleCollapse = () => {
         const queryShow = !query.show;
         const needReload = Object.keys(query).reduce(
-            (prev, curr) =>
-                ["format", "label", "origin", "style"].includes(curr) || prev,
+            (prev, curr) => Object.keys(selects).includes(curr) || prev,
             false
         );
         const newQuery = { ...query, show: queryShow };
@@ -56,10 +74,7 @@ const ProductSearch = ({ name, onSearch }) => {
 
         if (!queryShow) {
             delete newQuery.show;
-            delete newQuery.format;
-            delete newQuery.label;
-            delete newQuery.origin;
-            delete newQuery.style;
+            Object.keys(selects).forEach((key) => delete newQuery[key]);
         }
         dispatch(
             updateSetting(name, {
@@ -197,34 +212,16 @@ const ProductSearch = ({ name, onSearch }) => {
             >
                 {/* <div className="row g-3 card card-body d-flex cen flex-nowrap"> */}
                 <div className="row g-2">
-                    <SelectField
-                        name="origin"
-                        placeholder="Поиск по странам"
-                        data={origins}
-                        onChange={handleSearchQuery}
-                        value={query.origin}
-                    />
-                    <SelectField
-                        name="style"
-                        placeholder="Поиск по жанрам"
-                        data={styles}
-                        onChange={handleSearchQuery}
-                        value={query.style}
-                    />
-                    <SelectField
-                        name="format"
-                        placeholder="Поиск по форматам"
-                        data={formats}
-                        onChange={handleSearchQuery}
-                        value={query.format}
-                    />
-                    <SelectField
-                        name="label"
-                        placeholder="Поиск по лейблам"
-                        data={labels}
-                        onChange={handleSearchQuery}
-                        value={query.label}
-                    />
+                    {Object.keys(selects).map((key, index) => (
+                        <SelectField
+                            key={index + 1}
+                            name={key}
+                            placeholder={selects[key].placeholder}
+                            data={selects[key].data}
+                            onChange={handleSearchQuery}
+                            value={query[key]}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

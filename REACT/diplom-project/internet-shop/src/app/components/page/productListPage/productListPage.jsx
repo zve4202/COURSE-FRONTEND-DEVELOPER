@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { debounce } from "lodash";
 
 import ProductTable from "./table/productTable";
 import { loadCategories } from "../../../store/categories";
@@ -82,23 +81,18 @@ const ProductListPage = () => {
     }, []);
 
     // useEffect(() => {
-    //     window.scrollTo(0, 0);
+    //     window.scrollTo(0, 0);1
     // }, [docs]);
 
     const onReload = () => {
         dispatch(loadProducts());
     };
 
-    const onFilterDebounced = debounce(onReload, 500);
-    const onSearch = () => {
-        onFilterDebounced();
-    };
-
     return (
         <WorkScreen>
             <CategoryList name={name} onItemSelect={onReload} />
             <div className="content_wrapper card bg-light p-2">
-                <ProductSearch onSearch={onSearch} name={name} />
+                <ProductSearch onSearch={onReload} name={name} />
                 <ProductCard product={product} />
                 <ProductTable
                     {...{ name, data, totalDocs, loading, onReload }}

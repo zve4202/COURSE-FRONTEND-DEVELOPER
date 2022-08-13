@@ -58,6 +58,10 @@ const TableHeader = ({ name, onReload, columns, headered }) => {
         return <span className="text-nowrap g-1">{column.caption}</span>;
     };
 
+    const headerClick = (column) => {
+        if (!headered || !column.sortable) return;
+        handleSort(column.name);
+    };
     return (
         <thead>
             <tr>
@@ -66,12 +70,12 @@ const TableHeader = ({ name, onReload, columns, headered }) => {
                         <th
                             key={index + 1}
                             {...{
-                                name: headered && column.name,
-                                role: headered && column.sortable && "button",
-                                onClick:
-                                    headered &&
-                                    column.sortable &&
-                                    (() => handleSort(column.name)),
+                                name: headered ? column.name : undefined,
+                                role:
+                                    headered && column.sortable
+                                        ? "button"
+                                        : undefined,
+                                onClick: () => headerClick(column),
                                 scope: "col"
                             }}
                             style={

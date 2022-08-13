@@ -1,44 +1,57 @@
 import React from "react";
-import classNames from "classnames";
+import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getBasket, clearBasket } from "../../../store/basket";
-import BackButton from "./backButton";
+import SideBarWrapper from "../../common/wrappers/sideBar";
+import BackButton from "../../common/backButton";
+// import { yesNo } from "../../../dialogs/messageDialog";
+// import { names } from "./menu";
 import ClearBasketButton from "./clearBasketButton";
 import GoToPayButton from "./goToPayButton";
 
-const BasketSidebar = () => {
-    // console.log("BasketSidebar count", count);
+const BasketSidebar = ({ menu }) => {
     const basket = useSelector(getBasket());
     const dispatch = useDispatch();
 
     const nf = Intl.NumberFormat();
 
     const handleCheckAndPay = () => {
-        console.log(basket);
+        console.log("Check And Pay;");
     };
 
     const handleClearBasket = () => {
         dispatch(clearBasket());
     };
 
+    // const onItemSelect = (item) => {
+    //     switch (item.path) {
+    //         case names.clear:
+    //             yesNo("Вы действительно желаете очистить вашу корзину?", handleClearBasket);
+    //             break;
+    //         case names.goto:
+    // yesNo(
+    //     "Вы действительно желаете отправить корзину на проверку, и перейти к оплате?",
+    //     handleCheckAndPay
+    // );
+    // break;
+    //         default:
+    //             break;
+    //     }
+    // };
+
     return (
-        <div className="sidebar_wrapper p-2 card bg-light flex-column me-2 h-100">
-            <div
-                className={classNames({
-                    // "bg-secondary": true,
-                    "mb-3": basket.totalQty > 0
-                })}
-            >
-                <BackButton />
-            </div>
+        <SideBarWrapper
+            {...{
+                menu,
+                // onItemSelect,
+                // menuAfterChildren: true,
+                backBtn: <BackButton to="/" tooltip="Вернуться к покупкам" />
+            }}
+        >
             {basket.totalQty > 0 && (
-                <ul className="list-group">
-                    <div className="card-header list-group-item-success mb-3">
-                        <i className="bi bi-cart-check me-2" />
-                        Ваша корзина
-                    </div>
-                    <div className="card mb-3">
+                <>
+                    <div className="card">
                         <div className="card-header">Итого заказно</div>
                         <div className="card-body">
                             <div className="d-flex justify-content-between">
@@ -53,17 +66,20 @@ const BasketSidebar = () => {
                             </div>
                         </div>
                     </div>
-
-                    <li className="list-group-item list-group-item-danger mb-4">
+                    <div className="list-group-item-danger mb-2 mt-3">
                         <ClearBasketButton onAccept={handleClearBasket} />
-                    </li>
-                    <li className="list-group-item list-group-item-warning">
+                    </div>
+                    <div className="list-group-item-sucsess">
                         <GoToPayButton onAccept={handleCheckAndPay} />
-                    </li>
-                </ul>
+                    </div>
+                </>
             )}
-        </div>
+        </SideBarWrapper>
     );
+};
+
+BasketSidebar.propTypes = {
+    menu: PropTypes.object.isRequired
 };
 
 export default BasketSidebar;

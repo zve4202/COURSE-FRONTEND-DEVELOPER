@@ -41,16 +41,16 @@ const ProductCard = ({ product }) => {
     return (
         <>
             <div className="card mb-2">
-                <div className="card-header d-flex g-2 p-2 align-items-center">
+                <div className="card-header d-flex g-2 ">
                     <button
-                        className="btn btn-outline-secondary me-2"
+                        className="btn btn-sm btn-outline-secondary me-2"
                         onClick={() => history.push("/")}
                         title="Вернуться к общему списку покупок"
                     >
                         <i className="bi bi-caret-left"></i>
                     </button>
                     <span>
-                        <i className="bi bi-hand-thumbs-up me-2"></i>
+                        <i className="bi bi-hand-thumbs-up me-2" />
                         Информация по товару
                     </span>
                 </div>

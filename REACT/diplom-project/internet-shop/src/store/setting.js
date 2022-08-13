@@ -41,6 +41,7 @@ const settingConfig = {
     },
 
     basket: {
+        pagination: { ...pagination },
         sort: { ...sort }
     }
 };

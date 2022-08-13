@@ -1,30 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal } from "bootstrap";
-
-import YesNoDialog from "../../../dialogs/yesNoDialog";
+import { yesNo } from "../../../dialogs/messageDialog";
 
 const ClearBasketButton = ({ onAccept }) => {
     const question = "Вы действительно желаете очистить вашу корзину?";
-    const idDialog = "clearBasketYesNoModal";
 
     return (
         <div>
             <div
+                className="btn btn-outline-danger w-100"
                 role="button"
                 onClick={() => {
-                    const modalElement = new Modal("#clearBasketYesNoModal");
-                    modalElement.show();
+                    yesNo(question, onAccept);
                 }}
             >
                 <i className="bi bi-x-lg me-2" />
                 Очистить корзину
             </div>
-            <YesNoDialog
-                dialogId={idDialog}
-                message={question}
-                onAccept={onAccept}
-            />
         </div>
     );
 };

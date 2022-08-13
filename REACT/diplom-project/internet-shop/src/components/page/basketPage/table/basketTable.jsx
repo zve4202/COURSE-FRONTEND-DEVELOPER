@@ -6,76 +6,97 @@ import ProductQty from "./productQty";
 import ProductPrice from "./productPrice";
 import Table from "../../../common/table";
 import Barcode from "../../../ui/barcode";
-import ProductPicture from "../../../ui/productPicture";
+import ProductPicture from "./productPicture";
 
-const BasketTable = ({ name, products, onSort, onUpdate, ...rest }) => {
-    const columns = {
-        image: {
-            class: "cover-small",
-            // name: "Имидж",
-            component: (product) => (
-                <ProductPicture size="small" picture={product.title.image} />
-            )
+const BasketTable = ({ name, data, totalDocs, loading, onReload, ...rest }) => {
+    const columns = [
+        {
+            name: "image",
+            width: 79,
+            component: (product) => <ProductPicture data={product} />
         },
-        add: {
-            class: "intut",
-            // name: "Корзина",
-            component: (product) => (
-                <ProductQty
-                    productId={product._id}
-                    max={product.count}
-                    qty={product.qty}
-                    price={product.price}
-                    onUpdate={onUpdate}
-                />
-            )
+        {
+            caption: "Корзина",
+            name: "add",
+            width: 120,
+            component: (product) => <ProductQty data={product} />
         },
-        price: {
-            // path: "price",
-            // name: "Цена",
+        {
+            caption: "Цена",
+            name: "price",
+            sortable: true,
+            width: 115,
             component: (product) => <ProductPrice price={product.price} />
         },
-        name: {
-            // path: "name",
-            // name: "Наименоване",
+        {
+            caption: "Наименоване",
+            name: "name",
+            sortable: true,
+            width: 300,
             component: (product) => <ProductName data={product} />
         },
-        format: {
-            // path: "format",
-            // name: "Формат",
+        {
+            caption: "Формат",
+            name: "format",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.format.name}</div>
             )
         },
-        barcode: {
-            // name: "Баркоде",
+        {
+            caption: "Штрихкод",
+            name: "barcode",
             component: (product) => <Barcode barcode={product.title.barcode} />
         },
-        label: {
-            // path: "label",
-            // name: "Лейбл",
+        {
+            caption: "Лейбл",
+            name: "label",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.label.name}</div>
             )
         },
-        origin: {
-            // path: "origin",
-            // name: "Страна",
+        {
+            caption: "Страна",
+            name: "origin",
+            sortable: true,
             component: (product) => (
                 <div className="small">{product.title.origin}</div>
             )
+        },
+        {
+            caption: "Жанр",
+            name: "style",
+            sortable: true,
+            component: (product) => (
+                <div className="small">{product.title.style}</div>
+            )
         }
-    };
+    ];
 
     return (
-        <Table name={name} columns={columns} data={products} onSort={onSort} />
+        <Table
+            {...{
+                name,
+                columns,
+                data,
+                totalDocs,
+                loading,
+                onReload,
+                headered: false,
+                paginator: false,
+                striped: false,
+                ...rest
+            }}
+        />
     );
 };
 
 BasketTable.propTypes = {
     name: PropTypes.string.isRequired,
-    products: PropTypes.array.isRequired,
-    onSort: PropTypes.func.isRequired,
-    onUpdate: PropTypes.func.isRequired
+    data: PropTypes.array.isRequired,
+    totalDocs: PropTypes.number,
+    loading: PropTypes.bool.isRequired,
+    onReload: PropTypes.func.isRequired
 };
 export default BasketTable;

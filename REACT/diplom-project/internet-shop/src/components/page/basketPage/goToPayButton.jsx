@@ -1,32 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal } from "bootstrap";
-
-import YesNoDialog from "../../../dialogs/yesNoDialog";
+import { yesNo } from "../../../dialogs/messageDialog";
 
 const GoToPayButton = ({ onAccept }) => {
     const question =
-        "Вы действительно желаете отправить корзину на проверку и перейти к оплате?";
-    const idDialog = "goToPayYesNoModal";
+        "Вы действительно желаете отправить корзину на проверку, и перейти к оплате?";
 
     return (
         <div>
             <div
+                className="btn btn-outline-success w-100"
                 role="button"
                 onClick={() => {
-                    const modalElement = new Modal(`#${idDialog}`);
-                    modalElement.show();
+                    yesNo(question, onAccept);
                 }}
             >
                 <i className="bi bi-credit-card me-2" />
                 Перейти к оплате
             </div>
-
-            <YesNoDialog
-                dialogId={idDialog}
-                message={question}
-                onAccept={onAccept}
-            />
         </div>
     );
 };

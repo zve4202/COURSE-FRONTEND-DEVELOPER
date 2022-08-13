@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ContentWrapper = ({ selected, children }) => {
+const ContentWrapper = ({ menu, children }) => {
     return (
         <div className="content_wrapper card bg-light p-2">
-            <div className="card-header mb-3">
-                <i className={`bi ${selected.icon} me-2`} />
-                {selected.name}
+            <div className="card-header">
+                <i className={`bi ${menu.icon} me-2`} />
+                {menu.name}
             </div>
             {children}
         </div>
@@ -14,7 +14,7 @@ const ContentWrapper = ({ selected, children }) => {
 };
 
 ContentWrapper.propTypes = {
-    selected: PropTypes.object.isRequired,
+    menu: PropTypes.object.isRequired,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node

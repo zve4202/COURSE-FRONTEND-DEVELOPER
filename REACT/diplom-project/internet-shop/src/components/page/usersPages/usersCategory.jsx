@@ -7,7 +7,6 @@ import classNames from "classnames";
 import { getRoles, loadRoles } from "../../../store/roles";
 
 const CategoryList = ({ name, onItemSelect }) => {
-    console.log("name", name);
     const roles = useSelector(getRoles());
     const dispatch = useDispatch();
 

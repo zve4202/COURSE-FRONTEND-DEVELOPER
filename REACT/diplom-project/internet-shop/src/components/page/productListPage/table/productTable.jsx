@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import Table from "../../../common/table";
 import ProductName from "./productName";
 import ProductPicture from "./productPicture";
-// import AddButton from "./addButton";
 import Barcode from "../../../ui/barcode";
 import ProductPrice from "./productPrice";
 import ProductQty from "./productQty";

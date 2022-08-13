@@ -5,7 +5,8 @@ import classNames from "classnames";
 const defaultItem = {
     path: "path",
     name: "name",
-    icon: "bi-gear"
+    icon: "bi-gear",
+    component: undefined
 };
 const defaultMenu = {
     name: "product",
@@ -18,38 +19,66 @@ const SideBarWrapper = ({
     menu,
     selected,
     onItemSelect,
+    menuAfterChildren,
     children
 }) => {
     menu = menu || { ...defaultMenu, items: undefined };
+    selected = selected || { path: "1234567890" };
     return (
-        <div className="sidebar_wrapper p-2 card bg-light me-2">
-            <div className="card-header d-flex px-3 py-2 align-items-center justify-content-between mb-3">
+        <div className="sidebar_wrapper p-2 card me-2">
+            <div className="card-header d-flex px-3 justify-content-between">
                 <span>
                     <i className={`bi ${menu.caption.icon} me-2`} />
                     {menu.caption.name}{" "}
                 </span>
                 {backBtn}
             </div>
-            {menu.afterChildren && children}
-            {menu.items && (
-                <div className="list-group">
-                    {menu.items.map((item) => (
-                        <div
-                            key={item.path}
-                            className={classNames({
-                                "list-group-item": true,
-                                active: item.path === selected.path
-                            })}
-                            onClick={() => onItemSelect(item)}
-                            role="button"
-                        >
-                            <i className={`bi ${item.icon} me-2`} />
-                            {item.name}
-                        </div>
-                    ))}
-                </div>
-            )}
-            {!menu.afterChildren && children}
+            <div
+            // className="card-body px-0"
+            >
+                {menuAfterChildren && children}
+                {menu.items && (
+                    <div
+                        className={classNames({
+                            "list-group ": true,
+                            "mb-2": !menuAfterChildren,
+                            "mt-2": menuAfterChildren
+                        })}
+                    >
+                        {menu.items.map((item, index) => (
+                            <div
+                                key={item.path}
+                                className={
+                                    item.component
+                                        ? undefined
+                                        : classNames({
+                                              //   "mt-2": index > 0,
+                                              "list-group-item": true,
+                                              active:
+                                                  item.path === selected.path
+                                          })
+                                }
+                                onClick={
+                                    item.component
+                                        ? undefined
+                                        : () => onItemSelect(item)
+                                }
+                                role="button"
+                            >
+                                {item.component ? (
+                                    item.component
+                                ) : (
+                                    <>
+                                        <i className={`bi ${item.icon} me-2`} />
+                                        {item.name}
+                                    </>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {!menuAfterChildren && children}
+            </div>
         </div>
     );
 };
@@ -59,6 +88,7 @@ SideBarWrapper.propTypes = {
     menu: PropTypes.object,
     selected: PropTypes.object,
     onItemSelect: PropTypes.func,
+    menuAfterChildren: PropTypes.bool,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node

@@ -46,7 +46,7 @@ const AdminPage = () => {
                     </div>
                 )}
             </AdminSideBar>
-            <ContentWrapper selected={selectedMenu}>
+            <ContentWrapper menu={selectedMenu}>
                 {selectedMenu.path === pathes.userPath && <UsersListPage />}
             </ContentWrapper>
         </WorkScreen>

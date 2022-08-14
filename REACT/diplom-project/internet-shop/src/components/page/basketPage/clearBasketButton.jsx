@@ -8,7 +8,7 @@ const ClearBasketButton = ({ onAccept }) => {
     return (
         <div>
             <div
-                className="btn btn-outline-danger w-100"
+                className="btn btn-outline-danger w-100 list-group-item-danger mb-2 mt-3"
                 role="button"
                 onClick={() => {
                     yesNo(question, onAccept);

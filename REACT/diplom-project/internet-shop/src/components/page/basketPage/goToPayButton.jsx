@@ -9,7 +9,7 @@ const GoToPayButton = ({ onAccept }) => {
     return (
         <div>
             <div
-                className="btn btn-outline-success w-100"
+                className="btn btn-outline-success w-100 list-group-item-success"
                 role="button"
                 onClick={() => {
                     yesNo(question, onAccept);
